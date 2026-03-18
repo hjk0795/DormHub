@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="vi" data-lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dorm Hub</title>
+    <meta name="description" content="Dormitory hub: recycling guide, rules, facility issue report, and FAQ." />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --paper: #fffaf0;
+        --paper2: #fff;
+        --ink: #101828;
+        --muted: rgba(16, 24, 40, 0.68);
+        --muted2: rgba(16, 24, 40, 0.52);
+        --stroke: rgba(16, 24, 40, 0.12);
+        --shadow: 0 14px 40px rgba(16, 24, 40, 0.12);
+        --shadow2: 0 8px 18px rgba(16, 24, 40, 0.12);
+        --accent: #2dd4bf;
+        --accent2: #60a5fa;
+        --accent3: #fb7185;
+        --warn: #f59e0b;
+        --radius: 18px;
+        --max: 980px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: radial-gradient(900px 520px at 10% 10%, rgba(96, 165, 250, 0.22), transparent 55%),
+          radial-gradient(900px 520px at 85% 0%, rgba(45, 212, 191, 0.18), transparent 52%),
+          radial-gradient(900px 520px at 70% 90%, rgba(251, 113, 133, 0.14), transparent 55%),
+          linear-gradient(180deg, #fff7ed, var(--paper));
+        font-family: "Be Vietnam Pro", "Noto Sans KR", system-ui, -apple-system, Segoe UI, sans-serif;
+        letter-spacing: -0.01em;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 28px 18px 52px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        align-items: start;
+        padding: 18px 18px 18px;
+        border: 1px solid var(--stroke);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.58));
+        border-radius: calc(var(--radius) + 6px);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        position: relative;
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        inset: -40% -40%;
+        background: radial-gradient(closest-side, rgba(45, 212, 191, 0.22), transparent 60%);
+        transform: translate(25%, -10%) rotate(12deg);
+        pointer-events: none;
+        filter: blur(18px);
+      }
+
+      .head-row {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .lang-picker {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        justify-items: end;
+      }
+
+      .lang-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: rgba(16, 24, 40, 0.7);
+        user-select: none;
+      }
+
+      .lang-label .globe {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: conic-gradient(from 180deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+        box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14);
+      }
+
+      .label-when-en,
+      .label-when-vi {
+        display: inline;
+      }
+
+      [data-lang="vi"] .label-when-en {
+        display: none;
+      }
+
+      [data-lang="en"] .label-when-vi {
+        display: none;
+      }
+
+      .lang-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: 1px solid rgba(16, 24, 40, 0.16);
+        background: rgba(255, 255, 255, 0.72);
+        border-radius: 999px;
+        padding: 10px 40px 10px 12px;
+        font-weight: 700;
+        color: rgba(16, 24, 40, 0.9);
+        box-shadow: 0 10px 18px rgba(16, 24, 40, 0.1);
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .lang-picker {
+        position: relative;
+      }
+
+      .lang-picker::after {
+        content: "";
+        position: absolute;
+        right: 14px;
+        top: 31px;
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid rgba(16, 24, 40, 0.55);
+        border-bottom: 2px solid rgba(16, 24, 40, 0.55);
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+
+      h1 {
+        position: relative;
+        margin: 0;
+        font-size: clamp(26px, 4.2vw, 40px);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+      }
+
+      .subtitle {
+        position: relative;
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+        max-width: 70ch;
+      }
+
+      .panel {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: calc(var(--radius) + 6px);
+        border: 1px solid var(--stroke);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.62));
+        box-shadow: var(--shadow);
+      }
+
+      .lang-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      @media (min-width: 880px) {
+        .lang-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+      }
+
+      .lang-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        align-content: start;
+      }
+
+      [data-lang="vi"] .lang-en {
+        display: none !important;
+      }
+
+      [data-lang="en"] .lang-vi {
+        display: none !important;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 16px 16px;
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62));
+        box-shadow: var(--shadow2);
+        text-decoration: none;
+        transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(700px 180px at 35% 0%, rgba(96, 165, 250, 0.16), transparent 60%);
+        opacity: 0;
+        transition: opacity 160ms ease;
+        pointer-events: none;
+      }
+
+      .card:hover,
+      .card:focus-visible {
+        transform: translateY(-2px);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.7));
+        border-color: rgba(16, 24, 40, 0.2);
+        outline: none;
+      }
+
+      .card:hover::after,
+      .card:focus-visible::after {
+        opacity: 1;
+      }
+
+      .icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.12);
+        position: relative;
+      }
+
+      .icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .title strong {
+        font-size: 16px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+      }
+
+      .pillrow {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(16, 24, 40, 0.14);
+        background: rgba(255, 255, 255, 0.58);
+        color: rgba(16, 24, 40, 0.84);
+        font-size: 13px;
+        text-decoration: none;
+      }
+
+      .pill b {
+        color: rgba(16, 24, 40, 0.92);
+        font-weight: 800;
+      }
+
+      .faq {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(16, 24, 40, 0.12);
+      }
+
+      .faq h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      details {
+        border-radius: 14px;
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        background: rgba(255, 255, 255, 0.72);
+        padding: 12px 12px;
+      }
+
+      details + details {
+        margin-top: 10px;
+      }
+
+      summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: 700;
+        color: rgba(16, 24, 40, 0.92);
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      summary .q {
+        color: var(--accent);
+        font-weight: 900;
+        letter-spacing: 0.02em;
+      }
+
+      details p {
+        margin: 10px 0 0;
+        color: rgba(16, 24, 40, 0.78);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      footer {
+        margin-top: 18px;
+        color: rgba(16, 24, 40, 0.55);
+        font-size: 12px;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        header,
+        .card,
+        .fine,
+        .faq {
+          animation: rise 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+        }
+
+        .card:nth-child(1) {
+          animation-delay: 60ms;
+        }
+        .card:nth-child(2) {
+          animation-delay: 90ms;
+        }
+        .card:nth-child(3) {
+          animation-delay: 120ms;
+        }
+        .card:nth-child(4) {
+          animation-delay: 150ms;
+        }
+        .fine {
+          animation-delay: 180ms;
+        }
+        .faq {
+          animation-delay: 210ms;
+        }
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header>
+        <div class="head-row">
+          <div class="hero">
+            <h1 class="lang-en">🏠 Dormitory All-in-One Guide</h1>
+            <h1 class="lang-vi">🏠 Hướng dẫn KTX tất cả trong một</h1>
+            <p class="subtitle lang-en">Check all the information you need for dorm life in one place!</p>
+            <p class="subtitle lang-vi">Xem tất cả thông tin cần thiết cho cuộc sống KTX tại một nơi!</p>
+          </div>
+
+          <div class="lang-picker">
+            <label class="lang-label" for="langSelect"
+              ><span class="globe" aria-hidden="true"></span> <span class="label-when-vi">LANGUAGE</span><span class="label-when-en">Ngôn ngữ</span></label
+            >
+            <select id="langSelect" class="lang-select" aria-label="Language selector">
+              <option value="vi">Tiếng Việt</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <div class="panel">
+      <section id="links" class="lang-grid" aria-label="Main links">
+        <div class="lang-col lang-en" aria-label="English links">
+          <a class="card" href="/recycling-guide-en.html">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#2dd4bf" />
+                    <stop offset="1" stop-color="#60a5fa" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M10 11l2-2 2 2" />
+                <path d="M10 13l2 2 2-2" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Recycling &amp; Trash Guide</strong>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules-en.html">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#60a5fa" />
+                  </linearGradient>
+                </defs>
+                <path d="M8 3h8" />
+                <path d="M9 3v3a2 2 0 0 1-2 2H6" />
+                <path d="M15 3v3a2 2 0 0 0 2 2h1" />
+                <path d="M7 8h10" />
+                <path d="M7 12h10" />
+                <path d="M7 16h7" />
+                <path d="M6 21h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Dormitory Rules &amp; Regulations</strong>
+            </div>
+          </a>
+
+          <a
+            class="card"
+            href="https://forms.gle/5WmkN938jqDJJjdg6"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facility Issue Report - English Google Form"
+          >
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g5)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g5" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#2dd4bf" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M14 7h6" />
+                <path d="M14 11h6" />
+                <path d="M14 15h6" />
+                <path d="M4 20V4a1 1 0 0 1 1-1h9l6 6v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z" />
+                <path d="M14 3v6h6" />
+                <path d="M7.5 12l1.8 1.8L12.8 10" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Facility Issue Report &amp; General Inquiry</strong>
+            </div>
+          </a>
+        </div>
+
+        <div class="lang-col lang-vi" aria-label="Vietnamese links">
+          <a class="card" href="/recycling-guide-vi.html">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Hướng dẫn phân loại rác</strong>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules-vi.html">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Quy định và nội quy KTX</strong>
+            </div>
+          </a>
+
+          <a
+            class="card"
+            href="https://forms.gle/83SrD4kbLB3yengP7"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facility issue report - Vietnamese Google Form"
+          >
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 22a7 7 0 1 0-7-7" />
+                <path d="M9.5 14.5 7 17" />
+                <path d="M14 6l4 4" />
+                <path d="M11 9l4 4" />
+                <path d="M5 19l4-4" />
+                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Báo cáo sự cố cơ sở vật chất &amp; Liên hệ chung</strong>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section id="faq" class="faq" aria-label="FAQ">
+        <div class="lang-en">
+          <h2>Frequently Asked Questions</h2>
+
+          <details>
+            <summary><span class="q">Q</span> Curfew / entry time restrictions (including overnight stays)</summary>
+            <p>There is no separate curfew. However, with more autonomy, please follow dormitory rules and be considerate of roommates and shared spaces.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> Utility Bill (electricity, gas, water)</summary>
+            <p>
+              Electricity, gas, and water costs are normally covered and you do not need to pay separately. However, if your electricity, gas, or water bill exceeds
+              the building average by more than 10%, you must pay the excess amount.
+            </p>
+          </details>
+        </div>
+
+        <div class="lang-vi">
+          <h2>Câu hỏi thường gặp</h2>
+
+          <details>
+            <summary><span class="q">Q</span> Giờ giới nghiêm / hạn chế ra vào (bao gồm ở qua đêm)</summary>
+            <p>Không có giờ giới nghiêm riêng. Tuy nhiên, vì có tính tự giác cao hơn, mong các bạn tuân thủ nội quy và tôn trọng bạn cùng phòng cũng như khu vực chung.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> Hóa đơn tiện ích (điện, gas, nước)</summary>
+            <p>
+              Thông thường, chi phí điện, gas và nước đã được bao gồm và bạn không cần trả riêng. Tuy nhiên, nếu tiền điện/gas/nước của bạn cao hơn mức trung bình của
+              tòa nhà hơn 10%, bạn phải thanh toán phần vượt quá.
+            </p>
+          </details>
+        </div>
+      </section>
+      </div>
+    </main>
+
+    <script>
+      (function () {
+        var select = document.getElementById("langSelect");
+        if (!select) return;
+
+        function applyLang(next) {
+          var lang = next === "en" ? "en" : "vi";
+          document.documentElement.setAttribute("data-lang", lang);
+          document.documentElement.lang = lang;
+          try {
+            localStorage.setItem("dormHubLang", lang);
+          } catch (e) {}
+        }
+
+        var initial = "vi";
+        try {
+          initial = localStorage.getItem("dormHubLang") || "vi";
+        } catch (e) {}
+
+        select.value = initial === "en" ? "en" : "vi";
+        applyLang(select.value);
+
+        select.addEventListener("change", function () {
+          applyLang(select.value);
+        });
+      })();
+    </script>
+  </body>
+</html>

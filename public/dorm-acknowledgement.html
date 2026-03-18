@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dormitory Acknowledgment</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A;--navy-l:#2a3d66;--coral:#E8654A;
+  --bg:#F5F2ED;--card:#fff;--text:#2C3E50;--muted:#8A95A3;--border:#E2DDD5;
+  --success:#2E7D5B;--success-bg:#e8f5ef;--link:#3B6FD4;
+  --dis-bg:#f0ede8;--dis-text:#b5b0a8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.container{max-width:480px;margin:0 auto;min-height:100vh}
+
+/* Header */
+.header{background:linear-gradient(135deg,var(--navy),var(--navy-l));padding:28px 24px 24px;color:#fff;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;bottom:-18px;left:-10%;width:120%;height:36px;background:var(--bg);border-radius:50% 50% 0 0}
+.header h1{font-size:20px;font-weight:800;line-height:1.3}
+.header p{font-size:12px;opacity:.7;margin-top:4px;font-weight:500}
+
+/* Lang */
+.lang-row{display:flex;gap:8px;padding:14px 24px 6px}
+.lang-btn{flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--card);font-family:inherit;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;text-align:center;transition:.15s}
+.lang-btn.on{border-color:var(--navy);color:var(--navy);background:#eef1f7}
+
+/* Main */
+.main{padding:12px 24px 40px}
+.card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:14px}
+
+/* Fields */
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+.field select,.field input{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:11px;font-family:inherit;font-size:14px;color:var(--text);background:var(--card);transition:.15s;appearance:none;-webkit-appearance:none}
+.field select{background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A95A3' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center}
+.field select:focus,.field input:focus{outline:none;border-color:var(--navy)}
+
+/* Checklist */
+.chk{border:2px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:.2s}
+.chk.done{border-color:var(--success);background:var(--success-bg)}
+.chk.locked{background:var(--dis-bg)}
+.chk-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+.chk-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--success);flex-shrink:0;pointer-events:none}
+.chk-row input:disabled{opacity:.35}
+.chk-info{flex:1}
+.chk-info .t{font-size:13px;font-weight:600;line-height:1.5}
+.chk.locked .t{color:var(--dis-text)}
+.chk-info .h{font-size:11px;color:var(--coral);font-weight:600;margin-top:3px;display:none}
+.chk.locked .h{display:block}
+.chk.done .h{display:none}
+.chk-open{flex-shrink:0;width:28px;height:28px;border:none;border-radius:8px;background:#f0ede8;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.chk-open:hover{background:#e4e0d9}
+.chk.done .chk-open{background:var(--success);color:#fff}
+
+/* Submit */
+.btn-sub{width:100%;padding:15px;background:var(--navy);color:#fff;border:none;border-radius:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;margin-top:6px}
+.btn-sub:hover{background:var(--navy-l);transform:translateY(-1px)}
+.btn-sub:disabled{background:#B0B8C4;cursor:not-allowed;transform:none}
+
+/* ── Modal ── */
+.modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(27,42,74,.55);align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.modal-sheet{width:100%;max-width:480px;height:92vh;height:92dvh;background:var(--card);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:up .3s ease-out}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head h3{font-size:15px;font-weight:700;color:var(--navy)}
+.modal-x{width:32px;height:32px;border:none;border-radius:50%;background:#f0ede8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.modal-iframe-wrap{flex:1;overflow:hidden;position:relative}
+.modal-iframe-wrap iframe{width:100%;height:100%;border:none}
+.modal-page{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;color:var(--muted);background:rgba(255,255,255,.85);backdrop-filter:blur(4px);padding:3px 12px;border-radius:10px;pointer-events:none}
+.modal-foot{padding:12px 20px 20px;flex-shrink:0;border-top:1px solid var(--border)}
+.modal-btn{width:100%;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.modal-btn.scroll{background:#f0ede8;color:var(--text)}
+.modal-btn.scroll:hover{background:#e4e0d9}
+.modal-btn.ok{background:var(--success);color:#fff}
+.modal-btn.ok:hover{background:#256b4a}
+
+/* Success */
+.suc{display:none;text-align:center;padding:50px 24px}
+.suc-ico{width:72px;height:72px;background:var(--success-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.suc h2{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:10px}
+.suc p{font-size:13px;color:var(--muted);line-height:1.6}
+.suc-det{background:var(--card);border-radius:12px;padding:16px;margin-top:20px;text-align:left}
+.suc-r{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.suc-r:last-child{border-bottom:none}
+.suc-r .l{color:var(--muted)}.suc-r .v{font-weight:600}
+.btn-hub{width:100%;padding:13px;background:0;color:var(--navy);border:2px solid var(--border);border-radius:14px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:16px}
+
+/* Util */
+.loading{display:none;position:fixed;inset:0;background:rgba(27,42,74,.5);z-index:200;align-items:center;justify-content:center}
+.loading.on{display:flex}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--coral);color:#fff;padding:12px 20px;border-radius:10px;font-size:12px;font-weight:600;z-index:300;transition:transform .3s;max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 data-i="hT">📋 Dormitory Rules Acknowledgment</h1>
+    <p data-i="hS">Kyungsung Univ. Off-campus Dormitory</p>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn on" onclick="setLang('en')">🇬🇧 English</button>
+    <button class="lang-btn" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+
+  <div class="main" id="mainC">
+    <!-- Info -->
+    <div class="card">
+      <div class="card-label" data-i="inf">Your Information</div>
+      <div class="field"><label data-i="bL">Building</label>
+        <select id="building" onchange="val()">
+          <option value="" data-i="bS">— Select —</option>
+          <option value="오름A">오름A (Oreum A)</option>
+          <option value="오름B">오름B (Oreum B)</option>
+          <option value="ACE캐슬">ACE캐슬 (ACE Castle)</option>
+        </select>
+      </div>
+      <div class="field"><label data-i="rL">Room Number</label>
+        <input id="room" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="val()">
+      </div>
+      <div class="field"><label data-i="nL">Full Name</label>
+        <input id="fname" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="val()">
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="card">
+      <div class="card-label" data-i="cL">Confirmation Checklist</div>
+
+      <div class="chk locked" id="ci0">
+        <div class="chk-row" onclick="chkClick(0)">
+          <input type="checkbox" id="cb0" disabled>
+          <div class="chk-info">
+            <div class="t" data-i="c0">I have read the Dormitory Rules & Regulations.</div>
+            <div class="h" data-i="c0h">Tap 📖 to read first</div>
+          </div>
+          <button class="chk-open" onclick="event.stopPropagation();openM(0)">📖</button>
+        </div>
+      </div>
+
+      <div class="chk locked" id="ci1">
+        <div class="chk-row" onclick="chkClick(1)">
+          <input type="checkbox" id="cb1" disabled>
+          <div class="chk-info">
+            <div class="t" data-i="c1">I have read the Recycling & Trash Guide.</div>
+            <div class="h" data-i="c1h">Tap ♻️ to read first</div>
+          </div>
+          <button class="chk-open" onclick="event.stopPropagation();openM(1)">♻️</button>
+        </div>
+      </div>
+
+      <div class="chk locked" id="ci2">
+        <div class="chk-row" onclick="chkClick(2)">
+          <input type="checkbox" id="cb2" disabled>
+          <div class="chk-info">
+            <div class="t" data-i="c2">I have read the Door Lock Password Policy.</div>
+            <div class="h" data-i="c2h">Tap 🔐 to read first</div>
+          </div>
+          <button class="chk-open" onclick="event.stopPropagation();openM(2)">🔐</button>
+        </div>
+      </div>
+
+      <div class="chk" id="ci3" style="margin-top:6px">
+        <div class="chk-row" onclick="togFree(3)">
+          <input type="checkbox" id="cb3">
+          <div class="chk-info">
+            <div class="t" data-i="c3">I agree to follow all rules above. I understand that violations may result in demerit points, eviction, or permanent ban.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-sub" id="btnSub" disabled onclick="doSubmit()" data-i="sub">Submit ✓</button>
+  </div>
+
+  <div class="suc" id="suc">
+    <div class="suc-ico">✅</div>
+    <h2 data-i="sT">Submitted!</h2>
+    <p data-i="sM">Your acknowledgment has been recorded.</p>
+    <div class="suc-det" id="sucD"></div>
+    <button class="btn-hub" onclick="location.href='/'" data-i="sB">← Back to Dorm Hub</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal" onclick="closeM()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h3 id="mTitle"></h3>
+      <button class="modal-x" onclick="closeM()">✕</button>
+    </div>
+    <div class="modal-iframe-wrap">
+      <iframe id="mFrame" src="about:blank"></iframe>
+      <div class="modal-page" id="mPage"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="modal-btn scroll" id="mBtn" onclick="mAction()">
+        <span id="mBtnTxt">↓ Scroll down</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="loading" id="ld"><div class="spinner"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ Config ═══
+const URLS = {
+  en: [
+    '/dormitory-rules-en.html',
+    '/recycling-guide-en.html',
+    '/password-policy.html?lang=en',
+  ],
+  vi: [
+    '/dormitory-rules-vi.html',
+    '/recycling-guide-vi.html',
+    '/password-policy.html?lang=vi',
+  ]
+};
+
+// Fallback "last slide index" per content (used until iframe loads and we can compute it).
+const FALLBACK_LAST_INDEX = [12, 11, 4];
+const TITLES = {
+  en: ['Dormitory Rules', 'Recycling Guide', 'Password Policy'],
+  vi: ['Nội quy KTX', 'Phân loại rác', 'Quy định mật khẩu'],
+};
+
+const I = {
+  en: {
+    hT:'📋 Dormitory Rules Acknowledgment',hS:'Kyungsung Univ. Off-campus Dormitory',
+    inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name',
+    cL:'Confirmation Checklist',
+    c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
+    c1:'I have read the Recycling & Trash Guide.',c1h:'Tap ♻️ to read first',
+    c2:'I have read the Door Lock Password Policy.',c2h:'Tap 🔐 to read first',
+    c3:'I agree to follow all rules above. I understand that violations may result in demerit points, eviction, or permanent ban.',
+    sub:'Submit ✓',sT:'Submitted!',sM:'Your acknowledgment has been recorded.',sB:'← Back to Dorm Hub',
+    tF:'Please fill in all fields',tE:'Failed. Please try again.',
+    dB:'Building',dR:'Room',dN:'Name',dD:'Date',
+    scrBtn:'↓ Next page',okBtn:'✓ I have read this',
+  },
+  vi: {
+    hT:'📋 Xác nhận Nội quy KTX',hS:'KTX ngoài khuôn viên ĐH Kyungsung',
+    inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên',
+    cL:'Danh sách xác nhận',
+    c0:'Tôi đã đọc Nội quy & Quy định KTX.',c0h:'Nhấn 📖 để đọc',
+    c1:'Tôi đã đọc Hướng dẫn Phân loại rác.',c1h:'Nhấn ♻️ để đọc',
+    c2:'Tôi đã đọc Quy định Mật khẩu khóa cửa.',c2h:'Nhấn 🔐 để đọc',
+    c3:'Tôi đồng ý tuân thủ tất cả nội quy trên. Tôi hiểu rằng vi phạm có thể dẫn đến điểm phạt, buộc rời KTX, hoặc cấm vĩnh viễn.',
+    sub:'Gửi xác nhận ✓',sT:'Gửi thành công!',sM:'Xác nhận của bạn đã được ghi nhận.',sB:'← Quay lại Dorm Hub',
+    tF:'Vui lòng điền đầy đủ',tE:'Thất bại. Vui lòng thử lại.',
+    dB:'Tòa nhà',dR:'Phòng',dN:'Tên',dD:'Ngày',
+    scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',
+  }
+};
+
+let lang='en';
+const rd=[false,false,false];
+let curM=-1, curSlide=0;
+let mLast=1;
+
+function setModalLastIndexFromDoc(doc){
+  if(!doc) return;
+
+  // Preferred: pages with explicit snap sections use `data-card="0..N"`.
+  const dataCards = Array.from(doc.querySelectorAll('[data-card]'));
+  if(dataCards.length){
+    const max = dataCards.reduce((m, el) => {
+      const v = parseInt(el.getAttribute('data-card'), 10);
+      return Number.isFinite(v) ? Math.max(m, v) : m;
+    }, 0);
+    if(max > 0){
+      mLast = max;
+      return;
+    }
+  }
+
+  // Fallback: count snap sections by class.
+  const sections = doc.querySelectorAll('.slide, .card');
+  if(sections.length){
+    mLast = Math.max(1, sections.length - 1);
+  }
+}
+
+// ═══ Lang ═══
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`.lang-btn:nth-child(${l==='en'?1:2})`).classList.add('on');
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const k=el.getAttribute('data-i');
+    if(!I[l][k])return;
+    if(el.tagName==='INPUT')el.placeholder=I[l][k];
+    else if(el.tagName==='OPTION')el.textContent=I[l][k];
+    else el.innerHTML=I[l][k];
+  });
+}
+
+// ═══ Checklist ═══
+function chkClick(i){
+  if(!rd[i]){toast(I[lang][`c${i}h`]);return;}
+  togCb(i);
+}
+function togFree(i){togCb(i)}
+function togCb(i){
+  const cb=document.getElementById(`cb${i}`);
+  cb.checked=!cb.checked;
+  document.getElementById(`ci${i}`).classList.toggle('done',cb.checked);
+  val();
+}
+function unlock(i){
+  rd[i]=true;
+  const it=document.getElementById(`ci${i}`),cb=document.getElementById(`cb${i}`);
+  it.classList.remove('locked');cb.disabled=false;cb.checked=true;it.classList.add('done');
+  val();
+}
+
+// ═══ Modal with iframe ═══
+function openM(i){
+  curM=i; curSlide=0;
+  mLast = FALLBACK_LAST_INDEX[i] ?? 1;
+  document.getElementById('mTitle').textContent=TITLES[lang][i];
+  const frame=document.getElementById('mFrame');
+  frame.src=URLS[lang][i];
+  updPage();
+  updMBtn();
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeM(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('mFrame').src='about:blank';
+  curM=-1;
+  mLast=1;
+}
+function updPage(){
+  const safeLast = Math.max(1, mLast || 1);
+  const safeCur = Math.min(Math.max(0, curSlide), safeLast);
+  // Display as 1-based pages for readability.
+  document.getElementById('mPage').textContent=`${safeCur + 1} / ${safeLast + 1}`;
+}
+function updMBtn(){
+  const btn=document.getElementById('mBtn');
+  const txt=document.getElementById('mBtnTxt');
+  const safeLast = Math.max(1, mLast || 1);
+  if(curSlide>=safeLast){
+    btn.className='modal-btn ok';
+    txt.textContent=I[lang].okBtn;
+  }else{
+    btn.className='modal-btn scroll';
+    txt.textContent=I[lang].scrBtn;
+  }
+}
+function mAction(){
+  const safeLast = Math.max(1, mLast || 1);
+  if(curSlide>=safeLast){
+    unlock(curM);
+    closeM();
+    return;
+  }
+  // Scroll iframe's scroll-container by one viewport
+  try{
+    const frame=document.getElementById('mFrame');
+    const doc=frame.contentDocument||frame.contentWindow.document;
+    const scroller=doc.querySelector('.scroll-container')||doc.scrollingElement||doc.documentElement;
+    const vh=frame.clientHeight;
+    scroller.scrollBy({top:vh, behavior:'smooth'});
+    curSlide = Math.min(safeLast, curSlide + 1);
+    updPage();
+    updMBtn();
+  }catch(e){
+    // Cross-origin: can't access iframe. Fallback: use postMessage or just increment
+    curSlide = Math.min(safeLast, curSlide + 1);
+    updPage();
+    updMBtn();
+  }
+}
+
+// Also listen for manual scroll inside iframe
+function trackIframeScroll(){
+  try{
+    const frame=document.getElementById('mFrame');
+    const doc=frame.contentDocument||frame.contentWindow.document;
+    setModalLastIndexFromDoc(doc);
+    const scroller=doc.querySelector('.scroll-container')||doc.scrollingElement||doc.documentElement;
+    if(!scroller)return;
+    scroller.addEventListener('scroll',()=>{
+      const vh=frame.clientHeight;
+      const scrolled=scroller.scrollTop;
+      const safeLast = Math.max(1, mLast || 1);
+      const rawSlide = Math.round(scrolled / Math.max(1, vh));
+      const newSlide = Math.min(safeLast, Math.max(0, rawSlide));
+      if(newSlide>curSlide){
+        curSlide=newSlide;
+        updPage();
+        updMBtn();
+      }
+    },{passive:true});
+
+    // Ensure UI reflects computed total immediately.
+    updPage();
+    updMBtn();
+  }catch(e){}
+}
+
+// Attach iframe load listener
+document.getElementById('mFrame').addEventListener('load',function(){
+  // Small delay for rendering
+  setTimeout(trackIframeScroll,300);
+});
+
+// ═══ Validate ═══
+function val(){
+  const b=document.getElementById('building').value;
+  const r=document.getElementById('room').value.trim();
+  const n=document.getElementById('fname').value.trim();
+  const all=[0,1,2,3].every(i=>document.getElementById(`cb${i}`).checked);
+  document.getElementById('btnSub').disabled=!(b&&r&&n&&all);
+}
+
+// ═══ Submit ═══
+async function doSubmit(){
+  const building=document.getElementById('building').value;
+  const room=document.getElementById('room').value.trim();
+  const name=document.getElementById('fname').value.trim();
+  if(!building||!room||!name){toast(I[lang].tF);return;}
+  const date=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
+  document.getElementById('ld').classList.add('on');
+  try{
+    const rec={building,room,name,lang,date};
+    const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
+    recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
+
+    /*
+     * ── Google Form (uncomment & configure) ──
+     * const URL='https://docs.google.com/forms/d/e/YOUR_ID/formResponse';
+     * const fd=new URLSearchParams();
+     * fd.append('entry.XXX',building);
+     * fd.append('entry.XXX',room);
+     * fd.append('entry.XXX',name);
+     * fd.append('entry.XXX',lang==='en'?'English':'Tiếng Việt');
+     * fd.append('entry.XXX',date);
+     * await fetch(URL,{method:'POST',mode:'no-cors',body:fd});
+     */
+
+    await new Promise(r=>setTimeout(r,500));
+    document.getElementById('ld').classList.remove('on');
+    document.getElementById('mainC').style.display='none';
+    document.querySelector('.lang-row').style.display='none';
+    const t=I[lang];
+    document.getElementById('sucD').innerHTML=`
+      <div class="suc-r"><span class="l">${t.dB}</span><span class="v">${building}</span></div>
+      <div class="suc-r"><span class="l">${t.dR}</span><span class="v">${room}</span></div>
+      <div class="suc-r"><span class="l">${t.dN}</span><span class="v">${name}</span></div>
+      <div class="suc-r"><span class="l">${t.dD}</span><span class="v">${date}</span></div>`;
+    document.getElementById('suc').style.display='block';
+    window.scrollTo(0,0);
+  }catch(e){
+    document.getElementById('ld').classList.remove('on');
+    toast(I[lang].tE);
+  }
+}
+
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dormitory Rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Be Vietnam Pro', 'Noto Sans KR', sans-serif;
+  background: #111;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.card {
+  scroll-snap-align: start;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.card-inner {
+  max-width: 440px;
+  width: 100%;
+  z-index: 2;
+}
+.card-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+.big-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+.card h2 {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.card-text {
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.rule-item .rule-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.rule-item.danger {
+  background: rgba(183,28,28,0.1);
+  border-left: 4px solid #B71C1C;
+}
+.rule-item.warn {
+  background: rgba(230,81,0,0.1);
+  border-left: 4px solid #E65100;
+}
+.rule-item.info {
+  background: rgba(0,0,0,0.05);
+  border-left: 4px solid rgba(0,0,0,0.15);
+}
+.penalty-box {
+  background: rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 10px 0;
+}
+.penalty-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 13.5px;
+}
+.penalty-row:last-child { border-bottom: none; }
+.penalty-row .pts {
+  font-weight: 800;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.penalty-row .pts.neg {
+  color: #B71C1C;
+}
+.highlight-banner {
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  margin: 14px 0;
+  line-height: 1.4;
+}
+.demerit-badge {
+  display: inline-block;
+  background: #B71C1C;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin: 8px 0;
+}
+.small-note {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin: 14px 0 6px 0;
+}
+.cover-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  text-align: center;
+}
+.cover-card h1 {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.cover-card .cover-sub {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.cover-card .cover-warning {
+  background: rgba(255,82,82,0.2);
+  border: 1px solid rgba(255,82,82,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  text-align: left;
+}
+.swipe-hint {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-4px); }
+}
+.scroll-arrow {
+  display: inline-block;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.progress {
+  position: fixed;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 100;
+}
+.progress .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: all 0.3s;
+}
+.progress .dot.active {
+  background: white;
+  transform: scale(1.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<div class="card cover-card" data-card="0">
+  <div class="card-inner">
+    <div class="card-num">경성대 교외 원룸 기숙사</div>
+    <div style="font-size:64px;margin-bottom:16px;">🏠</div>
+    <h1>Nội quy KTX<br>bạn cần biết</h1>
+    <div class="cover-sub">KTX ngoài khuôn viên ĐH Kyungsung<br>경성대 교외 원룸 기숙사</div>
+    <div class="cover-warning">⚠️ <strong>Điểm phạt có thể dẫn đến buộc rời KTX.</strong> Sinh viên bị đuổi có thể bị cấm vĩnh viễn hoặc cấm học kỳ sau. Vui lòng đọc kỹ!</div>
+    <div class="swipe-hint"><span class="scroll-arrow">↓</span> Cuộn xuống <span class="scroll-arrow">↓</span></div>
+  </div>
+</div>
+
+<div class="card" style="background:#FFF8E1;color:#E65100" data-card="1">
+  <div class="card-inner">
+    <div class="card-num" style="color:#E65100">1 / 13</div>
+    <div class="big-icon">🚨</div>
+    <h2>Hệ thống điểm phạt</h2>
+
+<div class="card-text">Vi phạm nội quy → nhận <strong>điểm phạt</strong>. Điểm cộng dồn và có hậu quả nghiêm trọng:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>⚠️ Cảnh cáo</span><span class="pts neg">−10 điểm</span></div>
+  <div class="penalty-row"><span>🚪 Đuổi + cấm học kỳ sau</span><span class="pts neg">−15 điểm</span></div>
+</div>
+<div class="section-label" style="margin-top:16px;">Theo loại vi phạm:</div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span><strong>Vi phạm an toàn & trật tự</strong><br>→ Đuổi + <strong>cấm vĩnh viễn</strong> (không bao giờ được quay lại)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚠️</span><span><strong>Vi phạm nghĩa vụ cư dân</strong><br>→ Đuổi + <strong>cấm học kỳ sau</strong></span></div>
+<div class="small-note">Bạn có thể bù trừ điểm phạt bằng điểm thưởng (tình nguyện, phòng sạch, tham gia sự kiện, v.v.)</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFEBEE;color:#B71C1C" data-card="2">
+  <div class="card-inner">
+    <div class="card-num" style="color:#B71C1C">2 / 13</div>
+    <div class="big-icon">🔥</div>
+    <h2>Đuổi ngay +<br>Cấm vĩnh viễn</h2>
+
+<div class="card-text">Đây là <strong>vi phạm an toàn & trật tự</strong> — đuổi ngay lập tức và <strong>KHÔNG BAO GIỜ được quay lại</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🔥</span><span>Gây cháy, ngập, hoặc thảm họa (cố ý hoặc do bất cẩn)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚔</span><span>Trộm cắp, hành hung, hoặc đánh bạc</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span>Cho người khác giới ở qua đêm trong phòng</span></div>
+<div class="rule-item danger"><span class="rule-icon">⚠️</span><span>Các vi phạm nghiêm trọng khác về nội quy KTX</span></div>
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">Cấm vĩnh viễn = Không bao giờ được<br>đăng ký KTX nào nữa</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FCE4EC;color:#880E4F" data-card="3">
+  <div class="card-inner">
+    <div class="card-num" style="color:#880E4F">3 / 13</div>
+    <div class="big-icon">🚪</div>
+    <h2>Đuổi + Cấm<br>học kỳ sau</h2>
+
+<div class="card-text">Đây là <strong>vi phạm nghĩa vụ cư dân</strong> — đuổi và <strong>không được nhập lại học kỳ sau</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>Cho người ngoài ở qua đêm</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>Vào phòng người khác giới (hoặc cho họ vào phòng bạn)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🔄</span><span>Tự ý đổi phòng</span></div>
+<div class="rule-item danger"><span class="rule-icon">📄</span><span>Nộp giấy tờ giả/làm giả</span></div>
+<div class="rule-item danger"><span class="rule-icon">💬</span><span>Phát tán thông tin sai, phỉ báng hoặc xúc phạm về KTX hoặc cư dân</span></div>
+<div class="rule-item danger"><span class="rule-icon">🐾</span><span>Mang vào hoặc nuôi thú cưng (kể cả cá và côn trùng)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🧹</span><span>Phòng bẩn khi rời KTX</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="4">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">4 / 13</div>
+    <div class="big-icon">🚷</div>
+    <h2>Cấm đưa người ngoài<br>vào phòng</h2>
+
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">Đưa người ngoài vào KTX</div>
+<div style="text-align:center;"><span class="demerit-badge">−12 điểm</span></div>
+<div class="card-text" style="margin-top:14px;">Người không phải cư dân <strong>không được phép vào</strong> tòa nhà KTX trong mọi trường hợp.</div>
+<div class="rule-item danger"><span class="rule-icon">🚷</span><span>Đưa bất kỳ khách nào vào tòa nhà = <strong>−12 điểm</strong></span></div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>Cho họ ở qua đêm = <strong>đuổi ngay + cấm học kỳ sau</strong></span></div>
+<div class="card-text" style="margin-top:8px;">Bao gồm bạn bè, người yêu, gia đình, và bất kỳ ai không phải cư dân đăng ký của KTX này.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFF3E0;color:#BF360C" data-card="5">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">5 / 13</div>
+    <div class="big-icon">🍺</div>
+    <h2>Rượu bia</h2>
+
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🍺 CẤM uống rượu bia<br>Chai rỗng cũng là bằng chứng!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
+<div class="card-text" style="margin-top:12px;">Không cần bắt quả tang. Nếu phát hiện <strong>bất kỳ dấu vết nào</strong> — chai, lon, mùi — đều tính là uống rượu.</div>
+<div class="rule-item danger"><span class="rule-icon">🍷</span><span><strong>−10 điểm phạt</strong> — chai rỗng, lon, hoặc bất kỳ dấu hiệu rượu bia nào trong phòng</span></div>
+<div class="small-note">💡 Mẹo: Đừng cất rượu "để sau." Nếu bị phát hiện khi kiểm tra, −10 điểm.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F3E5F5;color:#6A1B9A" data-card="6">
+  <div class="card-inner">
+    <div class="card-num" style="color:#6A1B9A">6 / 13</div>
+    <div class="big-icon">🚬</div>
+    <h2>Hút thuốc</h2>
+
+<div class="highlight-banner" style="background:rgba(106,27,154,0.1);color:#6A1B9A;">🚬 TUYỆT ĐỐI CẤM HÚT THUỐC<br>Trong phòng, hành lang, VÀ cầu thang!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
+<div class="card-text" style="margin-top:12px;">Cấm mọi loại thuốc <strong>ở mọi nơi trong tòa nhà</strong> — phòng, hành lang, cầu thang. Bao gồm:</div>
+<div class="rule-item danger"><span class="rule-icon">🚬</span><span>Thuốc lá, <strong>thuốc lá điện tử, vape, IQOS, thuốc lá nung nóng</strong>, và mọi thiết bị hút thuốc khác</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚨</span><span><strong>Cảm biến cháy rất nhạy</strong> — hút thuốc kích hoạt báo cháy toàn tòa nhà</span></div>
+<div class="rule-item danger"><span class="rule-icon">💥</span><span><strong>NGUY HIỂM:</strong> Một số khu vực có đường ống gas — hút thuốc gần đó có <strong>nguy cơ nổ</strong></span></div>
+<div class="rule-item danger"><span class="rule-icon">⚖️</span><span>Vi phạm hút thuốc có thể dẫn đến <strong>đuổi + khởi tố (고발)</strong></span></div>
+<div class="card-text" style="margin-top:8px;">❌ Ném đầu lọc thuốc trên cầu thang hoặc dụi tắt trên tường/sàn cũng bị cấm. <strong>Dấu vết</strong> (mùi, đầu lọc, khói) đều tính là bằng chứng.</div>
+<div class="highlight-banner" style="background:rgba(46,125,50,0.1);color:#2E7D32;font-size:14px;">✅ Vui lòng hút thuốc BÊN NGOÀI tòa nhà.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E3F2FD;color:#0D47A1" data-card="7">
+  <div class="card-inner">
+    <div class="card-num" style="color:#0D47A1">7 / 13</div>
+    <div class="big-icon">🔌</div>
+    <h2>Thiết bị bị cấm</h2>
+
+<div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
+<div class="card-text" style="margin-top:12px;">Các thiết bị sau <strong>bị cấm hoàn toàn</strong> trong phòng:</div>
+<div class="rule-item warn"><span class="rule-icon">🔥</span><span><strong>Máy sưởi điện</strong> — quạt sưởi, lò sưởi, v.v.</span></div>
+<div class="rule-item warn"><span class="rule-icon">🛏️</span><span><strong>Đệm/chăn điện sưởi</strong> (전기매트, 전기장판)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚡</span><span><strong>Mọi thiết bị sưởi</strong> hoặc vật liệu dễ cháy</span></div>
+<div class="rule-item warn"><span class="rule-icon">💇</span><span><strong>Máy duỗi tóc cắm điện</strong> không có người trông → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
+<div class="small-note">Chỉ dùng hệ thống sưởi/lạnh có sẵn. Nếu hỏng, hãy báo cáo!</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="8">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">8 / 13</div>
+    <div class="big-icon">💡</div>
+    <h2>Tiền điện nước</h2>
+
+<div class="card-text">Chi phí điện, gas, nước <strong>thông thường được bao gồm</strong> và bạn không cần trả riêng. Tuy nhiên:</div>
+<div class="rule-item warn"><span class="rule-icon">💡</span><span>Nếu hóa đơn điện, gas, nước vượt trung bình tòa nhà <strong>hơn 10%</strong>, bạn phải trả phần vượt</span></div>
+<div class="rule-item info"><span class="rule-icon">🌡️</span><span>Bật điều hòa/sưởi khi cửa sổ hoặc cửa mở → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚪</span><span>Khi ra ngoài: đóng cửa sổ, tắt điều hòa/sưởi, kiểm tra vòi nước nóng</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F5F5F5;color:#37474F" data-card="9">
+  <div class="card-inner">
+    <div class="card-num" style="color:#37474F">9 / 13</div>
+    <div class="big-icon">📋</div>
+    <h2>Kiểm tra phòng</h2>
+
+<div class="card-text">Nhân viên KTX <strong>có thể và sẽ</strong> kiểm tra phòng của bạn về:</div>
+<div class="rule-item info"><span class="rule-icon">🔍</span><span>An toàn, phòng chống tai nạn, vệ sinh</span></div>
+<div class="rule-item info"><span class="rule-icon">🧹</span><span>Phòng bẩn → <span style="color:#B71C1C;font-weight:800;">−3 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚫</span><span>Từ chối kiểm tra phòng → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
+<div class="card-text" style="margin-top:10px;">Kiểm tra thường có thông báo trước. Tuy nhiên, <strong>trường hợp khẩn cấp</strong> (sửa chữa, diệt côn trùng, an toàn) có thể kiểm tra khi bạn vắng — bạn sẽ được thông báo sau.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="10">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">10 / 13</div>
+    <div class="big-icon">📦</div>
+    <h2>Rời KTX & Hoàn tiền</h2>
+
+<div class="card-text"><strong>Tự nguyện rời</strong> không được phép trong 30 ngày đầu, trừ trường hợp đặc biệt như về nước.</div>
+<div class="section-label">Sau 30 ngày — rời tự nguyện:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>Phí rời tự nguyện</span><span class="pts neg">14 ngày phí</span></div>
+  <div class="penalty-row"><span>Phí bị đuổi</span><span class="pts neg">30 ngày phí</span></div>
+  <div class="penalty-row"><span>Còn dưới 30 ngày<br><span style="font-size:11px;opacity:0.6;">(20 ngày trong kỳ nghỉ)</span></span><span class="pts neg">Không hoàn tiền</span></div>
+</div>
+<div class="card-text" style="margin-top:10px;">Hoàn tiền = Tổng đã nộp <strong>trừ phí phạt</strong>, rồi <strong>trừ phí hàng ngày × số ngày đã ở</strong> đến ngày rời.</div>
+<div class="card-text">Khi rời: trả lại đồ đã cấp, kiểm tra phòng, và bồi thường mọi hư hỏng hoặc mất mát.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8EAF6;color:#283593" data-card="11">
+  <div class="card-inner">
+    <div class="card-num" style="color:#283593">11 / 13</div>
+    <div class="big-icon">📌</div>
+    <h2>Các quy định khác cần nhớ</h2>
+
+<div class="rule-item info"><span class="rule-icon">📢</span><span>Gây ồn ào (bao gồm khiếu nại từ hàng xóm) → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🧲</span><span>Không tháo, sửa, di chuyển đồ nội thất/thiết bị → <span style="color:#B71C1C;font-weight:800;">−3 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">♻️</span><span>Không phân loại rác → <span style="color:#B71C1C;font-weight:800;">−2 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🍔</span><span>Vứt thức ăn bừa bãi / làm phiền bạn cùng phòng → <span style="color:#B71C1C;font-weight:800;">−2 điểm</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🪟</span><span>Dùng rèm hoặc vòi phun để phơi đồ → <span style="color:#B71C1C;font-weight:800;">−2 điểm</span></span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FBE9E7;color:#BF360C" data-card="12">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">12 / 13</div>
+    <div class="big-icon">🧯</div>
+    <h2>Luật phòng cháy:<br>Cấm để đồ ngoài hành lang!</h2>
+
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🚨 Phạt lần đầu: 1.000.000₩<br>(Luật Phòng cháy Hàn Quốc)</div>
+<div class="card-text">Theo pháp luật, <strong>nghiêm cấm</strong> đặt bất kỳ vật dụng nào tại các khu vực sau:</div>
+<div class="rule-item danger"><span class="rule-icon">🚲</span><span>Hành lang — cấm xe đạp, thùng, kệ giày, v.v.</span></div>
+<div class="rule-item danger"><span class="rule-icon">🪴</span><span>Cầu thang — cấm chậu cây, đồ nội thất, túi, v.v.</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>Lối thoát hiểm — phải luôn thông thoáng hoàn toàn</span></div>
+<div class="card-text" style="margin-top:10px;">Đây không chỉ là quy định KTX — đây là <strong>luật pháp Hàn Quốc</strong>. Bất kỳ ai cũng có thể báo cáo, và mức phạt bắt đầu từ <strong>1.000.000₩ (khoảng $750)</strong> cho lần đầu vi phạm.</div>
+<div class="small-note">Giữ tất cả đồ cá nhân trong phòng. Không có ngoại lệ.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="13">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">13 / 13</div>
+    <div class="big-icon">⭐</div>
+    <h2>Điểm thưởng<br>— Bù trừ điểm phạt!</h2>
+    <div class="card-text">Bạn có thể <strong>kiếm điểm thưởng</strong> để bù trừ điểm phạt. Cách kiếm:</div>
+    <div class="penalty-box" style="background:rgba(46,125,50,0.08);">
+      <div class="penalty-row"><span>🏆 Nâng cao uy tín KTX</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+      <div class="penalty-row"><span>🚑 Hỗ trợ sơ cứu khẩn cấp</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+      <div class="penalty-row"><span>📋 Tham gia buổi định hướng</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>🧠 Tư vấn nghề nghiệp & tâm lý</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>🧹 Phòng được công nhận sạch đẹp</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>📝 Khảo sát hài lòng KTX</span><span class="pts" style="color:#2E7D32;">+2</span></div>
+      <div class="penalty-row"><span>🎉 Tham gia sự kiện KTX</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>🤝 Giúp việc hành chính (phiên dịch, v.v.)</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>📢 Báo cáo vi phạm nội quy</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>💪 Tình nguyện (1 điểm/giờ)</span><span class="pts" style="color:#2E7D32;">+1/giờ</span></div>
+    </div>
+    <div class="small-note">※ Điểm hiển thị là tối đa và có thể thay đổi. Hoạt động tình nguyện phải đăng ký trước tại Văn phòng Giám sát KTX.</div>
+  </div>
+</div>
+
+<script src="/toc.js"></script>
+<script>
+const cards = document.querySelectorAll('.card');
+const progress = document.getElementById('progress');
+cards.forEach((_,i) => { const d=document.createElement('div'); d.className='dot'; progress.appendChild(d); });
+const dots = progress.querySelectorAll('.dot');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const idx = Array.from(cards).indexOf(e.target);
+      dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+      const isDark = e.target.classList.contains('cover-card');
+      dots.forEach(d => {
+        d.style.background = d.classList.contains('active')
+          ? (isDark?'white':'#333')
+          : (isDark?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.15)');
+      });
+    }
+  });
+}, {threshold: 0.5});
+cards.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>

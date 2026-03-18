@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dormitory Rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Be Vietnam Pro', 'Noto Sans KR', sans-serif;
+  background: #111;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.card {
+  scroll-snap-align: start;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.card-inner {
+  max-width: 440px;
+  width: 100%;
+  z-index: 2;
+}
+.card-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+.big-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+.card h2 {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.card-text {
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.rule-item .rule-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.rule-item.danger {
+  background: rgba(183,28,28,0.1);
+  border-left: 4px solid #B71C1C;
+}
+.rule-item.warn {
+  background: rgba(230,81,0,0.1);
+  border-left: 4px solid #E65100;
+}
+.rule-item.info {
+  background: rgba(0,0,0,0.05);
+  border-left: 4px solid rgba(0,0,0,0.15);
+}
+.penalty-box {
+  background: rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 10px 0;
+}
+.penalty-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 13.5px;
+}
+.penalty-row:last-child { border-bottom: none; }
+.penalty-row .pts {
+  font-weight: 800;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.penalty-row .pts.neg {
+  color: #B71C1C;
+}
+.highlight-banner {
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  margin: 14px 0;
+  line-height: 1.4;
+}
+.demerit-badge {
+  display: inline-block;
+  background: #B71C1C;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin: 8px 0;
+}
+.small-note {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin: 14px 0 6px 0;
+}
+.cover-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  text-align: center;
+}
+.cover-card h1 {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.cover-card .cover-sub {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.cover-card .cover-warning {
+  background: rgba(255,82,82,0.2);
+  border: 1px solid rgba(255,82,82,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  text-align: left;
+}
+.swipe-hint {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-4px); }
+}
+.scroll-arrow {
+  display: inline-block;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.progress {
+  position: fixed;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 100;
+}
+.progress .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: all 0.3s;
+}
+.progress .dot.active {
+  background: white;
+  transform: scale(1.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<div class="card cover-card" data-card="0">
+  <div class="card-inner">
+    <div class="card-num">경성대 교외 원룸 기숙사</div>
+    <div style="font-size:64px;margin-bottom:16px;">🏠</div>
+    <h1>Dormitory Rules<br>You Need to Know</h1>
+    <div class="cover-sub">Kyungsung Univ. Off-campus Studio Dormitory<br>경성대 교외 원룸 기숙사</div>
+    <div class="cover-warning">⚠️ <strong>Demerit points can lead to forced eviction.</strong> Evicted students may be permanently banned or banned for the next semester. Please read carefully!</div>
+    <div class="swipe-hint"><span class="scroll-arrow">↓</span> Scroll down <span class="scroll-arrow">↓</span></div>
+  </div>
+</div>
+
+<div class="card" style="background:#FFF8E1;color:#E65100" data-card="1">
+  <div class="card-inner">
+    <div class="card-num" style="color:#E65100">1 / 13</div>
+    <div class="big-icon">🚨</div>
+    <h2>Penalty Point System</h2>
+
+<div class="card-text">Break a rule → get <strong>demerit points</strong>. Points add up and have serious consequences:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>⚠️ Warning issued</span><span class="pts neg">−10 pts</span></div>
+  <div class="penalty-row"><span>🚪 Eviction + banned next semester</span><span class="pts neg">−15 pts</span></div>
+</div>
+<div class="section-label" style="margin-top:16px;">By violation type:</div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span><strong>Safety & order violations</strong><br>→ Eviction + <strong>permanent ban</strong> (can never return)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚠️</span><span><strong>Resident obligation violations</strong><br>→ Eviction + <strong>banned next semester</strong></span></div>
+<div class="small-note">You can offset demerit points with merit points (volunteer work, keeping room clean, attending events, etc.)</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFEBEE;color:#B71C1C" data-card="2">
+  <div class="card-inner">
+    <div class="card-num" style="color:#B71C1C">2 / 13</div>
+    <div class="big-icon">🔥</div>
+    <h2>Instant Eviction +<br>Permanent Ban</h2>
+
+<div class="card-text">These are <strong>safety & order violations</strong> — immediate dismissal and you can <strong>NEVER return</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🔥</span><span>Causing fire, flood, or other disasters (deliberately or by negligence)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚔</span><span>Theft, assault, or gambling</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span>Letting someone of the opposite sex stay overnight in your room</span></div>
+<div class="rule-item danger"><span class="rule-icon">⚠️</span><span>Other serious violations of dormitory regulations</span></div>
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">Permanent ban = You cannot apply for<br>any dormitory ever again</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FCE4EC;color:#880E4F" data-card="3">
+  <div class="card-inner">
+    <div class="card-num" style="color:#880E4F">3 / 13</div>
+    <div class="big-icon">🚪</div>
+    <h2>Eviction + Banned<br>Next Semester</h2>
+
+<div class="card-text">These are <strong>resident obligation violations</strong> — eviction and <strong>cannot re-enter next semester</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>Letting non-residents stay overnight</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>Entering a room of the opposite sex (or letting them in yours)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🔄</span><span>Switching rooms without permission</span></div>
+<div class="rule-item danger"><span class="rule-icon">📄</span><span>Submitting false/forged documents</span></div>
+<div class="rule-item danger"><span class="rule-icon">💬</span><span>Spreading false info, defamation, or insults about the dorm or residents</span></div>
+<div class="rule-item danger"><span class="rule-icon">🐾</span><span>Bringing in or keeping pets (including fish and insects)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🧹</span><span>Poor room condition when leaving the dormitory</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="4">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">4 / 13</div>
+    <div class="big-icon">🚷</div>
+    <h2>No Outside Visitors<br>in Your Room</h2>
+
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">Bringing outsiders into the dorm</div>
+<div style="text-align:center;"><span class="demerit-badge">−12 pts</span></div>
+<div class="card-text" style="margin-top:14px;">Non-residents are <strong>not allowed to enter</strong> the dormitory building under any circumstances.</div>
+<div class="rule-item danger"><span class="rule-icon">🚷</span><span>Bringing any outside visitor into the building = <strong>−12 points</strong></span></div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>Letting them stay overnight = <strong>immediate eviction + banned next semester</strong></span></div>
+<div class="card-text" style="margin-top:8px;">This includes friends, partners, family, and anyone who is not a registered resident of this dormitory.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFF3E0;color:#BF360C" data-card="5">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">5 / 13</div>
+    <div class="big-icon">🍺</div>
+    <h2>Alcohol</h2>
+
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🍺 Drinking is BANNED<br>Even empty bottles count as evidence!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 pts</span></div>
+<div class="card-text" style="margin-top:12px;">You don't need to be caught drinking. If <strong>any trace</strong> is found — bottles, cans, smell — it counts as drinking.</div>
+<div class="rule-item danger"><span class="rule-icon">🍷</span><span><strong>−10 demerit points</strong> — empty bottles, cans, or any sign of alcohol in your room</span></div>
+<div class="small-note">💡 Tip: Don't even store alcohol "for later." If found during inspection, it's −10 points.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F3E5F5;color:#6A1B9A" data-card="6">
+  <div class="card-inner">
+    <div class="card-num" style="color:#6A1B9A">6 / 13</div>
+    <div class="big-icon">🚬</div>
+    <h2>Smoking</h2>
+
+<div class="highlight-banner" style="background:rgba(106,27,154,0.1);color:#6A1B9A;">🚬 ABSOLUTELY NO SMOKING<br>In rooms, hallways, AND staircases!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 pts</span></div>
+<div class="card-text" style="margin-top:12px;">Smoking of <strong>any kind</strong> is prohibited <strong>everywhere inside the building</strong> — rooms, hallways, staircases. This includes:</div>
+<div class="rule-item danger"><span class="rule-icon">🚬</span><span>Cigarettes, <strong>e-cigarettes, vapes, IQOS, heated tobacco</strong>, and all other smoking devices</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚨</span><span><strong>Fire sensors are extremely sensitive</strong> — smoking triggers the fire alarm for the entire building</span></div>
+<div class="rule-item danger"><span class="rule-icon">💥</span><span><strong>DANGER:</strong> Some sections have gas pipes installed — smoking near them creates an <strong>explosion risk</strong></span></div>
+<div class="rule-item danger"><span class="rule-icon">⚖️</span><span>Smoking violations may result in <strong>eviction + legal action (고발)</strong></span></div>
+<div class="card-text" style="margin-top:8px;">❌ Throwing cigarette butts on staircases or putting them out on walls/floors is also prohibited. <strong>Traces</strong> (smell, butts, smoke) count as evidence.</div>
+<div class="highlight-banner" style="background:rgba(46,125,50,0.1);color:#2E7D32;font-size:14px;">✅ Please smoke OUTSIDE the building only.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E3F2FD;color:#0D47A1" data-card="7">
+  <div class="card-inner">
+    <div class="card-num" style="color:#0D47A1">7 / 13</div>
+    <div class="big-icon">🔌</div>
+    <h2>Banned Appliances</h2>
+
+<div style="text-align:center;"><span class="demerit-badge">−10 pts</span></div>
+<div class="card-text" style="margin-top:12px;">These items are <strong>strictly prohibited</strong> in your room:</div>
+<div class="rule-item warn"><span class="rule-icon">🔥</span><span><strong>Electric heaters</strong> — space heaters, fan heaters, etc.</span></div>
+<div class="rule-item warn"><span class="rule-icon">🛏️</span><span><strong>Electric heating mats / blankets</strong> (전기매트, 전기장판)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚡</span><span><strong>Any heating appliance</strong> or flammable materials</span></div>
+<div class="rule-item warn"><span class="rule-icon">💇</span><span><strong>Hair straightener left plugged in</strong> unattended → <span style="color:#B71C1C;font-weight:800;">−5 pts</span></span></div>
+<div class="small-note">Use only the built-in heating/cooling system. If it's broken, report it!</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="8">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">8 / 13</div>
+    <div class="big-icon">💡</div>
+    <h2>Utility Bills</h2>
+
+<div class="card-text">Electricity, gas, and water costs are <strong>normally covered</strong> and you don't need to pay separately. However:</div>
+<div class="rule-item warn"><span class="rule-icon">💡</span><span>If your electricity, gas, or water bill exceeds the building average by <strong>more than 10%</strong>, you must pay the excess amount</span></div>
+<div class="rule-item info"><span class="rule-icon">🌡️</span><span>Don't run AC/heater with windows or door open → <span style="color:#B71C1C;font-weight:800;">−5 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚪</span><span>When leaving: close windows, turn off AC/heater, check hot water tap</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F5F5F5;color:#37474F" data-card="9">
+  <div class="card-inner">
+    <div class="card-num" style="color:#37474F">9 / 13</div>
+    <div class="big-icon">📋</div>
+    <h2>Room Inspections</h2>
+
+<div class="card-text">Dormitory staff <strong>can and will</strong> inspect your room for:</div>
+<div class="rule-item info"><span class="rule-icon">🔍</span><span>Safety checks, accident prevention, cleanliness</span></div>
+<div class="rule-item info"><span class="rule-icon">🧹</span><span>Poor room cleanliness → <span style="color:#B71C1C;font-weight:800;">−3 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚫</span><span>Refusing room inspection → <span style="color:#B71C1C;font-weight:800;">−5 pts</span></span></div>
+<div class="card-text" style="margin-top:10px;">Inspections are normally done with prior notice. However, <strong>emergency situations</strong> (repairs, pest control, safety) can be done without you present — you'll be notified afterwards.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="10">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">10 / 13</div>
+    <div class="big-icon">📦</div>
+    <h2>Move-out & Refunds</h2>
+
+<div class="card-text"><strong>Voluntary move-out</strong> is not allowed for the first 30 days, except for special circumstances such as returning to your home country.</div>
+<div class="section-label">After 30 days — voluntary move-out:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>Voluntary move-out penalty</span><span class="pts neg">14 days fee</span></div>
+  <div class="penalty-row"><span>Forced eviction penalty</span><span class="pts neg">30 days fee</span></div>
+  <div class="penalty-row"><span>Less than 30 days remaining<br><span style="font-size:11px;opacity:0.6;">(20 days during vacation)</span></span><span class="pts neg">No refund</span></div>
+</div>
+<div class="card-text" style="margin-top:10px;">Refund = Total paid <strong>minus penalty</strong>, then <strong>minus daily fee × days used</strong> up to your move-out date.</div>
+<div class="card-text">When moving out: return all issued items, get your room inspected, and compensate for any damage or missing items.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8EAF6;color:#283593" data-card="11">
+  <div class="card-inner">
+    <div class="card-num" style="color:#283593">11 / 13</div>
+    <div class="big-icon">📌</div>
+    <h2>Other Rules to Remember</h2>
+
+<div class="rule-item info"><span class="rule-icon">📢</span><span>Noise disturbances (including complaints from neighbors) → <span style="color:#B71C1C;font-weight:800;">−5 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🧲</span><span>Don't disassemble, modify, or move furniture/facilities → <span style="color:#B71C1C;font-weight:800;">−3 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">♻️</span><span>Not following recycling rules → <span style="color:#B71C1C;font-weight:800;">−2 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🍔</span><span>Carelessly disposing food waste / disturbing roommate's sleep → <span style="color:#B71C1C;font-weight:800;">−2 pts</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🪟</span><span>Using blinds or sprinklers for laundry drying → <span style="color:#B71C1C;font-weight:800;">−2 pts</span></span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FBE9E7;color:#BF360C" data-card="12">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">12 / 13</div>
+    <div class="big-icon">🧯</div>
+    <h2>Fire Safety Law:<br>No Items in Hallways!</h2>
+
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🚨 First offense fine: ₩1,000,000<br>(Korean Fire Safety Act)</div>
+<div class="card-text">By law, it is <strong>strictly prohibited</strong> to place any objects in the following areas:</div>
+<div class="rule-item danger"><span class="rule-icon">🚲</span><span>Hallways — no bicycles, boxes, shoe racks, etc.</span></div>
+<div class="rule-item danger"><span class="rule-icon">🪴</span><span>Staircases — no flower pots, furniture, bags, etc.</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>Emergency exits — must be completely clear at all times</span></div>
+<div class="card-text" style="margin-top:10px;">This is not just a dormitory rule — it is <strong>Korean law</strong>. Anyone can report it, and the fine starts at <strong>₩1,000,000 (approx. $750)</strong> for the first offense.</div>
+<div class="small-note">Keep all personal items inside your room. No exceptions.</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="13">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">13 / 13</div>
+    <div class="big-icon">⭐</div>
+    <h2>Merit Points<br>— Offset Your Demerits!</h2>
+    <div class="card-text">You can <strong>earn merit points</strong> to offset demerit points. Here's how:</div>
+    <div class="penalty-box" style="background:rgba(46,125,50,0.08);">
+      <div class="penalty-row"><span>🏆 Promoting dormitory's reputation</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+      <div class="penalty-row"><span>🚑 Emergency first aid assistance</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+      <div class="penalty-row"><span>📋 Attending orientation</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>🧠 Career & Psychological counseling</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>🧹 Room recognized for cleanliness</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+      <div class="penalty-row"><span>📝 Dormitory satisfaction survey</span><span class="pts" style="color:#2E7D32;">+2</span></div>
+      <div class="penalty-row"><span>🎉 Participating in dorm events</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>🤝 Helping admin (translation, etc.)</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>📢 Reporting rule violations</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+      <div class="penalty-row"><span>💪 Volunteer work (1 pt/hour)</span><span class="pts" style="color:#2E7D32;">+1/hr</span></div>
+    </div>
+    <div class="small-note">※ Points shown are maximums and may vary. Volunteer activities must be applied for in advance at the Dormitory Supervisor's Office.</div>
+  </div>
+</div>
+
+<script src="/toc.js"></script>
+<script>
+const cards = document.querySelectorAll('.card');
+const progress = document.getElementById('progress');
+cards.forEach((_,i) => { const d=document.createElement('div'); d.className='dot'; progress.appendChild(d); });
+const dots = progress.querySelectorAll('.dot');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const idx = Array.from(cards).indexOf(e.target);
+      dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+      const isDark = e.target.classList.contains('cover-card');
+      dots.forEach(d => {
+        d.style.background = d.classList.contains('active')
+          ? (isDark?'white':'#333')
+          : (isDark?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.15)');
+      });
+    }
+  });
+}, {threshold: 0.5});
+cards.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>
