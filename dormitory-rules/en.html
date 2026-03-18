@@ -208,19 +208,15 @@ body {
 }
 
 /* ── TOC ── */
-.toc-wrap{margin-top:18px;width:100%}
-.toc-title{font-size:12px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;opacity:.9;margin-bottom:10px}
-.toc-list{display:flex;flex-wrap:wrap;gap:10px;max-height:34vh;overflow:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
-.toc-chip{min-height:44px;max-width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.14);color:#fff;font-family:inherit;cursor:pointer}
-.toc-chip:active{transform:scale(.99)}
 .toc-emoji{font-size:16px;line-height:1;flex:0 0 auto}
 .toc-text{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;line-height:1.1}
 @media (max-width:360px){.toc-text{max-width:200px}}
 .toc-fab{position:fixed;left:14px;bottom:14px;z-index:150;width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,0.25);background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .toc-fab:active{transform:scale(.98)}
-.toc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;align-items:flex-end;justify-content:center}
+.toc-fab-tip{position:fixed;left:70px;bottom:20px;z-index:149;display:flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:800;letter-spacing:.2px;pointer-events:none}
+.toc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:200;align-items:flex-start;justify-content:center;padding:18px 12px 12px}
 .toc-modal.open{display:flex}
-.toc-sheet{width:100%;max-width:480px;max-height:78vh;background:rgba(17,17,17,0.92);color:#fff;border-radius:18px 18px 0 0;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden}
+.toc-sheet{width:100%;max-width:480px;max-height:min(78vh,calc(100dvh - 30px));margin-top:8px;background:rgba(17,17,17,0.92);color:#fff;border-radius:20px;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.28)}
 .toc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12)}
 .toc-head-title{font-weight:900;font-size:14px;letter-spacing:.2px}
 .toc-close{width:34px;height:34px;border-radius:12px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer}
@@ -228,20 +224,29 @@ body {
 .toc-item{min-height:44px;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;cursor:pointer}
 .toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
 html.embed-mode .progress{display:none}
-html.embed-mode .card{min-height:100vh;min-height:100dvh;padding:18px 16px 34px}
-html.embed-mode .card-inner{max-width:420px}
-html.embed-mode .cover-card h1{font-size:30px}
-html.embed-mode .big-icon{font-size:48px}
-html.embed-mode .card h2{font-size:22px}
-html.embed-mode .card-text,html.embed-mode .rule-item{font-size:13.5px}
-html.embed-mode .toc-sheet{max-width:none;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0}
-html.embed-mode .toc-items{max-height:calc(100dvh - 63px)}
+html.embed-mode .card{min-height:100vh;min-height:100dvh;padding:12px 14px 50px}
+html.embed-mode .card-inner{max-width:392px}
+html.embed-mode .cover-card h1{font-size:27px}
+html.embed-mode .cover-sub{font-size:12px}
+html.embed-mode .cover-warning{padding:12px 14px;font-size:12px;margin-top:16px}
+html.embed-mode .big-icon{font-size:40px;margin-bottom:10px}
+html.embed-mode .card h2{font-size:19px;margin-bottom:12px}
+html.embed-mode .card-text,html.embed-mode .rule-item,html.embed-mode .small-note{font-size:12.5px;line-height:1.5}
+html.embed-mode .rule-item{padding:10px 12px;margin-top:8px}
+html.embed-mode .highlight-banner{font-size:13px;padding:10px 12px;margin:10px 0}
+html.embed-mode .section-label{font-size:11px;margin:12px 0 8px}
+html.embed-mode .demerit-badge{font-size:14px;padding:8px 12px}
+html.embed-mode .penalty-row{padding:10px 0;font-size:12.5px}
 html.embed-mode .toc-fab{left:10px;bottom:10px;width:44px;height:44px;border-radius:14px}
+html.embed-mode .toc-fab-tip{left:62px;bottom:14px;padding:8px 11px;font-size:11px}
+html.embed-mode .toc-sheet{max-width:calc(100% - 8px);max-height:calc(100dvh - 34px);margin-top:10px;border-radius:18px}
+html.embed-mode .toc-items{max-height:calc(100dvh - 104px)}
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div>
 <button class="toc-fab" id="tocFab" type="button" aria-label="Open table of contents">☰</button>
+<div class="toc-fab-tip" aria-hidden="true">☰ Quick jump</div>
 <div class="toc-modal" id="tocModal" aria-hidden="true">
   <div class="toc-sheet" role="dialog" aria-modal="true" aria-label="Table of contents">
     <div class="toc-head">
@@ -259,10 +264,6 @@ html.embed-mode .toc-fab{left:10px;bottom:10px;width:44px;height:44px;border-rad
     <h1>Dormitory Rules<br>You Need to Know</h1>
     <div class="cover-sub">Kyungsung Univ. Off-campus Studio Dormitory<br>경성대 교외 원룸 기숙사</div>
     <div class="cover-warning">⚠️ <strong>Demerit points can lead to forced eviction.</strong> Evicted students may be permanently banned or banned for the next semester. Please read carefully!</div>
-    <div class="toc-wrap" aria-label="Table of contents">
-      <div class="toc-title">Quick jump</div>
-      <div class="toc-list" id="tocInline"></div>
-    </div>
     <div class="swipe-hint"><span class="scroll-arrow">↓</span> Scroll down <span class="scroll-arrow">↓</span></div>
   </div>
 </div>
@@ -492,12 +493,11 @@ cards.forEach(c => observer.observe(c));
 
 // ── TOC ──
 (() => {
-  const tocInline = document.getElementById('tocInline');
   const tocModal = document.getElementById('tocModal');
   const tocModalList = document.getElementById('tocModalList');
   const tocFab = document.getElementById('tocFab');
   const tocClose = document.getElementById('tocClose');
-  if (!tocInline || !tocModal || !tocModalList || !tocFab || !tocClose) return;
+  if (!tocModal || !tocModalList || !tocFab || !tocClose) return;
 
   const tocCards = Array.from(document.querySelectorAll('.card[data-card]'))
     .filter(c => c.getAttribute('data-card') !== '0');
@@ -553,7 +553,6 @@ cards.forEach(c => observer.observe(c));
     return b;
   };
 
-  items.forEach(it => tocInline.appendChild(mkBtn('toc-chip', it, false)));
   items.forEach(it => tocModalList.appendChild(mkBtn('toc-item', it, true)));
 })();
 </script>
