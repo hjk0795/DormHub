@@ -31,16 +31,20 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 .main{padding:12px 24px 40px}
 .card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:14px}
+.hidden{display:none !important}
+
+/* Recovery */
+.recovery-toggle{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--link);background:none;border:none;padding:0;margin:2px 0 14px;cursor:pointer}
+.recovery-toggle:active{transform:translateY(1px)}
+.recovery-card{display:none}
+.recovery-card.open{display:block}
+.helper-copy{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:16px}
+.recovery-actions{display:flex;gap:10px;margin-top:16px}
+.btn-ghost,.btn-secondary{flex:1;min-height:44px;border-radius:12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn-ghost{border:2px solid var(--border);background:#fff;color:var(--navy)}
+.btn-secondary{border:none;background:var(--navy);color:#fff}
 
 /* Link card */
-.ref-card{width:100%;border:2px solid var(--border);background:#fff;border-radius:14px;padding:14px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:inherit;transition:.15s}
-.ref-card:active{transform:scale(.99)}
-.ref-ico{width:36px;height:36px;border-radius:14px;background:#f0ede8;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
-.ref-txt{flex:1;min-width:0}
-.ref-t{font-size:14px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ref-s{font-size:12px;font-weight:600;color:var(--muted);margin-top:3px;line-height:1.35}
-.ref-go{width:32px;height:32px;border-radius:12px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);flex:0 0 auto}
-
 /* Fields */
 .field{margin-bottom:16px}
 .field:last-child{margin-bottom:0}
@@ -74,15 +78,15 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 /* ── Modal ── */
 .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(27,42,74,.55);align-items:flex-end;justify-content:center}
 .modal.open{display:flex}
-.modal-sheet{width:100%;max-width:480px;height:92vh;height:92dvh;background:var(--card);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:up .3s ease-out}
+.modal-sheet{width:100%;max-width:560px;height:98vh;height:98dvh;background:var(--card);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:up .3s ease-out}
 @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .modal-head h3{font-size:15px;font-weight:700;color:var(--navy)}
 .modal-x{width:32px;height:32px;border:none;border-radius:50%;background:#f0ede8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
-.modal-iframe-wrap{flex:1;overflow:hidden;position:relative}
-.modal-iframe-wrap iframe{width:100%;height:100%;border:none}
-.modal-page{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;color:var(--muted);background:rgba(255,255,255,.85);backdrop-filter:blur(4px);padding:3px 12px;border-radius:10px;pointer-events:none}
-.modal-foot{padding:12px 20px 20px;flex-shrink:0;border-top:1px solid var(--border)}
+.modal-iframe-wrap{flex:1;overflow:hidden;position:relative;padding:0 4px 4px;background:var(--bg)}
+.modal-iframe-wrap iframe{width:100%;height:100%;border:none;border-radius:14px;display:block;background:var(--bg)}
+.modal-page{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;color:var(--muted);background:rgba(255,255,255,.88);backdrop-filter:blur(4px);padding:3px 12px;border-radius:10px;pointer-events:none}
+.modal-foot{padding:8px 14px 14px;flex-shrink:0;border-top:1px solid var(--border)}
 .modal-btn{width:100%;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
 .modal-btn.scroll{background:#f0ede8;color:var(--text)}
 .modal-btn.scroll:hover{background:#e4e0d9}
@@ -122,8 +126,33 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   </div>
 
   <div class="main" id="mainC">
+    <button class="recovery-toggle" id="recoveryToggle" type="button" onclick="toggleRecovery(true)" data-i="rvT">Already verified?</button>
+
+    <div class="card recovery-card" id="recoveryCard">
+      <div class="card-label" data-i="rvL">Find Existing Verification</div>
+      <p class="helper-copy" data-i="rvH">If you already submitted before, enter the same building, room number, and name to continue.</p>
+      <div class="field"><label data-i="rbL">Building</label>
+        <select id="recoveryBuilding">
+          <option value="" data-i="bS">— Select —</option>
+          <option value="오름A">오름A (Oreum A)</option>
+          <option value="오름B">오름B (Oreum B)</option>
+          <option value="ACE캐슬">ACE캐슬 (ACE Castle)</option>
+        </select>
+      </div>
+      <div class="field"><label data-i="rrL">Room Number</label>
+        <input id="recoveryRoom" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5">
+      </div>
+      <div class="field"><label data-i="rnL">Full Name</label>
+        <input id="recoveryName" type="text" placeholder="e.g. Nguyen Van A" maxlength="50">
+      </div>
+      <div class="recovery-actions">
+        <button class="btn-ghost" type="button" onclick="toggleRecovery(false)" data-i="rvB">← Back</button>
+        <button class="btn-secondary" type="button" onclick="findExisting()" data-i="rvF">Find my verification</button>
+      </div>
+    </div>
+
     <!-- Info -->
-    <div class="card">
+    <div class="card" id="infoCard">
       <div class="card-label" data-i="inf">Your Information</div>
       <div class="field"><label data-i="bL">Building</label>
         <select id="building" onchange="val()">
@@ -141,9 +170,8 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
       </div>
     </div>
 
-
     <!-- Checklist -->
-    <div class="card">
+    <div class="card" id="checklistCard">
       <div class="card-label" data-i="cL">Confirmation Checklist</div>
 
       <div class="chk locked" id="ci0">
@@ -227,14 +255,14 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 // ═══ Config ═══
 const URLS = {
   en: [
-    '/dormitory-rules-en.html',
-    '/recycling-guide-en.html',
-    '/password-policy.html?lang=en',
+    '/dormitory-rules/en.html?embed=1',
+    '/recycling-guide/en.html?embed=1',
+    '/password-policy.html?lang=en&embed=1',
   ],
   vi: [
-    '/dormitory-rules-vi.html',
-    '/recycling-guide-vi.html',
-    '/password-policy.html?lang=vi',
+    '/dormitory-rules/vi.html?embed=1',
+    '/recycling-guide/vi.html?embed=1',
+    '/password-policy.html?lang=vi&embed=1',
   ]
 };
 
@@ -249,28 +277,32 @@ const I = {
   en: {
     hT:'📋 Dormitory Rules Acknowledgment',hS:'Kyungsung Univ. Off-campus Dormitory',
     inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name',
+    rvT:'Already verified?',rvL:'Find Existing Verification',rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Find my verification',
+    rbL:'Building',rrL:'Room Number',rnL:'Full Name',
     cL:'Confirmation Checklist',
     c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
     c1:'I have read the Recycling & Trash Guide.',c1h:'Tap ♻️ to read first',
     c2:'I have read the Door Lock Password Policy.',c2h:'Tap 🔐 to read first',
     c3:'I agree to follow all rules above. I understand that violations may result in demerit points, eviction, or permanent ban.',
     sub:'Submit ✓',sT:'Submitted!',sM:'Your acknowledgment has been recorded.',sB:'← Back to Dorm Hub',
-    tF:'Please fill in all fields',tE:'Failed. Please try again.',
+    tF:'Please fill in all fields',tE:'Failed. Please try again.',tNF:'No existing verification found. Please check your name and room.',tFD:'Verification found. Continuing to Dorm Hub...',
     dB:'Building',dR:'Room',dN:'Name',dD:'Date',
-    scrBtn:'↓ Next page',okBtn:'✓ I have read this',
+    scrBtn:'↓ Next page',okBtn:'✓ I have read this',tA:'Please read all three documents first.',
   },
   vi: {
     hT:'📋 Xác nhận Nội quy KTX',hS:'KTX ngoài khuôn viên ĐH Kyungsung',
     inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên',
+    rvT:'Đã xác nhận rồi?',rvL:'Tìm xác nhận hiện có',rvH:'Nếu bạn đã gửi trước đó, hãy nhập lại đúng tòa nhà, số phòng và tên để tiếp tục.',rvB:'← Quay lại',rvF:'Tìm xác nhận của tôi',
+    rbL:'Tòa nhà',rrL:'Số phòng',rnL:'Họ và tên',
     cL:'Danh sách xác nhận',
     c0:'Tôi đã đọc Nội quy & Quy định KTX.',c0h:'Nhấn 📖 để đọc',
     c1:'Tôi đã đọc Hướng dẫn Phân loại rác.',c1h:'Nhấn ♻️ để đọc',
     c2:'Tôi đã đọc Quy định Mật khẩu khóa cửa.',c2h:'Nhấn 🔐 để đọc',
     c3:'Tôi đồng ý tuân thủ tất cả nội quy trên. Tôi hiểu rằng vi phạm có thể dẫn đến điểm phạt, buộc rời KTX, hoặc cấm vĩnh viễn.',
     sub:'Gửi xác nhận ✓',sT:'Gửi thành công!',sM:'Xác nhận của bạn đã được ghi nhận.',sB:'← Quay lại Dorm Hub',
-    tF:'Vui lòng điền đầy đủ',tE:'Thất bại. Vui lòng thử lại.',
+    tF:'Vui lòng điền đầy đủ',tE:'Thất bại. Vui lòng thử lại.',tNF:'Không tìm thấy xác nhận trước đó. Vui lòng kiểm tra lại tên và số phòng.',tFD:'Đã tìm thấy xác nhận. Đang chuyển đến Dorm Hub...',
     dB:'Tòa nhà',dR:'Phòng',dN:'Tên',dD:'Ngày',
-    scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',
+    scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',tA:'Vui lòng đọc xong cả ba tài liệu trước.',
   }
 };
 
@@ -278,6 +310,7 @@ let lang='en';
 const rd=[false,false,false];
 let curM=-1, curSlide=0;
 let mLast=1;
+let currentSections=[];
 
 function setModalLastIndexFromDoc(doc){
   if(!doc) return;
@@ -318,10 +351,19 @@ function setLang(l){
 
 // ═══ Checklist ═══
 function chkClick(i){
-  if(!rd[i]){toast(I[lang][`c${i}h`]);return;}
+  if(i < 3){
+    if(!rd[i]){openM(i);return;}
+    return;
+  }
   togCb(i);
 }
-function togFree(i){togCb(i)}
+function togFree(i){
+  if(i===3 && ![0,1,2].every(idx => document.getElementById(`cb${idx}`).checked)){
+    toast(I[lang].tA);
+    return;
+  }
+  togCb(i);
+}
 function togCb(i){
   const cb=document.getElementById(`cb${i}`);
   cb.checked=!cb.checked;
@@ -331,14 +373,56 @@ function togCb(i){
 function unlock(i){
   rd[i]=true;
   const it=document.getElementById(`ci${i}`),cb=document.getElementById(`cb${i}`);
-  it.classList.remove('locked');cb.disabled=false;cb.checked=true;it.classList.add('done');
+  it.classList.remove('locked');cb.checked=true;cb.disabled=true;it.classList.add('done');
   val();
+}
+
+function normalizeName(name){
+  return name
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu,'')
+    .toLowerCase()
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function toggleRecovery(forceOpen){
+  const open = typeof forceOpen === 'boolean' ? forceOpen : !document.getElementById('recoveryCard').classList.contains('open');
+  document.getElementById('recoveryCard').classList.toggle('open', open);
+  document.getElementById('infoCard').classList.toggle('hidden', open);
+  document.getElementById('checklistCard').classList.toggle('hidden', open);
+  document.getElementById('btnSub').classList.toggle('hidden', open);
+  document.getElementById('recoveryToggle').classList.toggle('hidden', open);
+  if(!open){
+    document.getElementById('recoveryBuilding').value='';
+    document.getElementById('recoveryRoom').value='';
+    document.getElementById('recoveryName').value='';
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function findExisting(){
+  const building=document.getElementById('recoveryBuilding').value;
+  const room=document.getElementById('recoveryRoom').value.trim();
+  const name=document.getElementById('recoveryName').value.trim();
+  if(!building||!room||!name){toast(I[lang].tF);return;}
+  const normalized = normalizeName(name);
+  const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
+  const found = recs.find(rec =>
+    rec.building===building &&
+    String(rec.room).trim()===room &&
+    normalizeName(rec.name||'')===normalized
+  );
+  if(!found){toast(I[lang].tNF);return;}
+  toast(I[lang].tFD);
+  setTimeout(()=>{location.href='/'},500);
 }
 
 // ═══ Modal with iframe ═══
 function openM(i){
   curM=i; curSlide=0;
   mLast = FALLBACK_LAST_INDEX[i] ?? 1;
+  currentSections = [];
   document.getElementById('mTitle').textContent=TITLES[lang][i];
   const frame=document.getElementById('mFrame');
   frame.src=URLS[lang][i];
@@ -353,6 +437,7 @@ function closeM(){
   document.getElementById('mFrame').src='about:blank';
   curM=-1;
   mLast=1;
+  currentSections = [];
 }
 function updPage(){
   const safeLast = Math.max(1, mLast || 1);
@@ -379,48 +464,73 @@ function mAction(){
     closeM();
     return;
   }
-  // Scroll iframe's scroll-container by one viewport
   try{
     const frame=document.getElementById('mFrame');
     const doc=frame.contentDocument||frame.contentWindow.document;
     const scroller=doc.querySelector('.scroll-container')||doc.scrollingElement||doc.documentElement;
-    const vh=frame.clientHeight;
-    scroller.scrollBy({top:vh, behavior:'smooth'});
-    curSlide = Math.min(safeLast, curSlide + 1);
-    updPage();
-    updMBtn();
+    const nextSection = currentSections[Math.min(curSlide + 1, currentSections.length - 1)];
+    if(nextSection){
+      scroller.scrollTo({top:nextSection.offsetTop, behavior:'smooth'});
+    }else{
+      const vh=frame.clientHeight;
+      scroller.scrollBy({top:vh, behavior:'smooth'});
+    }
   }catch(e){
-    // Cross-origin: can't access iframe. Fallback: use postMessage or just increment
     curSlide = Math.min(safeLast, curSlide + 1);
     updPage();
     updMBtn();
   }
 }
 
-// Also listen for manual scroll inside iframe
+function readSections(doc){
+  return Array.from(doc.querySelectorAll('.scroll-container .slide, body > .card, .scroll-container > .card, .slide, .card'))
+    .filter((section, index, arr) => arr.indexOf(section) === index);
+}
+
+function syncCurrentSlide(scroller){
+  const safeLast = Math.max(1, mLast || 1);
+  if(!currentSections.length){
+    const rawSlide = Math.round(scroller.scrollTop / Math.max(1, document.getElementById('mFrame').clientHeight));
+    curSlide = Math.min(safeLast, Math.max(0, rawSlide));
+  }else{
+    let bestIndex = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    currentSections.forEach((section, index) => {
+      const distance = Math.abs(section.getBoundingClientRect().top);
+      if(distance < bestDistance){
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    });
+    curSlide = Math.min(safeLast, Math.max(0, bestIndex));
+  }
+  updPage();
+  updMBtn();
+}
+
 function trackIframeScroll(){
   try{
     const frame=document.getElementById('mFrame');
     const doc=frame.contentDocument||frame.contentWindow.document;
     setModalLastIndexFromDoc(doc);
+    currentSections = readSections(doc);
+    if(currentSections.length){
+      mLast = Math.max(1, currentSections.length - 1);
+    }
     const scroller=doc.querySelector('.scroll-container')||doc.scrollingElement||doc.documentElement;
     if(!scroller)return;
-    scroller.addEventListener('scroll',()=>{
-      const vh=frame.clientHeight;
-      const scrolled=scroller.scrollTop;
-      const safeLast = Math.max(1, mLast || 1);
-      const rawSlide = Math.round(scrolled / Math.max(1, vh));
-      const newSlide = Math.min(safeLast, Math.max(0, rawSlide));
-      if(newSlide>curSlide){
-        curSlide=newSlide;
-        updPage();
-        updMBtn();
-      }
-    },{passive:true});
-
-    // Ensure UI reflects computed total immediately.
-    updPage();
-    updMBtn();
+    let ticking=false;
+    const onScroll=()=>{
+      if(ticking) return;
+      ticking=true;
+      requestAnimationFrame(()=>{
+        syncCurrentSlide(scroller);
+        ticking=false;
+      });
+    };
+    scroller.addEventListener('scroll', onScroll, {passive:true});
+    doc.addEventListener('scroll', onScroll, {passive:true});
+    syncCurrentSlide(scroller);
   }catch(e){}
 }
 

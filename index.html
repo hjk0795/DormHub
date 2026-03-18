@@ -439,7 +439,7 @@
       <div class="panel">
       <section id="links" class="lang-grid" aria-label="Main links">
         <div class="lang-col lang-en" aria-label="English links">
-          <a class="card" href="/recycling-guide-en.html">
+          <a class="card" href="/recycling-guide/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -461,7 +461,7 @@
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules-en.html">
+          <a class="card" href="/dormitory-rules/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -514,7 +514,7 @@
         </div>
 
         <div class="lang-col lang-vi" aria-label="Vietnamese links">
-          <a class="card" href="/recycling-guide-vi.html">
+          <a class="card" href="/recycling-guide/vi">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -536,7 +536,7 @@
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules-vi.html">
+          <a class="card" href="/dormitory-rules/vi">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -628,6 +628,21 @@
 
     <script>
       (function () {
+        var ACK_STORAGE_KEY = "dormhub_ack_verified_v1";
+        function hasAckState() {
+          try {
+            var saved = JSON.parse(localStorage.getItem(ACK_STORAGE_KEY) || "null");
+            return !!(saved && saved.building && saved.room && saved.name);
+          } catch (e) {
+            return false;
+          }
+        }
+
+        if (!hasAckState()) {
+          window.location.replace("/dorm-acknowledgement");
+          return;
+        }
+
         var select = document.getElementById("langSelect");
         if (!select) return;
 

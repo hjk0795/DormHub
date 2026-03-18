@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>📚 Rules Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#1B2A4A;--navy-l:#2a3d66;--coral:#E8654A;
+      --bg:#F5F2ED;--card:#fff;--text:#2C3E50;--muted:#8A95A3;--border:#E2DDD5;
+      --chip:#f0ede8;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+    .container{max-width:480px;margin:0 auto;min-height:100vh}
+
+    .header{background:linear-gradient(135deg,var(--navy),var(--navy-l));padding:28px 24px 22px;color:#fff;position:relative;overflow:hidden}
+    .header::after{content:'';position:absolute;bottom:-18px;left:-10%;width:120%;height:36px;background:var(--bg);border-radius:50% 50% 0 0}
+    .header h1{font-size:20px;font-weight:900;line-height:1.25}
+    .header p{font-size:12px;opacity:.75;margin-top:5px;font-weight:600}
+
+    .lang-row{display:flex;gap:8px;padding:14px 24px 6px}
+    .lang-btn{flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--card);font-family:inherit;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;transition:.15s}
+    .lang-btn.on{border-color:var(--navy);color:var(--navy);background:#eef1f7}
+
+    .main{padding:12px 24px 44px}
+    .search{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--border);border-radius:14px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .search .ico{font-size:14px;opacity:.7}
+    .search input{border:none;outline:none;background:transparent;font-family:inherit;font-size:14px;font-weight:600;color:var(--text);width:100%}
+    .search input::placeholder{color:var(--muted);font-weight:600}
+
+    .tabs{display:flex;gap:8px;overflow:auto;padding:12px 0 4px;-webkit-overflow-scrolling:touch}
+    .tab{flex:0 0 auto;border:2px solid var(--border);background:var(--card);color:var(--muted);border-radius:999px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.15s}
+    .tab.on{border-color:var(--navy);background:var(--navy);color:#fff}
+
+    .meta{font-size:12px;color:var(--muted);font-weight:600;margin:8px 2px 12px}
+
+    .acc{background:var(--card);border:2px solid var(--border);border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:10px;overflow:hidden}
+    .acc-btn{width:100%;text-align:left;display:flex;align-items:center;gap:10px;padding:14px 14px;border:none;background:transparent;font-family:inherit;cursor:pointer}
+    .acc-ico{width:28px;height:28px;border-radius:10px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 auto}
+    .acc-txt{flex:1;min-width:0}
+    .acc-title{font-size:13.5px;font-weight:800;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .acc-sub{font-size:11px;color:var(--muted);font-weight:700;margin-top:3px}
+    .badge{flex:0 0 auto;background:var(--coral);color:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:900;white-space:nowrap}
+    .chev{flex:0 0 auto;width:30px;height:30px;border-radius:12px;border:2px solid var(--border);background:#fff;color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:900}
+    .acc.open .chev{transform:rotate(180deg)}
+
+    .acc-body{display:none;padding:0 14px 14px}
+    .acc.open .acc-body{display:block}
+    .body-text{font-size:13px;line-height:1.7;color:var(--text)}
+    .body-text mark{background:#FFF3D6;border-radius:4px;padding:0 3px}
+    .empty{padding:24px 6px;color:var(--muted);font-weight:700;text-align:center}
+
+    .foot{margin-top:16px;font-size:11px;color:var(--muted);line-height:1.6}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="hTitle">📚 Rules Reference</h1>
+      <p id="hSub">Search penalties, recycling, and password rules</p>
+    </div>
+
+    <div class="lang-row">
+      <button class="lang-btn on" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="lang-btn" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+    </div>
+
+    <div class="main">
+      <div class="search">
+        <div class="ico">🔎</div>
+        <input id="q" type="text" placeholder="Search (e.g. smoking, visitors, recycling…)" autocomplete="off" />
+      </div>
+
+      <div class="tabs" id="tabs"></div>
+      <div class="meta" id="meta"></div>
+
+      <div id="list"></div>
+      <div class="foot" id="foot"></div>
+    </div>
+  </div>
+
+  <script>
+    const UI = {
+      en: {
+        title: '📚 Rules Reference',
+        sub: 'Search penalties, recycling, and password rules',
+        searchPh: 'Search (e.g. smoking, visitors, recycling…)',
+        empty: 'No results. Try a different keyword.',
+        results: (n) => `${n} result${n === 1 ? '' : 's'}`,
+        tabs: [
+          {key:'all', label:'All'},
+          {key:'penalties', label:'Penalties'},
+          {key:'safety', label:'Safety'},
+          {key:'daily', label:'Daily Life'},
+          {key:'recycling', label:'Recycling'},
+          {key:'password', label:'Password'},
+        ],
+        badgePts: (n) => `−${Math.abs(n)} pts`,
+      },
+      vi: {
+        title: '📚 Tra cứu nội quy',
+        sub: 'Tìm nhanh: điểm phạt, phân loại rác, quy định mật khẩu',
+        searchPh: 'Tìm kiếm (vd: hút thuốc, người ngoài, rác…)',
+        empty: 'Không có kết quả. Hãy thử từ khóa khác.',
+        results: (n) => `${n} mục`,
+        tabs: [
+          {key:'all', label:'All'},
+          {key:'penalties', label:'Điểm phạt'},
+          {key:'safety', label:'An toàn'},
+          {key:'daily', label:'Sinh hoạt'},
+          {key:'recycling', label:'Phân loại rác'},
+          {key:'password', label:'Mật khẩu'},
+        ],
+        badgePts: (n) => `−${Math.abs(n)} điểm`,
+      }
+    };
+
+    const ITEMS = [
+      {
+        id:'penalty-system', cat:'penalties', icon:'🚨',
+        en:{t:'Penalty point system (overview)', b:'Breaking rules gives demerit points.\n\n• Warning: −10 pts\n• Eviction + banned next semester: −15 pts\n\nSome serious violations can lead to immediate eviction and permanent ban.'},
+        vi:{t:'Tổng quan hệ thống điểm phạt', b:'Vi phạm nội quy sẽ bị trừ điểm phạt.\n\n• Cảnh cáo: −10 điểm\n• Đuổi + cấm học kỳ sau: −15 điểm\n\nMột số vi phạm nghiêm trọng có thể bị đuổi ngay và cấm vĩnh viễn.'},
+      },
+      {
+        id:'instant-eviction', cat:'safety', icon:'🔥', penalty:'Eviction',
+        en:{t:'Instant eviction + permanent ban', b:'Examples: fire/flood (accident or negligence), theft/assault/gambling, opposite-sex overnight stay, or other serious violations.'},
+        vi:{t:'Đuổi ngay + cấm vĩnh viễn', b:'Ví dụ: gây cháy/ngập (cố ý hoặc bất cẩn), trộm cắp/đánh nhau/cờ bạc, cho người khác giới ở qua đêm, hoặc các vi phạm nghiêm trọng khác.'},
+      },
+      {
+        id:'eviction-next', cat:'safety', icon:'🚪', penalty:'Eviction',
+        en:{t:'Eviction + banned next semester', b:'Examples: outside visitors sleeping over, unauthorized room changes, false documents, pets, repeated violations.'},
+        vi:{t:'Đuổi + cấm học kỳ sau', b:'Ví dụ: cho người ngoài ngủ lại, tự ý đổi phòng, giấy tờ gian dối, nuôi thú cưng, vi phạm lặp lại.'},
+      },
+      {
+        id:'no-visitors', cat:'safety', icon:'🚷', penalty:-12,
+        en:{t:'No outside visitors in rooms', b:'Non-residents are not allowed to enter dorm rooms. This includes friends, partners, family, etc.'},
+        vi:{t:'Cấm đưa người ngoài vào phòng', b:'Người không đăng ký ở KTX không được vào phòng. Bao gồm bạn bè, người yêu, gia đình, v.v.'},
+      },
+      {
+        id:'alcohol', cat:'daily', icon:'🍺', penalty:-10,
+        en:{t:'Alcohol (no drinking)', b:'Drinking is prohibited. Any trace (bottles, cans, smell) counts as evidence.'},
+        vi:{t:'Rượu bia (cấm uống)', b:'Cấm uống rượu bia. Chỉ cần có dấu vết (chai/lon/mùi) cũng bị tính là vi phạm.'},
+      },
+      {
+        id:'smoking', cat:'safety', icon:'🚬', penalty:-10,
+        en:{t:'Smoking (including e-cigarettes)', b:'Smoking is prohibited anywhere inside the building (rooms, hallways, stairs). Traces also count.'},
+        vi:{t:'Hút thuốc (kể cả thuốc lá điện tử)', b:'Cấm hút thuốc ở mọi nơi trong tòa nhà (phòng, hành lang, cầu thang). Dấu vết cũng bị tính.'},
+      },
+      {
+        id:'banned-appliances', cat:'safety', icon:'🔌', penalty:-10,
+        en:{t:'Banned appliances', b:'High-risk appliances (heaters, electric mats, etc.) are prohibited.'},
+        vi:{t:'Thiết bị bị cấm', b:'Các thiết bị nguy cơ cháy nổ (máy sưởi, đệm điện, v.v.) bị cấm.'},
+      },
+      {
+        id:'hair-iron', cat:'safety', icon:'🔥', penalty:-5,
+        en:{t:'Hair iron left unattended', b:'Do not leave hair irons / heat tools unattended. This is a fire risk.'},
+        vi:{t:'Bỏ quên máy uốn/tạo kiểu tóc', b:'Không được để thiết bị nhiệt (máy uốn/tạo kiểu) hoạt động mà không trông coi. Nguy cơ cháy.'},
+      },
+      {
+        id:'utilities', cat:'daily', icon:'💡', penalty:-5,
+        en:{t:'Utility bills (overuse)', b:'Utilities are normally included, but if you exceed the standard (e.g. +10%), you may need to pay extra.'},
+        vi:{t:'Tiền điện nước (dùng quá mức)', b:'Thông thường đã bao gồm, nhưng nếu vượt mức tiêu chuẩn (vd: +10%), bạn có thể phải trả thêm.'},
+      },
+      {
+        id:'inspection-refuse', cat:'daily', icon:'📋', penalty:-5,
+        en:{t:'Refusing room inspection', b:'Room inspections are done with notice. Emergencies may require entry even if you are absent.'},
+        vi:{t:'Từ chối kiểm tra phòng', b:'Kiểm tra phòng thường có thông báo. Trường hợp khẩn cấp có thể vào phòng dù bạn vắng mặt.'},
+      },
+      {
+        id:'cleanliness', cat:'daily', icon:'🧹', penalty:-3,
+        en:{t:'Poor cleanliness', b:'Keep your room clean. Repeated complaints can result in demerit points.'},
+        vi:{t:'Phòng bẩn/không vệ sinh', b:'Giữ phòng sạch sẽ. Nếu bị nhắc nhở nhiều lần có thể bị trừ điểm.'},
+      },
+      {
+        id:'noise', cat:'daily', icon:'📢', penalty:-5,
+        en:{t:'Noise / complaints', b:'Noise disturbances (including neighbor complaints) can lead to demerit points.'},
+        vi:{t:'Ồn ào / bị phản ánh', b:'Gây ồn (kể cả bị hàng xóm phản ánh) có thể bị trừ điểm.'},
+      },
+      {
+        id:'fixtures', cat:'daily', icon:'🧲', penalty:-3,
+        en:{t:'Disassembling / moving facilities', b:'Do not disassemble, modify, or move furniture/facilities without permission.'},
+        vi:{t:'Tự ý tháo/lắp/di chuyển đồ đạc', b:'Không được tự ý tháo rời, sửa đổi, hay di chuyển đồ đạc/cơ sở vật chất khi chưa được phép.'},
+      },
+      {
+        id:'recycling-noncompliance', cat:'recycling', icon:'♻️', penalty:-2,
+        en:{t:'Recycling non-compliance', b:'Follow the recycling guide and use designated bags/bins. Incorrect disposal may be fined by the district.'},
+        vi:{t:'Không tuân thủ phân loại rác', b:'Hãy làm đúng theo hướng dẫn phân loại. Đổ sai có thể bị phạt bởi quận.'},
+      },
+      {
+        id:'food-waste', cat:'recycling', icon:'🍜', penalty:-2,
+        en:{t:'Food waste mishandling', b:'Use the food waste bucket properly. Avoid smell and pests.'},
+        vi:{t:'Xử lý rác thực phẩm không đúng', b:'Bỏ rác thực phẩm đúng cách để tránh mùi và côn trùng.'},
+      },
+      {
+        id:'fire-law', cat:'safety', icon:'🧯', penalty:'₩1,000,000 fine',
+        en:{t:'Fire safety law (hallways/stairs)', b:'Do not place items in hallways, staircases, or emergency exits. This is Korean law and can be fined (starting ₩1,000,000).'},
+        vi:{t:'Luật phòng cháy (hành lang/cầu thang)', b:'Cấm để đồ ở hành lang, cầu thang, lối thoát hiểm. Đây là luật Hàn Quốc và có thể bị phạt (từ ₩1,000,000).'},
+      },
+      {
+        id:'moveout', cat:'daily', icon:'📦',
+        en:{t:'Move-out & refunds', b:'Move-out and refunds depend on timing and penalties. Ask the dorm office for the latest details.'},
+        vi:{t:'Rời KTX & hoàn tiền', b:'Hoàn tiền phụ thuộc thời điểm và khoản phạt. Hãy hỏi văn phòng KTX để biết thông tin mới nhất.'},
+      },
+      {
+        id:'merit', cat:'penalties', icon:'🏅',
+        en:{t:'Merit points (offset demerits)', b:'You may offset demerit points with merit points (events, volunteering, keeping room clean, etc.).'},
+        vi:{t:'Điểm thưởng (bù điểm phạt)', b:'Bạn có thể bù điểm phạt bằng điểm thưởng (sự kiện, tình nguyện, giữ phòng sạch, v.v.).'},
+      },
+
+      // Recycling reference (quick)
+      { id:'trash-general', cat:'recycling', icon:'🗑️', en:{t:'General waste (종량제봉투)', b:'Use official designated garbage bags from convenience stores. Non-recyclables only.'}, vi:{t:'Rác thải chung (종량제봉투)', b:'Phải dùng túi rác chính thức mua ở cửa hàng tiện lợi. Chỉ bỏ rác không tái chế.'}},
+      { id:'trash-paper', cat:'recycling', icon:'📦', en:{t:'Paper & cardboard', b:'Flatten boxes, remove tape, keep clean and dry.'}, vi:{t:'Giấy & thùng carton', b:'Xếp phẳng, bỏ băng keo, giữ sạch và khô.'}},
+      { id:'trash-cans', cat:'recycling', icon:'🥫', en:{t:'Cans / metal', b:'Empty, rinse, and separate.'}, vi:{t:'Lon / kim loại', b:'Đổ sạch, rửa, và phân loại.'}},
+      { id:'trash-plastic', cat:'recycling', icon:'♻️', en:{t:'Plastics', b:'Rinse and remove food residue. Sort by type when possible.'}, vi:{t:'Nhựa', b:'Rửa sạch, bỏ cặn thức ăn. Phân loại theo loại nếu có thể.'}},
+      { id:'trash-glass', cat:'recycling', icon:'🍾', en:{t:'Glass bottles', b:'Empty and separate. Do not break.'}, vi:{t:'Chai thủy tinh', b:'Đổ sạch và phân loại. Không đập vỡ.'}},
+      { id:'trash-styro', cat:'recycling', icon:'🧊', en:{t:'Styrofoam', b:'Remove stickers/tape, keep clean and dry.'}, vi:{t:'Xốp Styrofoam', b:'Bóc nhãn/băng keo, giữ sạch và khô.'}},
+      { id:'trash-food', cat:'recycling', icon:'🍜', en:{t:'Food waste', b:'Use the food waste bucket. Avoid liquid when possible.'}, vi:{t:'Rác thực phẩm', b:'Bỏ vào thùng rác thực phẩm. Hạn chế nước.'}},
+      { id:'trash-bulky', cat:'recycling', icon:'🛋️', en:{t:'Bulky waste', b:'Large items require special disposal. Ask the dorm office if unsure.'}, vi:{t:'Rác cồng kềnh', b:'Đồ lớn cần xử lý riêng. Nếu không chắc, hãy hỏi văn phòng KTX.'}},
+
+      // Password policy (quick)
+      { id:'pw-managed', cat:'password', icon:'🏢', en:{t:'Managed by dorm office', b:'Door lock passwords are managed by the dorm office for safety and maintenance.'}, vi:{t:'Quản lý bởi văn phòng KTX', b:'Mật khẩu khóa cửa được quản lý bởi văn phòng KTX vì an toàn và bảo trì.'}},
+      { id:'pw-nochange', cat:'password', icon:'🚫', en:{t:'Do NOT change without permission', b:'Changing the password without authorization is prohibited.'}, vi:{t:'KHÔNG được tự ý đổi mật khẩu', b:'Cấm thay đổi mật khẩu khi chưa được phép.'}},
+      { id:'pw-email', cat:'password', icon:'📧', en:{t:'If you must change: email immediately', b:'If unavoidable, email your room number and new password to hjk0795@ks.ac.kr.'}, vi:{t:'Nếu buộc phải đổi: báo ngay qua email', b:'Nếu bắt buộc, hãy gửi email kèm số phòng và mật khẩu mới đến hjk0795@ks.ac.kr.'}},
+      { id:'pw-emergency', cat:'password', icon:'📋', en:{t:'Emergency entry / inspections', b:'In emergencies (repairs, safety, pest control), staff may enter even if you are absent.'}, vi:{t:'Vào phòng khi khẩn cấp', b:'Trong trường hợp khẩn cấp (sửa chữa, an toàn, diệt côn trùng), nhân viên có thể vào phòng dù bạn vắng mặt.'}},
+    ];
+
+    let lang = 'en';
+    let activeCat = 'all';
+
+    const els = {
+      title: document.getElementById('hTitle'),
+      sub: document.getElementById('hSub'),
+      q: document.getElementById('q'),
+      tabs: document.getElementById('tabs'),
+      meta: document.getElementById('meta'),
+      list: document.getElementById('list'),
+      foot: document.getElementById('foot'),
+    };
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#39;");
+    }
+    function escRe(s){ return String(s).replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&'); }
+
+    function highlight(text, q){
+      const base = escapeHtml(text).replaceAll('\\n','<br>');
+      if(!q) return base;
+      const re = new RegExp(escRe(q), 'ig');
+      return base.replace(re, (m) => `<mark>${m}</mark>`);
+    }
+
+    function formatPenalty(p){
+      if(p === null || p === undefined) return '';
+      if(typeof p === 'number') return UI[lang].badgePts(p);
+      return String(p);
+    }
+
+    function matchesQuery(it, q){
+      if(!q) return true;
+      const needle = q.toLowerCase();
+      const hay = [
+        it.en?.t, it.en?.b,
+        it.vi?.t, it.vi?.b,
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(needle);
+    }
+
+    function getFiltered(){
+      const q = els.q.value.trim();
+      return ITEMS.filter(it => (activeCat === 'all' || it.cat === activeCat) && matchesQuery(it, q));
+    }
+
+    function catLabel(key){
+      const hit = UI[lang].tabs.find(t => t.key === key);
+      return hit ? hit.label : key;
+    }
+
+    function setLang(l){
+      lang = l;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('on'));
+      document.querySelector(`.lang-btn:nth-child(${l==='en'?1:2})`).classList.add('on');
+
+      els.title.textContent = UI[l].title;
+      els.sub.textContent = UI[l].sub;
+      els.q.placeholder = UI[l].searchPh;
+
+      renderTabs();
+      render();
+    }
+
+    function setCat(cat){
+      activeCat = cat;
+      document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+      render();
+    }
+
+    function renderTabs(){
+      els.tabs.innerHTML = '';
+      UI[lang].tabs.forEach(t => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tab' + (t.key === activeCat ? ' on' : '');
+        b.dataset.cat = t.key;
+        b.textContent = t.label;
+        b.addEventListener('click', () => setCat(t.key));
+        els.tabs.appendChild(b);
+      });
+    }
+
+    function render(){
+      const q = els.q.value.trim();
+      const list = getFiltered();
+      els.meta.textContent = UI[lang].results(list.length);
+      els.list.innerHTML = '';
+
+      if(!list.length){
+        const e = document.createElement('div');
+        e.className = 'empty';
+        e.textContent = UI[lang].empty;
+        els.list.appendChild(e);
+      }else{
+        list.forEach(it => {
+          const acc = document.createElement('div');
+          acc.className = 'acc';
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'acc-btn';
+
+          const ico = document.createElement('div');
+          ico.className = 'acc-ico';
+          ico.textContent = it.icon || '•';
+
+          const txt = document.createElement('div');
+          txt.className = 'acc-txt';
+
+          const t = document.createElement('div');
+          t.className = 'acc-title';
+          t.innerHTML = highlight((it[lang]?.t || it.en.t), q);
+
+          const sub = document.createElement('div');
+          sub.className = 'acc-sub';
+          sub.textContent = catLabel(it.cat);
+
+          txt.appendChild(t);
+          txt.appendChild(sub);
+
+          const badgeTxt = formatPenalty(it.penalty);
+          let badge = null;
+          if(badgeTxt){
+            badge = document.createElement('div');
+            badge.className = 'badge';
+            badge.textContent = badgeTxt;
+          }
+
+          const chev = document.createElement('div');
+          chev.className = 'chev';
+          chev.textContent = '⌄';
+
+          btn.appendChild(ico);
+          btn.appendChild(txt);
+          if(badge) btn.appendChild(badge);
+          btn.appendChild(chev);
+
+          const body = document.createElement('div');
+          body.className = 'acc-body';
+          const p = document.createElement('div');
+          p.className = 'body-text';
+          p.innerHTML = highlight((it[lang]?.b || it.en.b), q);
+          body.appendChild(p);
+
+          btn.addEventListener('click', () => acc.classList.toggle('open'));
+
+          acc.appendChild(btn);
+          acc.appendChild(body);
+          els.list.appendChild(acc);
+        });
+      }
+
+      els.foot.textContent = lang === 'vi'
+        ? 'Tip: Có thể tìm kiếm bằng tiếng Anh hoặc tiếng Việt. Ví dụ: "smoking", "visitor", "rác", "mật khẩu".'
+        : 'Tip: You can search in English or Vietnamese (e.g. "smoking", "visitor", "rác", "mật khẩu").';
+    }
+
+    els.q.addEventListener('input', render);
+    renderTabs();
+    setLang('en');
+  </script>
+</body>
+</html>

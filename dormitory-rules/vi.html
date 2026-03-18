@@ -206,10 +206,51 @@ body {
   transform: scale(1.5);
   box-shadow: 0 0 6px rgba(255,255,255,0.5);
 }
+
+/* ── TOC ── */
+.toc-wrap{margin-top:18px;width:100%}
+.toc-title{font-size:12px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;opacity:.9;margin-bottom:10px}
+.toc-list{display:flex;flex-wrap:wrap;gap:10px;max-height:34vh;overflow:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
+.toc-chip{min-height:44px;max-width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.14);color:#fff;font-family:inherit;cursor:pointer}
+.toc-chip:active{transform:scale(.99)}
+.toc-emoji{font-size:16px;line-height:1;flex:0 0 auto}
+.toc-text{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;line-height:1.1}
+@media (max-width:360px){.toc-text{max-width:200px}}
+.toc-fab{position:fixed;left:14px;bottom:14px;z-index:150;width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,0.25);background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.toc-fab:active{transform:scale(.98)}
+.toc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;align-items:flex-end;justify-content:center}
+.toc-modal.open{display:flex}
+.toc-sheet{width:100%;max-width:480px;max-height:78vh;background:rgba(17,17,17,0.92);color:#fff;border-radius:18px 18px 0 0;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden}
+.toc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12)}
+.toc-head-title{font-weight:900;font-size:14px;letter-spacing:.2px}
+.toc-close{width:34px;height:34px;border-radius:12px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer}
+.toc-items{padding:12px 12px 18px;overflow:auto;max-height:calc(78vh - 60px);-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px}
+.toc-item{min-height:44px;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;cursor:pointer}
+.toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
+html.embed-mode .progress{display:none}
+html.embed-mode .card{min-height:100vh;min-height:100dvh;padding:18px 16px 34px}
+html.embed-mode .card-inner{max-width:420px}
+html.embed-mode .cover-card h1{font-size:30px}
+html.embed-mode .big-icon{font-size:48px}
+html.embed-mode .card h2{font-size:22px}
+html.embed-mode .card-text,html.embed-mode .rule-item{font-size:13.5px}
+html.embed-mode .toc-sheet{max-width:none;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0}
+html.embed-mode .toc-items{max-height:calc(100dvh - 63px)}
+html.embed-mode .toc-fab{left:10px;bottom:10px;width:44px;height:44px;border-radius:14px}
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div>
+<button class="toc-fab" id="tocFab" type="button" aria-label="Mở mục lục">☰</button>
+<div class="toc-modal" id="tocModal" aria-hidden="true">
+  <div class="toc-sheet" role="dialog" aria-modal="true" aria-label="Mục lục">
+    <div class="toc-head">
+      <div class="toc-head-title">📑 Mục lục</div>
+      <button class="toc-close" id="tocClose" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="toc-items" id="tocModalList"></div>
+  </div>
+</div>
 
 <div class="card cover-card" data-card="0">
   <div class="card-inner">
@@ -218,16 +259,20 @@ body {
     <h1>Nội quy KTX<br>bạn cần biết</h1>
     <div class="cover-sub">KTX ngoài khuôn viên ĐH Kyungsung<br>경성대 교외 원룸 기숙사</div>
     <div class="cover-warning">⚠️ <strong>Điểm phạt có thể dẫn đến buộc rời KTX.</strong> Sinh viên bị đuổi có thể bị cấm vĩnh viễn hoặc cấm học kỳ sau. Vui lòng đọc kỹ!</div>
+    <div class="toc-wrap" aria-label="Mục lục">
+      <div class="toc-title">Đi đến nhanh</div>
+      <div class="toc-list" id="tocInline"></div>
+    </div>
     <div class="swipe-hint"><span class="scroll-arrow">↓</span> Cuộn xuống <span class="scroll-arrow">↓</span></div>
   </div>
 </div>
 
 <div class="card" style="background:#FFF8E1;color:#E65100" data-card="1">
   <div class="card-inner">
-    <div class="card-num" style="color:#E65100">1 / 13</div>
+    <div class="card-num" style="color:#E65100">1 / 12</div>
     <div class="big-icon">🚨</div>
     <h2>Hệ thống điểm phạt</h2>
-
+    
 <div class="card-text">Vi phạm nội quy → nhận <strong>điểm phạt</strong>. Điểm cộng dồn và có hậu quả nghiêm trọng:</div>
 <div class="penalty-box">
   <div class="penalty-row"><span>⚠️ Cảnh cáo</span><span class="pts neg">−10 điểm</span></div>
@@ -243,10 +288,10 @@ body {
 
 <div class="card" style="background:#FFEBEE;color:#B71C1C" data-card="2">
   <div class="card-inner">
-    <div class="card-num" style="color:#B71C1C">2 / 13</div>
+    <div class="card-num" style="color:#B71C1C">2 / 12</div>
     <div class="big-icon">🔥</div>
     <h2>Đuổi ngay +<br>Cấm vĩnh viễn</h2>
-
+    
 <div class="card-text">Đây là <strong>vi phạm an toàn & trật tự</strong> — đuổi ngay lập tức và <strong>KHÔNG BAO GIỜ được quay lại</strong>:</div>
 <div class="rule-item danger"><span class="rule-icon">🔥</span><span>Gây cháy, ngập, hoặc thảm họa (cố ý hoặc do bất cẩn)</span></div>
 <div class="rule-item danger"><span class="rule-icon">🚔</span><span>Trộm cắp, hành hung, hoặc đánh bạc</span></div>
@@ -259,10 +304,10 @@ body {
 
 <div class="card" style="background:#FCE4EC;color:#880E4F" data-card="3">
   <div class="card-inner">
-    <div class="card-num" style="color:#880E4F">3 / 13</div>
+    <div class="card-num" style="color:#880E4F">3 / 12</div>
     <div class="big-icon">🚪</div>
     <h2>Đuổi + Cấm<br>học kỳ sau</h2>
-
+    
 <div class="card-text">Đây là <strong>vi phạm nghĩa vụ cư dân</strong> — đuổi và <strong>không được nhập lại học kỳ sau</strong>:</div>
 <div class="rule-item danger"><span class="rule-icon">🛏️</span><span>Cho người ngoài ở qua đêm</span></div>
 <div class="rule-item danger"><span class="rule-icon">🚪</span><span>Vào phòng người khác giới (hoặc cho họ vào phòng bạn)</span></div>
@@ -277,10 +322,10 @@ body {
 
 <div class="card" style="background:#EFEBE9;color:#4E342E" data-card="4">
   <div class="card-inner">
-    <div class="card-num" style="color:#4E342E">4 / 13</div>
+    <div class="card-num" style="color:#4E342E">4 / 12</div>
     <div class="big-icon">🚷</div>
     <h2>Cấm đưa người ngoài<br>vào phòng</h2>
-
+    
 <div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">Đưa người ngoài vào KTX</div>
 <div style="text-align:center;"><span class="demerit-badge">−12 điểm</span></div>
 <div class="card-text" style="margin-top:14px;">Người không phải cư dân <strong>không được phép vào</strong> tòa nhà KTX trong mọi trường hợp.</div>
@@ -293,10 +338,10 @@ body {
 
 <div class="card" style="background:#FFF3E0;color:#BF360C" data-card="5">
   <div class="card-inner">
-    <div class="card-num" style="color:#BF360C">5 / 13</div>
+    <div class="card-num" style="color:#BF360C">5 / 12</div>
     <div class="big-icon">🍺</div>
     <h2>Rượu bia</h2>
-
+    
 <div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🍺 CẤM uống rượu bia<br>Chai rỗng cũng là bằng chứng!</div>
 <div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
 <div class="card-text" style="margin-top:12px;">Không cần bắt quả tang. Nếu phát hiện <strong>bất kỳ dấu vết nào</strong> — chai, lon, mùi — đều tính là uống rượu.</div>
@@ -308,10 +353,10 @@ body {
 
 <div class="card" style="background:#F3E5F5;color:#6A1B9A" data-card="6">
   <div class="card-inner">
-    <div class="card-num" style="color:#6A1B9A">6 / 13</div>
+    <div class="card-num" style="color:#6A1B9A">6 / 12</div>
     <div class="big-icon">🚬</div>
     <h2>Hút thuốc</h2>
-
+    
 <div class="highlight-banner" style="background:rgba(106,27,154,0.1);color:#6A1B9A;">🚬 TUYỆT ĐỐI CẤM HÚT THUỐC<br>Trong phòng, hành lang, VÀ cầu thang!</div>
 <div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
 <div class="card-text" style="margin-top:12px;">Cấm mọi loại thuốc <strong>ở mọi nơi trong tòa nhà</strong> — phòng, hành lang, cầu thang. Bao gồm:</div>
@@ -327,10 +372,10 @@ body {
 
 <div class="card" style="background:#E3F2FD;color:#0D47A1" data-card="7">
   <div class="card-inner">
-    <div class="card-num" style="color:#0D47A1">7 / 13</div>
+    <div class="card-num" style="color:#0D47A1">7 / 12</div>
     <div class="big-icon">🔌</div>
     <h2>Thiết bị bị cấm</h2>
-
+    
 <div style="text-align:center;"><span class="demerit-badge">−10 điểm</span></div>
 <div class="card-text" style="margin-top:12px;">Các thiết bị sau <strong>bị cấm hoàn toàn</strong> trong phòng:</div>
 <div class="rule-item warn"><span class="rule-icon">🔥</span><span><strong>Máy sưởi điện</strong> — quạt sưởi, lò sưởi, v.v.</span></div>
@@ -344,10 +389,10 @@ body {
 
 <div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="8">
   <div class="card-inner">
-    <div class="card-num" style="color:#1B5E20">8 / 13</div>
+    <div class="card-num" style="color:#1B5E20">8 / 12</div>
     <div class="big-icon">💡</div>
     <h2>Tiền điện nước</h2>
-
+    
 <div class="card-text">Chi phí điện, gas, nước <strong>thông thường được bao gồm</strong> và bạn không cần trả riêng. Tuy nhiên:</div>
 <div class="rule-item warn"><span class="rule-icon">💡</span><span>Nếu hóa đơn điện, gas, nước vượt trung bình tòa nhà <strong>hơn 10%</strong>, bạn phải trả phần vượt</span></div>
 <div class="rule-item info"><span class="rule-icon">🌡️</span><span>Bật điều hòa/sưởi khi cửa sổ hoặc cửa mở → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
@@ -358,10 +403,10 @@ body {
 
 <div class="card" style="background:#F5F5F5;color:#37474F" data-card="9">
   <div class="card-inner">
-    <div class="card-num" style="color:#37474F">9 / 13</div>
+    <div class="card-num" style="color:#37474F">9 / 12</div>
     <div class="big-icon">📋</div>
     <h2>Kiểm tra phòng</h2>
-
+    
 <div class="card-text">Nhân viên KTX <strong>có thể và sẽ</strong> kiểm tra phòng của bạn về:</div>
 <div class="rule-item info"><span class="rule-icon">🔍</span><span>An toàn, phòng chống tai nạn, vệ sinh</span></div>
 <div class="rule-item info"><span class="rule-icon">🧹</span><span>Phòng bẩn → <span style="color:#B71C1C;font-weight:800;">−3 điểm</span></span></div>
@@ -373,10 +418,10 @@ body {
 
 <div class="card" style="background:#EFEBE9;color:#4E342E" data-card="10">
   <div class="card-inner">
-    <div class="card-num" style="color:#4E342E">10 / 13</div>
+    <div class="card-num" style="color:#4E342E">10 / 12</div>
     <div class="big-icon">📦</div>
     <h2>Rời KTX & Hoàn tiền</h2>
-
+    
 <div class="card-text"><strong>Tự nguyện rời</strong> không được phép trong 30 ngày đầu, trừ trường hợp đặc biệt như về nước.</div>
 <div class="section-label">Sau 30 ngày — rời tự nguyện:</div>
 <div class="penalty-box">
@@ -392,10 +437,10 @@ body {
 
 <div class="card" style="background:#E8EAF6;color:#283593" data-card="11">
   <div class="card-inner">
-    <div class="card-num" style="color:#283593">11 / 13</div>
+    <div class="card-num" style="color:#283593">11 / 12</div>
     <div class="big-icon">📌</div>
     <h2>Các quy định khác cần nhớ</h2>
-
+    
 <div class="rule-item info"><span class="rule-icon">📢</span><span>Gây ồn ào (bao gồm khiếu nại từ hàng xóm) → <span style="color:#B71C1C;font-weight:800;">−5 điểm</span></span></div>
 <div class="rule-item info"><span class="rule-icon">🧲</span><span>Không tháo, sửa, di chuyển đồ nội thất/thiết bị → <span style="color:#B71C1C;font-weight:800;">−3 điểm</span></span></div>
 <div class="rule-item info"><span class="rule-icon">♻️</span><span>Không phân loại rác → <span style="color:#B71C1C;font-weight:800;">−2 điểm</span></span></div>
@@ -407,10 +452,10 @@ body {
 
 <div class="card" style="background:#FBE9E7;color:#BF360C" data-card="12">
   <div class="card-inner">
-    <div class="card-num" style="color:#BF360C">12 / 13</div>
+    <div class="card-num" style="color:#BF360C">12 / 12</div>
     <div class="big-icon">🧯</div>
     <h2>Luật phòng cháy:<br>Cấm để đồ ngoài hành lang!</h2>
-
+    
 <div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🚨 Phạt lần đầu: 1.000.000₩<br>(Luật Phòng cháy Hàn Quốc)</div>
 <div class="card-text">Theo pháp luật, <strong>nghiêm cấm</strong> đặt bất kỳ vật dụng nào tại các khu vực sau:</div>
 <div class="rule-item danger"><span class="rule-icon">🚲</span><span>Hành lang — cấm xe đạp, thùng, kệ giày, v.v.</span></div>
@@ -422,30 +467,9 @@ body {
   </div>
 </div>
 
-<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="13">
-  <div class="card-inner">
-    <div class="card-num" style="color:#1B5E20">13 / 13</div>
-    <div class="big-icon">⭐</div>
-    <h2>Điểm thưởng<br>— Bù trừ điểm phạt!</h2>
-    <div class="card-text">Bạn có thể <strong>kiếm điểm thưởng</strong> để bù trừ điểm phạt. Cách kiếm:</div>
-    <div class="penalty-box" style="background:rgba(46,125,50,0.08);">
-      <div class="penalty-row"><span>🏆 Nâng cao uy tín KTX</span><span class="pts" style="color:#2E7D32;">+5</span></div>
-      <div class="penalty-row"><span>🚑 Hỗ trợ sơ cứu khẩn cấp</span><span class="pts" style="color:#2E7D32;">+5</span></div>
-      <div class="penalty-row"><span>📋 Tham gia buổi định hướng</span><span class="pts" style="color:#2E7D32;">+3</span></div>
-      <div class="penalty-row"><span>🧠 Tư vấn nghề nghiệp & tâm lý</span><span class="pts" style="color:#2E7D32;">+3</span></div>
-      <div class="penalty-row"><span>🧹 Phòng được công nhận sạch đẹp</span><span class="pts" style="color:#2E7D32;">+3</span></div>
-      <div class="penalty-row"><span>📝 Khảo sát hài lòng KTX</span><span class="pts" style="color:#2E7D32;">+2</span></div>
-      <div class="penalty-row"><span>🎉 Tham gia sự kiện KTX</span><span class="pts" style="color:#2E7D32;">+1</span></div>
-      <div class="penalty-row"><span>🤝 Giúp việc hành chính (phiên dịch, v.v.)</span><span class="pts" style="color:#2E7D32;">+1</span></div>
-      <div class="penalty-row"><span>📢 Báo cáo vi phạm nội quy</span><span class="pts" style="color:#2E7D32;">+1</span></div>
-      <div class="penalty-row"><span>💪 Tình nguyện (1 điểm/giờ)</span><span class="pts" style="color:#2E7D32;">+1/giờ</span></div>
-    </div>
-    <div class="small-note">※ Điểm hiển thị là tối đa và có thể thay đổi. Hoạt động tình nguyện phải đăng ký trước tại Văn phòng Giám sát KTX.</div>
-  </div>
-</div>
-
-<script src="/toc.js"></script>
 <script>
+const EMBED_MODE = new URLSearchParams(window.location.search).get('embed') === '1';
+if (EMBED_MODE) document.documentElement.classList.add('embed-mode');
 const cards = document.querySelectorAll('.card');
 const progress = document.getElementById('progress');
 cards.forEach((_,i) => { const d=document.createElement('div'); d.className='dot'; progress.appendChild(d); });
@@ -465,6 +489,73 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, {threshold: 0.5});
 cards.forEach(c => observer.observe(c));
+
+// ── TOC ──
+(() => {
+  const tocInline = document.getElementById('tocInline');
+  const tocModal = document.getElementById('tocModal');
+  const tocModalList = document.getElementById('tocModalList');
+  const tocFab = document.getElementById('tocFab');
+  const tocClose = document.getElementById('tocClose');
+  if (!tocInline || !tocModal || !tocModalList || !tocFab || !tocClose) return;
+
+  const tocCards = Array.from(document.querySelectorAll('.card[data-card]'))
+    .filter(c => c.getAttribute('data-card') !== '0');
+
+  const items = tocCards.map(c => {
+    const idx = c.getAttribute('data-card');
+    const icon = (c.querySelector('.big-icon')?.textContent || '').replace(/\s+/g, ' ').trim();
+    const title = (c.querySelector('h2')?.textContent || `Slide ${idx}`).replace(/\s+/g, ' ').trim();
+    return { idx, icon, title };
+  });
+
+  const scrollToCard = (idx) => {
+    const el = document.querySelector(`.card[data-card="${idx}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const closeModal = () => {
+    tocModal.classList.remove('open');
+    tocModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+  const openModal = () => {
+    tocModal.classList.add('open');
+    tocModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  tocFab.addEventListener('click', (e) => { e.stopPropagation(); openModal(); });
+  tocClose.addEventListener('click', closeModal);
+  tocModal.addEventListener('click', (e) => { if (e.target === tocModal) closeModal(); });
+
+  const mkBtn = (cls, it, closeOnClick) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls;
+    b.title = it.title;
+
+    const em = document.createElement('span');
+    em.className = 'toc-emoji';
+    em.textContent = it.icon || '•';
+
+    const tx = document.createElement('span');
+    tx.className = 'toc-text';
+    tx.textContent = it.title;
+
+    b.appendChild(em);
+    b.appendChild(tx);
+    b.addEventListener('click', () => {
+      scrollToCard(it.idx);
+      if (closeOnClick) closeModal();
+    });
+    return b;
+  };
+
+  items.forEach(it => tocInline.appendChild(mkBtn('toc-chip', it, false)));
+  items.forEach(it => tocModalList.appendChild(mkBtn('toc-item', it, true)));
+})();
 </script>
 </body>
 </html>
