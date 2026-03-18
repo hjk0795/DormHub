@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dormitory Acknowledgment</title>
+<title>Dormitory Rules Check-in</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -117,7 +117,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 <body>
 <div class="container">
   <div class="header">
-    <h1 data-i="hT">📋 Dormitory Rules Acknowledgment</h1>
+    <h1 data-i="hT">📋 Dormitory Rules Check-in</h1>
     <p data-i="hS">Kyungsung Univ. Off-campus Dormitory</p>
   </div>
   <div class="lang-row">
@@ -126,7 +126,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   </div>
 
   <div class="main" id="mainC">
-    <button class="recovery-toggle" id="recoveryToggle" type="button" onclick="toggleRecovery(true)" data-i="rvT">Already verified?</button>
+    <button class="recovery-toggle" id="recoveryToggle" type="button" onclick="toggleRecovery(true)" data-i="rvT">Already checked in?</button>
 
     <div class="card recovery-card" id="recoveryCard">
       <div class="card-label" data-i="rvL">Find Existing Verification</div>
@@ -275,9 +275,9 @@ const TITLES = {
 
 const I = {
   en: {
-    hT:'📋 Dormitory Rules Acknowledgment',hS:'Kyungsung Univ. Off-campus Dormitory',
+    hT:'📋 Dormitory Rules Check-in',hS:'Kyungsung Univ. Off-campus Dormitory',
     inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name',
-    rvT:'Already verified?',rvL:'Find Existing Verification',rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Find my verification',
+    rvT:'Already checked in?',rvL:'Find Existing Check-in',rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Find my check-in',
     rbL:'Building',rrL:'Room Number',rnL:'Full Name',
     cL:'Confirmation Checklist',
     c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
