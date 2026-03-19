@@ -34,10 +34,11 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 .hidden{display:none !important}
 
 /* Recovery */
-.recovery-toggle{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--link);background:none;border:none;padding:0;margin:2px 0 14px;cursor:pointer}
+.recovery-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;font-size:12px;font-weight:700;color:var(--link);background:none;border:none;padding:0;margin:2px auto 14px;cursor:pointer;text-align:center}
 .recovery-toggle:active{transform:translateY(1px)}
 .recovery-card{display:none}
 .recovery-card.open{display:block}
+.recovery-card .card-label{text-transform:none;letter-spacing:.2px;font-size:12px}
 .helper-copy{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:16px}
 .recovery-actions{display:flex;gap:10px;margin-top:16px}
 .btn-ghost,.btn-secondary{flex:1;min-height:44px;border-radius:12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
@@ -126,10 +127,10 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   </div>
 
   <div class="main" id="mainC">
-    <button class="recovery-toggle" id="recoveryToggle" type="button" onclick="toggleRecovery(true)" data-i="rvT">Already checked in?</button>
+    <button class="recovery-toggle" id="recoveryToggle" type="button" onclick="toggleRecovery(true)" data-i="rvT">Already completed this?</button>
 
     <div class="card recovery-card" id="recoveryCard">
-      <div class="card-label" data-i="rvL">Find Existing Verification</div>
+      <div class="card-label" data-i="rvL">I've done this before</div>
       <p class="helper-copy" data-i="rvH">If you already submitted before, enter the same building, room number, and name to continue.</p>
       <div class="field"><label data-i="rbL">Building</label>
         <select id="recoveryBuilding">
@@ -147,7 +148,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
       </div>
       <div class="recovery-actions">
         <button class="btn-ghost" type="button" onclick="toggleRecovery(false)" data-i="rvB">← Back</button>
-        <button class="btn-secondary" type="button" onclick="findExisting()" data-i="rvF">Find my verification</button>
+        <button class="btn-secondary" type="button" onclick="findExisting()" data-i="rvF">Confirm</button>
       </div>
     </div>
 
@@ -277,7 +278,7 @@ const I = {
   en: {
     hT:'📋 Dormitory Rules Check-in',hS:'Kyungsung Univ. Off-campus Dormitory',
     inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name',
-    rvT:'Already checked in?',rvL:'Find Existing Check-in',rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Find my check-in',
+    rvT:'Already completed this?',rvL:"I've done this before",rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Confirm',
     rbL:'Building',rrL:'Room Number',rnL:'Full Name',
     cL:'Confirmation Checklist',
     c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
@@ -310,6 +311,7 @@ let lang='en';
 const rd=[false,false,false];
 let curM=-1, curSlide=0;
 let mLast=1;
+let mReachedEnd=false;
 let currentSections=[];
 
 function setModalLastIndexFromDoc(doc){
@@ -422,6 +424,7 @@ function findExisting(){
 function openM(i){
   curM=i; curSlide=0;
   mLast = FALLBACK_LAST_INDEX[i] ?? 1;
+  mReachedEnd=false;
   currentSections = [];
   document.getElementById('mTitle').textContent=TITLES[lang][i];
   const frame=document.getElementById('mFrame');
@@ -437,6 +440,7 @@ function closeM(){
   document.getElementById('mFrame').src='about:blank';
   curM=-1;
   mLast=1;
+  mReachedEnd=false;
   currentSections = [];
 }
 function updPage(){
@@ -449,7 +453,7 @@ function updMBtn(){
   const btn=document.getElementById('mBtn');
   const txt=document.getElementById('mBtnTxt');
   const safeLast = Math.max(1, mLast || 1);
-  if(curSlide>=safeLast){
+  if(curSlide>=safeLast || mReachedEnd){
     btn.className='modal-btn ok';
     txt.textContent=I[lang].okBtn;
   }else{
@@ -459,7 +463,7 @@ function updMBtn(){
 }
 function mAction(){
   const safeLast = Math.max(1, mLast || 1);
-  if(curSlide>=safeLast){
+  if(curSlide>=safeLast || mReachedEnd){
     unlock(curM);
     closeM();
     return;
@@ -499,6 +503,7 @@ function syncCurrentSlide(scroller){
     if(nextIndex === -1) nextIndex = currentSections.length - 1;
     curSlide = Math.min(safeLast, Math.max(0, nextIndex));
   }
+  if(curSlide>=safeLast) mReachedEnd=true;
   updPage();
   updMBtn();
 }
