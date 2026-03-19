@@ -144,7 +144,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
       <div class="field"><label data-i="rrL">Room Number</label>
         <input id="recoveryRoom" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="sanitizeRoomInput(this)">
       </div>
-      <div class="field"><label data-i="rnL">Full Name (Enter in English)</label>
+      <div class="field"><label data-i="rnL">Full Name (English)</label>
         <input id="recoveryName" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="sanitizeNameInput(this)" onblur="formatNameInput(this)">
       </div>
       <div class="recovery-actions">
@@ -167,9 +167,10 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
       <div class="field"><label data-i="rL">Room Number</label>
         <input id="room" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="sanitizeRoomInput(this);val()">
       </div>
-      <div class="field"><label data-i="nL">Full Name (Enter in English)</label>
+      <div class="field"><label data-i="nL">Full Name (English)</label>
         <input id="fname" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="sanitizeNameInput(this);val()" onblur="formatNameInput(this);val()">
       </div>
+      <p class="helper-copy" style="margin-top:2px;margin-bottom:0" data-i="pN">Used only to confirm check-in. Deleted after move-out.</p>
     </div>
 
     <!-- Checklist -->
@@ -284,9 +285,9 @@ const TITLES = {
 const I = {
   en: {
     hT:'📋 Dormitory Rules Check-in',hS:'Kyungsung Univ. Off-campus Dormitory',
-    inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name (Enter in English)',
+    inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name (English)',
     rvT:'Already completed this?',rvL:"I've done this before",rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Confirm',
-    rbL:'Building',rrL:'Room Number',rnL:'Full Name (Enter in English)',
+    rbL:'Building',rrL:'Room Number',rnL:'Full Name (English)',pN:'Used only to confirm check-in. Deleted after move-out.',
     cL:'Confirmation Checklist',
     c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
     c1:'I have read the Recycling & Trash Guide.',c1h:'Tap ♻️ to read first',
@@ -299,9 +300,9 @@ const I = {
   },
   vi: {
     hT:'📋 Xác nhận Nội quy KTX',hS:'KTX ngoài khuôn viên ĐH Kyungsung',
-    inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên (Nhập bằng tiếng Việt)',
+    inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên (Tiếng Việt)',
     rvT:'Đã xác nhận rồi?',rvL:'Tìm xác nhận hiện có',rvH:'Nếu bạn đã gửi trước đó, hãy nhập lại đúng tòa nhà, số phòng và tên để tiếp tục.',rvB:'← Quay lại',rvF:'Tìm xác nhận của tôi',
-    rbL:'Tòa nhà',rrL:'Số phòng',rnL:'Họ và tên (Nhập bằng tiếng Việt)',
+    rbL:'Tòa nhà',rrL:'Số phòng',rnL:'Họ và tên (Tiếng Việt)',pN:'Chỉ dùng để xác nhận check-in. Sẽ xóa sau khi bạn rời KTX.',
     cL:'Danh sách xác nhận',
     c0:'Tôi đã đọc Nội quy & Quy định KTX.',c0h:'Nhấn 📖 để đọc',
     c1:'Tôi đã đọc Hướng dẫn Phân loại rác.',c1h:'Nhấn ♻️ để đọc',
@@ -454,6 +455,17 @@ function toggleRecovery(forceOpen){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+function persistAckState(rec){
+  try{
+    localStorage.setItem('dormhub_ack_verified_v1', JSON.stringify({
+      building: rec.building,
+      room: sanitizeRoom(rec.room || ''),
+      name: toDisplayName(rec.name || ''),
+      lang: rec.lang || lang
+    }));
+  }catch(e){}
+}
+
 async function findExisting(){
   const building=document.getElementById('recoveryBuilding').value;
   const room=sanitizeRoom(document.getElementById('recoveryRoom').value);
@@ -463,6 +475,16 @@ async function findExisting(){
   if(!building||!room||!name){toast(I[lang].tF);return;}
   const found = await findExistingRecord({building, room, name});
   if(!found){toast(I[lang].tNF);return;}
+  const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
+  if(!recs.some(rec =>
+    rec.building===building &&
+    sanitizeRoom(rec.room || '')===room &&
+    normalizeName(rec.name || '')===normalizeName(name)
+  )){
+    recs.push({building, room, name, lang});
+    localStorage.setItem('dorm_ack', JSON.stringify(recs));
+  }
+  persistAckState({building, room, name, lang});
   toast(I[lang].tFD);
   setTimeout(()=>{location.href=DORM_HUB_HOME_URL;},500);
 }
@@ -687,6 +709,7 @@ async function doSubmit(){
     await submitToGoogleForm(rec);
     const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
     recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
+    persistAckState(rec);
     await new Promise(r=>setTimeout(r,500));
     document.getElementById('ld').classList.remove('on');
     document.getElementById('mainC').style.display='none';
@@ -718,7 +741,6 @@ async function submitToGoogleForm(rec){
   if(cfg.entries.room) body.set(cfg.entries.room, rec.room);
   if(cfg.entries.name) body.set(cfg.entries.name, normalizedName);
   if(cfg.entries.lang) body.set(cfg.entries.lang, rec.lang);
-  if(cfg.entries.date) body.set(cfg.entries.date, rec.date);
   await fetch(submitUrl,{
     method:'POST',
     mode:'no-cors',
