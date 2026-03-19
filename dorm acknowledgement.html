@@ -142,10 +142,10 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
         </select>
       </div>
       <div class="field"><label data-i="rrL">Room Number</label>
-        <input id="recoveryRoom" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5">
+        <input id="recoveryRoom" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="sanitizeRoomInput(this)">
       </div>
-      <div class="field"><label data-i="rnL">Full Name</label>
-        <input id="recoveryName" type="text" placeholder="e.g. Nguyen Van A" maxlength="50">
+      <div class="field"><label data-i="rnL">Full Name (Enter in English)</label>
+        <input id="recoveryName" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="sanitizeNameInput(this)" onblur="formatNameInput(this)">
       </div>
       <div class="recovery-actions">
         <button class="btn-ghost" type="button" onclick="toggleRecovery(false)" data-i="rvB">← Back</button>
@@ -165,10 +165,10 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
         </select>
       </div>
       <div class="field"><label data-i="rL">Room Number</label>
-        <input id="room" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="val()">
+        <input id="room" type="text" placeholder="e.g. 801" inputmode="numeric" maxlength="5" oninput="sanitizeRoomInput(this);val()">
       </div>
-      <div class="field"><label data-i="nL">Full Name</label>
-        <input id="fname" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="val()">
+      <div class="field"><label data-i="nL">Full Name (Enter in English)</label>
+        <input id="fname" type="text" placeholder="e.g. Nguyen Van A" maxlength="50" oninput="sanitizeNameInput(this);val()" onblur="formatNameInput(this);val()">
       </div>
     </div>
 
@@ -284,9 +284,9 @@ const TITLES = {
 const I = {
   en: {
     hT:'📋 Dormitory Rules Check-in',hS:'Kyungsung Univ. Off-campus Dormitory',
-    inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name',
+    inf:'Your Information',bL:'Building',bS:'— Select —',rL:'Room Number',nL:'Full Name (Enter in English)',
     rvT:'Already completed this?',rvL:"I've done this before",rvH:'If you already submitted before, enter the same building, room number, and name to continue.',rvB:'← Back',rvF:'Confirm',
-    rbL:'Building',rrL:'Room Number',rnL:'Full Name',
+    rbL:'Building',rrL:'Room Number',rnL:'Full Name (Enter in English)',
     cL:'Confirmation Checklist',
     c0:'I have read the Dormitory Rules & Regulations.',c0h:'Tap 📖 to read first',
     c1:'I have read the Recycling & Trash Guide.',c1h:'Tap ♻️ to read first',
@@ -299,9 +299,9 @@ const I = {
   },
   vi: {
     hT:'📋 Xác nhận Nội quy KTX',hS:'KTX ngoài khuôn viên ĐH Kyungsung',
-    inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên',
+    inf:'Thông tin của bạn',bL:'Tòa nhà',bS:'— Chọn —',rL:'Số phòng',nL:'Họ và tên (Nhập bằng tiếng Việt)',
     rvT:'Đã xác nhận rồi?',rvL:'Tìm xác nhận hiện có',rvH:'Nếu bạn đã gửi trước đó, hãy nhập lại đúng tòa nhà, số phòng và tên để tiếp tục.',rvB:'← Quay lại',rvF:'Tìm xác nhận của tôi',
-    rbL:'Tòa nhà',rrL:'Số phòng',rnL:'Họ và tên',
+    rbL:'Tòa nhà',rrL:'Số phòng',rnL:'Họ và tên (Nhập bằng tiếng Việt)',
     cL:'Danh sách xác nhận',
     c0:'Tôi đã đọc Nội quy & Quy định KTX.',c0h:'Nhấn 📖 để đọc',
     c1:'Tôi đã đọc Hướng dẫn Phân loại rác.',c1h:'Nhấn ♻️ để đọc',
@@ -402,8 +402,41 @@ function normalizeName(name){
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu,'')
     .toLowerCase()
+    .replace(/[^\p{L}\s]/gu,' ')
     .replace(/\s+/g,' ')
     .trim();
+}
+
+function sanitizeRoom(value){
+  return String(value || '').replace(/\D+/g,'').slice(0,5);
+}
+
+function sanitizeRoomInput(input){
+  input.value = sanitizeRoom(input.value);
+}
+
+function sanitizeName(value){
+  return String(value || '')
+    .replace(/[^\p{L}\s]/gu,' ')
+    .replace(/\s+/g,' ')
+    .trimStart();
+}
+
+function toDisplayName(value){
+  return sanitizeName(value)
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toLocaleUpperCase() + part.slice(1).toLocaleLowerCase())
+    .join(' ');
+}
+
+function sanitizeNameInput(input){
+  input.value = sanitizeName(input.value);
+}
+
+function formatNameInput(input){
+  input.value = toDisplayName(input.value);
 }
 
 function toggleRecovery(forceOpen){
@@ -421,21 +454,91 @@ function toggleRecovery(forceOpen){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function findExisting(){
+async function findExisting(){
   const building=document.getElementById('recoveryBuilding').value;
-  const room=document.getElementById('recoveryRoom').value.trim();
-  const name=document.getElementById('recoveryName').value.trim();
+  const room=sanitizeRoom(document.getElementById('recoveryRoom').value);
+  const name=toDisplayName(document.getElementById('recoveryName').value);
+  document.getElementById('recoveryRoom').value=room;
+  document.getElementById('recoveryName').value=name;
   if(!building||!room||!name){toast(I[lang].tF);return;}
-  const normalized = normalizeName(name);
-  const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
-  const found = recs.find(rec =>
-    rec.building===building &&
-    String(rec.room).trim()===room &&
-    normalizeName(rec.name||'')===normalized
-  ) || null;
+  const found = await findExistingRecord({building, room, name});
   if(!found){toast(I[lang].tNF);return;}
   toast(I[lang].tFD);
   setTimeout(()=>{location.href=DORM_HUB_HOME_URL;},500);
+}
+
+async function findExistingRecord({building, room, name}){
+  const normalized = normalizeName(name);
+  const lookupCsvUrl = window.DORM_ACK_FORM_CONFIG?.lookupCsvUrl?.trim();
+  if(lookupCsvUrl){
+    try{
+      const res = await fetch(lookupCsvUrl, {cache:'no-store'});
+      if(res.ok){
+        const text = await res.text();
+        const rows = parseCsv(text);
+        const header = rows.shift() || [];
+        const idx = {
+          building: findHeaderIndex(header, ['building', 'toa nha']),
+          room: findHeaderIndex(header, ['room', 'so phong']),
+          name: findHeaderIndex(header, ['name', 'ho va ten'])
+        };
+        const hit = rows.find(cols =>
+          String(cols[idx.building] || '').trim() === building &&
+          sanitizeRoom(cols[idx.room] || '') === room &&
+          normalizeName(cols[idx.name] || '') === normalized
+        );
+        if(hit) return { building, room, name };
+      }
+    }catch(e){}
+  }
+  const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
+  return recs.find(rec =>
+    rec.building===building &&
+    sanitizeRoom(rec.room || '')===room &&
+    normalizeName(rec.name||'')===normalized
+  ) || null;
+}
+
+function findHeaderIndex(header, aliases){
+  const normalizedHeader = header.map(cell => normalizeName(cell || ''));
+  for(const alias of aliases){
+    const idx = normalizedHeader.findIndex(cell => cell.includes(normalizeName(alias)));
+    if(idx !== -1) return idx;
+  }
+  return -1;
+}
+
+function parseCsv(text){
+  const rows = [];
+  let row = [];
+  let cell = '';
+  let inQuotes = false;
+  for(let i=0;i<text.length;i++){
+    const ch = text[i];
+    const next = text[i + 1];
+    if(ch === '"'){
+      if(inQuotes && next === '"'){
+        cell += '"';
+        i++;
+      }else{
+        inQuotes = !inQuotes;
+      }
+    }else if(ch === ',' && !inQuotes){
+      row.push(cell);
+      cell = '';
+    }else if((ch === '\n' || ch === '\r') && !inQuotes){
+      if(ch === '\r' && next === '\n') i++;
+      row.push(cell);
+      if(row.some(value => value !== '')) rows.push(row);
+      row = [];
+      cell = '';
+    }else{
+      cell += ch;
+    }
+  }
+  row.push(cell);
+  if(row.some(value => value !== '')) rows.push(row);
+  return rows;
 }
 
 // ═══ Modal with iframe ═══
@@ -562,8 +665,9 @@ document.getElementById('mFrame').addEventListener('load',function(){
 // ═══ Validate ═══
 function val(){
   const b=document.getElementById('building').value;
-  const r=document.getElementById('room').value.trim();
-  const n=document.getElementById('fname').value.trim();
+  const r=sanitizeRoom(document.getElementById('room').value);
+  const n=toDisplayName(document.getElementById('fname').value);
+  document.getElementById('room').value=r;
   const all=[0,1,2,3].every(i=>document.getElementById(`cb${i}`).checked);
   document.getElementById('btnSub').disabled=!(b&&r&&n&&all);
 }
@@ -571,8 +675,10 @@ function val(){
 // ═══ Submit ═══
 async function doSubmit(){
   const building=document.getElementById('building').value;
-  const room=document.getElementById('room').value.trim();
-  const name=document.getElementById('fname').value.trim();
+  const room=sanitizeRoom(document.getElementById('room').value);
+  const name=toDisplayName(document.getElementById('fname').value);
+  document.getElementById('room').value=room;
+  document.getElementById('fname').value=name;
   if(!building||!room||!name){toast(I[lang].tF);return;}
   const date=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
   document.getElementById('ld').classList.add('on');
