@@ -79,6 +79,7 @@ body {
 }
 .card-images img {
   width: 100%;
+  display: block;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   object-fit: cover;
@@ -193,16 +194,19 @@ body {
 .toc-item{min-height:44px;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;cursor:pointer}
 .toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
 html.embed-mode .progress{display:none}
-html.embed-mode{--embed-frame-width:392px;--embed-frame-scale:.74;--embed-v-pad:clamp(6px,1.4vh,11px);--embed-h-pad:clamp(4px,1vw,8px)}
+html.embed-mode{--embed-frame-width:392px;--embed-frame-scale:.74;--embed-frame-target-scale:.74;--embed-v-pad:clamp(6px,1.4vh,11px);--embed-h-pad:clamp(4px,1vw,8px)}
 html.embed-mode .card{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh;padding:var(--embed-v-pad) var(--embed-h-pad)}
 html.embed-mode .card-inner{max-width:var(--embed-frame-width);width:100%;transform:scale(var(--embed-frame-scale));transform-origin:center center;margin:0 auto}
 html.embed-mode .cover-card .card-inner{max-width:var(--embed-frame-width)}
 html.embed-mode .cover-card h1{font-size:27px}
 html.embed-mode .card h2{font-size:19px}
 html.embed-mode .card-text,html.embed-mode .caption{font-size:12.5px;line-height:1.5}
-html.embed-mode img{max-height:23vh;object-fit:cover}
-html.embed-mode .card-images.duo img{width:50%;height:21vh;max-height:none}
-html.embed-mode .card-images:not(.duo) img{width:100%;height:23vh;max-height:none}
+html.embed-mode img{display:block;object-fit:fill}
+html.embed-mode .card-images{overflow:hidden}
+html.embed-mode .card-images.duo{height:240px}
+html.embed-mode .card-images.duo img{width:50%;height:100%;max-height:none}
+html.embed-mode .card-images:not(.duo){height:320px;border-radius:14px}
+html.embed-mode .card-images:not(.duo) img{width:100%;height:100%;max-height:none;border-radius:inherit}
 html.embed-mode .cover-card img{width:100%;max-height:34vh;object-fit:cover;margin-bottom:18px}
 html.embed-mode .cover-card .cover-sub{margin-bottom:16px}
 html.embed-mode .caption{margin-top:8px}
@@ -383,12 +387,16 @@ function applyUnifiedEmbedScale(){
   if(!sampleCard || !samples.length) return;
   const cardStyle = getComputedStyle(sampleCard);
   const frameWidth = parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-width')) || 392;
+  const targetScale = parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-target-scale')) || parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-scale')) || 0.74;
   const availableWidth = window.innerWidth - (parseFloat(cardStyle.paddingLeft) || 0) - (parseFloat(cardStyle.paddingRight) || 0);
   const availableHeight = window.innerHeight - (parseFloat(cardStyle.paddingTop) || 0) - (parseFloat(cardStyle.paddingBottom) || 0);
   const maxHeight = Math.max(...samples.map(el => Math.max(el.offsetHeight || 0, el.scrollHeight || 0, el.getBoundingClientRect().height || 0)));
-  const scaleByWidth = availableWidth / frameWidth;
-  const scaleByHeight = availableHeight / maxHeight;
-  const scale = Math.max(0.58, Math.min(scaleByWidth, scaleByHeight, 1));
+  const widthCap = Math.min(availableWidth / frameWidth, 1);
+  const preferredScale = Math.min(targetScale, widthCap);
+  const heightCap = availableHeight / maxHeight;
+  const scale = maxHeight * preferredScale <= availableHeight
+    ? preferredScale
+    : Math.max(0.58, Math.min(preferredScale, heightCap));
   root.style.setProperty('--embed-frame-scale', scale.toFixed(3));
 }
 function markEmbedReady(){
