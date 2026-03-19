@@ -9,6 +9,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+html.embed-mode body { opacity: 0; }
+html.embed-mode.embed-ready body { opacity: 1; transition: opacity .18s ease; }
 body {
   font-family: 'Be Vietnam Pro', 'Noto Sans KR', sans-serif;
   background: #111;
@@ -368,15 +370,30 @@ function applyUnifiedEmbedScale(){
   const scale = Math.max(0.58, Math.min(scaleByWidth, scaleByHeight, 1));
   root.style.setProperty('--embed-frame-scale', scale.toFixed(3));
 }
+function markEmbedReady(){
+  if(!EMBED_MODE) return;
+  document.documentElement.classList.add('embed-ready');
+}
 function scheduleEmbedScaleRefresh(){
   applyUnifiedEmbedScale();
   requestAnimationFrame(applyUnifiedEmbedScale);
   setTimeout(applyUnifiedEmbedScale, 180);
+  setTimeout(() => {
+    applyUnifiedEmbedScale();
+    markEmbedReady();
+  }, 420);
   setTimeout(applyUnifiedEmbedScale, 700);
 }
 window.addEventListener('load', scheduleEmbedScaleRefresh);
 window.addEventListener('resize', scheduleEmbedScaleRefresh);
 if (document.fonts?.ready) document.fonts.ready.then(scheduleEmbedScaleRefresh);
+Promise.all(Array.from(document.images).map(img => {
+  if (img.complete) return Promise.resolve();
+  return new Promise(resolve => {
+    img.addEventListener('load', resolve, { once: true });
+    img.addEventListener('error', resolve, { once: true });
+  });
+})).then(scheduleEmbedScaleRefresh);
 const cards = document.querySelectorAll('.card');
 const progress = document.getElementById('progress');
 cards.forEach((_, i) => {
