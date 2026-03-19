@@ -603,13 +603,16 @@ async function doSubmit(){
 async function submitToGoogleForm(rec){
   const cfg = ACK_FORM_CONFIG;
   if(!cfg || !cfg.formUrl || !cfg.entries) throw new Error('missing_form_config');
+  const submitUrl = String(cfg.formUrl)
+    .replace('/viewform?usp=preview','/formResponse')
+    .replace('/viewform','/formResponse');
   const body = new URLSearchParams();
   if(cfg.entries.building) body.set(cfg.entries.building, rec.building);
   if(cfg.entries.room) body.set(cfg.entries.room, rec.room);
   if(cfg.entries.name) body.set(cfg.entries.name, rec.name);
   if(cfg.entries.lang) body.set(cfg.entries.lang, rec.lang);
   if(cfg.entries.date) body.set(cfg.entries.date, rec.date);
-  await fetch(cfg.formUrl,{
+  await fetch(submitUrl,{
     method:'POST',
     mode:'no-cors',
     headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
