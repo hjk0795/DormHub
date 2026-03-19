@@ -104,7 +104,8 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 .suc-r{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px solid var(--border)}
 .suc-r:last-child{border-bottom:none}
 .suc-r .l{color:var(--muted)}.suc-r .v{font-weight:600}
-.btn-hub{width:100%;padding:13px;background:0;color:var(--navy);border:2px solid var(--border);border-radius:14px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:16px}
+.btn-auto{width:100%;min-height:50px;padding:13px 16px;background:#eef1f7;color:var(--navy);border:2px solid #d7dce7;border-radius:14px;font-family:inherit;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;opacity:.88;pointer-events:none;cursor:default}
+.btn-auto .ring{width:18px;height:18px;border-radius:50%;border:2px solid rgba(27,42,74,.18);border-top-color:var(--navy);animation:spin .8s linear infinite;flex-shrink:0}
 
 /* Util */
 .loading{display:none;position:fixed;inset:0;background:rgba(27,42,74,.5);z-index:200;align-items:center;justify-content:center}
@@ -224,9 +225,12 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   <div class="suc" id="suc">
     <div class="suc-ico">✅</div>
     <h2 data-i="sT">Submitted!</h2>
-    <p data-i="sM">Your acknowledgment has been recorded.</p>
+    <p data-i="sM">You're all set!</p>
     <div class="suc-det" id="sucD"></div>
-    <button class="btn-hub" onclick="location.href='/'" data-i="sB">← Back to Dorm Hub</button>
+    <div class="btn-auto" id="autoGo" aria-live="polite">
+      <span class="ring" aria-hidden="true"></span>
+      <span id="autoGoTxt" data-i="sB">Returning to the main page in 3 seconds…</span>
+    </div>
   </div>
 </div>
 
@@ -252,6 +256,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 <div class="loading" id="ld"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="./ack-config.js"></script>
 <script>
 // ═══ Config ═══
 const URLS = {
@@ -266,6 +271,8 @@ const URLS = {
     '/password-policy.html?lang=vi&embed=1',
   ]
 };
+const DORM_HUB_HOME_URL = 'https://dorm-hub.vercel.app/';
+const ACK_API_URL = (window.DORM_ACK_API_URL || '').trim();
 
 // Fallback "last slide index" per content (used until iframe loads and we can compute it).
 const FALLBACK_LAST_INDEX = [13, 11, 2];
@@ -285,7 +292,7 @@ const I = {
     c1:'I have read the Recycling & Trash Guide.',c1h:'Tap ♻️ to read first',
     c2:'I have read the Door Lock Password Policy.',c2h:'Tap 🔐 to read first',
     c3:'I agree to follow all rules above. I understand that violations may result in demerit points, eviction, or permanent ban.',
-    sub:'Submit ✓',sT:'Submitted!',sM:'Your acknowledgment has been recorded.',sB:'← Back to Dorm Hub',
+    sub:'Submit ✓',sT:'Submitted!',sM:"You're all set!",sB:'Returning to the main page in 3 seconds…',
     tF:'Please fill in all fields',tE:'Failed. Please try again.',tNF:'No existing verification found. Please check your name and room.',tFD:'Verification found. Continuing to Dorm Hub...',
     dB:'Building',dR:'Room',dN:'Name',dD:'Date',
     scrBtn:'↓ Next page',okBtn:'✓ I have read this',tA:'Please read all three documents first.',
@@ -300,7 +307,7 @@ const I = {
     c1:'Tôi đã đọc Hướng dẫn Phân loại rác.',c1h:'Nhấn ♻️ để đọc',
     c2:'Tôi đã đọc Quy định Mật khẩu khóa cửa.',c2h:'Nhấn 🔐 để đọc',
     c3:'Tôi đồng ý tuân thủ tất cả nội quy trên. Tôi hiểu rằng vi phạm có thể dẫn đến điểm phạt, buộc rời KTX, hoặc cấm vĩnh viễn.',
-    sub:'Gửi xác nhận ✓',sT:'Gửi thành công!',sM:'Xác nhận của bạn đã được ghi nhận.',sB:'← Quay lại Dorm Hub',
+    sub:'Gửi xác nhận ✓',sT:'Gửi thành công!',sM:'Mọi thứ đã hoàn tất!',sB:'Tự động chuyển về màn hình chính sau 3 giây…',
     tF:'Vui lòng điền đầy đủ',tE:'Thất bại. Vui lòng thử lại.',tNF:'Không tìm thấy xác nhận trước đó. Vui lòng kiểm tra lại tên và số phòng.',tFD:'Đã tìm thấy xác nhận. Đang chuyển đến Dorm Hub...',
     dB:'Tòa nhà',dR:'Phòng',dN:'Tên',dD:'Ngày',
     scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',tA:'Vui lòng đọc xong cả ba tài liệu trước.',
@@ -313,6 +320,13 @@ let curM=-1, curSlide=0;
 let mLast=1;
 let mReachedEnd=false;
 let currentSections=[];
+let redirectTimer=null;
+
+function getCountdownLabel(sec){
+  return lang==='vi'
+    ? `Tự động chuyển về màn hình chính sau ${sec} giây…`
+    : `Returning to the main page in ${sec} second${sec===1?'':'s'}…`;
+}
 
 function setModalLastIndexFromDoc(doc){
   if(!doc) return;
@@ -349,6 +363,10 @@ function setLang(l){
     else if(el.tagName==='OPTION')el.textContent=I[l][k];
     else el.innerHTML=I[l][k];
   });
+  const autoGoTxt=document.getElementById('autoGoTxt');
+  if(autoGoTxt && document.getElementById('suc').style.display==='block'){
+    autoGoTxt.textContent=getCountdownLabel(3);
+  }
 }
 
 // ═══ Checklist ═══
@@ -414,10 +432,10 @@ function findExisting(){
     rec.building===building &&
     String(rec.room).trim()===room &&
     normalizeName(rec.name||'')===normalized
-  );
+  ) || null;
   if(!found){toast(I[lang].tNF);return;}
   toast(I[lang].tFD);
-  setTimeout(()=>{location.href='/'},500);
+  setTimeout(()=>{location.href=DORM_HUB_HOME_URL;},500);
 }
 
 // ═══ Modal with iframe ═══
@@ -560,21 +578,23 @@ async function doSubmit(){
   document.getElementById('ld').classList.add('on');
   try{
     const rec={building,room,name,lang,date};
+    if(ACK_API_URL){
+      const body = new URLSearchParams();
+      body.set('action','submit');
+      body.set('building',building);
+      body.set('room',room);
+      body.set('name',name);
+      body.set('lang',lang);
+      body.set('date',date);
+      await fetch(ACK_API_URL,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body:body.toString()
+      });
+    }
     const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
     recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
-
-    /*
-     * ── Google Form (uncomment & configure) ──
-     * const URL='https://docs.google.com/forms/d/e/YOUR_ID/formResponse';
-     * const fd=new URLSearchParams();
-     * fd.append('entry.XXX',building);
-     * fd.append('entry.XXX',room);
-     * fd.append('entry.XXX',name);
-     * fd.append('entry.XXX',lang==='en'?'English':'Tiếng Việt');
-     * fd.append('entry.XXX',date);
-     * await fetch(URL,{method:'POST',mode:'no-cors',body:fd});
-     */
-
     await new Promise(r=>setTimeout(r,500));
     document.getElementById('ld').classList.remove('on');
     document.getElementById('mainC').style.display='none';
@@ -586,11 +606,29 @@ async function doSubmit(){
       <div class="suc-r"><span class="l">${t.dN}</span><span class="v">${name}</span></div>
       <div class="suc-r"><span class="l">${t.dD}</span><span class="v">${date}</span></div>`;
     document.getElementById('suc').style.display='block';
+    startRedirectCountdown();
     window.scrollTo(0,0);
   }catch(e){
     document.getElementById('ld').classList.remove('on');
     toast(I[lang].tE);
   }
+}
+
+function startRedirectCountdown(){
+  if(redirectTimer) clearInterval(redirectTimer);
+  let left = 3;
+  const autoGoTxt=document.getElementById('autoGoTxt');
+  autoGoTxt.textContent=getCountdownLabel(left);
+  redirectTimer = setInterval(()=>{
+    left -= 1;
+    if(left <= 0){
+      clearInterval(redirectTimer);
+      redirectTimer = null;
+      location.href = DORM_HUB_HOME_URL;
+      return;
+    }
+    autoGoTxt.textContent=getCountdownLabel(left);
+  },1000);
 }
 
 function toast(m){
