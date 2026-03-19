@@ -355,6 +355,24 @@ html.embed-mode .toc-items{max-height:calc(100dvh - 104px)}
 <script>
 const EMBED_MODE = new URLSearchParams(window.location.search).get('embed') === '1';
 if (EMBED_MODE) document.documentElement.classList.add('embed-mode');
+function applyUnifiedEmbedScale(){
+  if(!EMBED_MODE) return;
+  const root = document.documentElement;
+  const sampleCard = document.querySelector('.card');
+  const samples = Array.from(document.querySelectorAll('.card-inner'));
+  if(!sampleCard || !samples.length) return;
+  const cardStyle = getComputedStyle(sampleCard);
+  const frameWidth = parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-width')) || 392;
+  const availableWidth = window.innerWidth - (parseFloat(cardStyle.paddingLeft) || 0) - (parseFloat(cardStyle.paddingRight) || 0);
+  const availableHeight = window.innerHeight - (parseFloat(cardStyle.paddingTop) || 0) - (parseFloat(cardStyle.paddingBottom) || 0);
+  const maxHeight = Math.max(...samples.map(el => el.offsetHeight || 0));
+  const scaleByWidth = availableWidth / frameWidth;
+  const scaleByHeight = availableHeight / maxHeight;
+  const scale = Math.max(0.58, Math.min(scaleByWidth, scaleByHeight, 1));
+  root.style.setProperty('--embed-frame-scale', scale.toFixed(3));
+}
+window.addEventListener('load', applyUnifiedEmbedScale);
+window.addEventListener('resize', applyUnifiedEmbedScale);
 const cards = document.querySelectorAll('.card');
 const progress = document.getElementById('progress');
 cards.forEach((_, i) => {
