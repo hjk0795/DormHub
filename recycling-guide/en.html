@@ -174,7 +174,7 @@ body {
 .toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
 html.embed-mode .progress{display:none}
 html.embed-mode .card{min-height:100vh;min-height:100dvh;padding:10px 14px 64px}
-html.embed-mode .card-inner{max-width:396px;width:100%;transform:scale(.86);transform-origin:center center;margin:0 auto}
+html.embed-mode .card-inner{--embed-base-scale:.86;--embed-scale:var(--embed-base-scale);max-width:396px;width:100%;transform:scale(var(--embed-scale));transform-origin:center center;margin:0 auto}
 html.embed-mode .cover-card .card-inner{max-width:404px;transform:none}
 html.embed-mode .cover-card h1{font-size:27px}
 html.embed-mode .card h2{font-size:19px}
@@ -354,6 +354,26 @@ html.embed-mode .toc-items{max-height:calc(100dvh - 104px)}
 <script>
 const EMBED_MODE = new URLSearchParams(window.location.search).get('embed') === '1';
 if (EMBED_MODE) document.documentElement.classList.add('embed-mode');
+function applyEmbedFit(){
+  if(!EMBED_MODE) return;
+  document.querySelectorAll('.card:not(.cover-card)').forEach(card => {
+    const inner = card.querySelector('.card-inner');
+    if(!inner) return;
+    inner.style.removeProperty('--embed-scale');
+    const base = parseFloat(getComputedStyle(inner).getPropertyValue('--embed-base-scale')) || 0.86;
+    const cardStyle = getComputedStyle(card);
+    const available = window.innerHeight
+      - (parseFloat(cardStyle.paddingTop) || 0)
+      - (parseFloat(cardStyle.paddingBottom) || 0)
+      - 34;
+    const naturalHeight = inner.offsetHeight || 0;
+    const fit = naturalHeight ? Math.min(base, available / naturalHeight) : base;
+    const scale = Math.max(0.74, fit - (fit < base ? 0.02 : 0));
+    inner.style.setProperty('--embed-scale', scale.toFixed(3));
+  });
+}
+window.addEventListener('load', applyEmbedFit);
+window.addEventListener('resize', applyEmbedFit);
 const cards = document.querySelectorAll('.card');
 const progress = document.getElementById('progress');
 cards.forEach((_, i) => {
