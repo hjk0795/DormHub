@@ -256,6 +256,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 <div class="loading" id="ld"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="./ack-config.js"></script>
 <script>
 // ═══ Config ═══
 const URLS = {
@@ -271,7 +272,7 @@ const URLS = {
   ]
 };
 const DORM_HUB_HOME_URL = 'https://dorm-hub.vercel.app/';
-const ACK_API_URL = '/api/ack';
+const ACK_FORM_CONFIG = window.DORM_ACK_FORM_CONFIG || null;
 
 // Fallback "last slide index" per content (used until iframe loads and we can compute it).
 const FALLBACK_LAST_INDEX = [13, 11, 2];
@@ -577,12 +578,7 @@ async function doSubmit(){
   document.getElementById('ld').classList.add('on');
   try{
     const rec={building,room,name,lang,date};
-    const res = await fetch(ACK_API_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(rec)
-    });
-    if(!res.ok) throw new Error('submit_failed');
+    await submitToGoogleForm(rec);
     const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
     recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
     await new Promise(r=>setTimeout(r,500));
@@ -602,6 +598,23 @@ async function doSubmit(){
     document.getElementById('ld').classList.remove('on');
     toast(I[lang].tE);
   }
+}
+
+async function submitToGoogleForm(rec){
+  const cfg = ACK_FORM_CONFIG;
+  if(!cfg || !cfg.formUrl || !cfg.entries) throw new Error('missing_form_config');
+  const body = new URLSearchParams();
+  if(cfg.entries.building) body.set(cfg.entries.building, rec.building);
+  if(cfg.entries.room) body.set(cfg.entries.room, rec.room);
+  if(cfg.entries.name) body.set(cfg.entries.name, rec.name);
+  if(cfg.entries.lang) body.set(cfg.entries.lang, rec.lang);
+  if(cfg.entries.date) body.set(cfg.entries.date, rec.date);
+  await fetch(cfg.formUrl,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+    body:body.toString()
+  });
 }
 
 function startRedirectCountdown(){
