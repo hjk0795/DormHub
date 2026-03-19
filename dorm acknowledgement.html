@@ -256,7 +256,6 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 <div class="loading" id="ld"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="./ack-config.js"></script>
 <script>
 // ═══ Config ═══
 const URLS = {
@@ -272,7 +271,7 @@ const URLS = {
   ]
 };
 const DORM_HUB_HOME_URL = 'https://dorm-hub.vercel.app/';
-const ACK_API_URL = (window.DORM_ACK_API_URL || '').trim();
+const ACK_API_URL = '/api/ack';
 
 // Fallback "last slide index" per content (used until iframe loads and we can compute it).
 const FALLBACK_LAST_INDEX = [13, 11, 2];
@@ -578,21 +577,12 @@ async function doSubmit(){
   document.getElementById('ld').classList.add('on');
   try{
     const rec={building,room,name,lang,date};
-    if(ACK_API_URL){
-      const body = new URLSearchParams();
-      body.set('action','submit');
-      body.set('building',building);
-      body.set('room',room);
-      body.set('name',name);
-      body.set('lang',lang);
-      body.set('date',date);
-      await fetch(ACK_API_URL,{
-        method:'POST',
-        mode:'no-cors',
-        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-        body:body.toString()
-      });
-    }
+    const res = await fetch(ACK_API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(rec)
+    });
+    if(!res.ok) throw new Error('submit_failed');
     const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
     recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
     await new Promise(r=>setTimeout(r,500));
