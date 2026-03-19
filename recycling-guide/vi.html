@@ -73,6 +73,7 @@ body {
   flex-direction: column;
   gap: 10px;
   margin: 14px 0;
+  width: 100%;
 }
 .card-images.duo {
   flex-direction: row;
@@ -82,13 +83,16 @@ body {
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   object-fit: cover;
+  display: block;
 }
 .card-images.duo img {
-  width: 50%;
-  max-height: 240px;
+  width: calc(50% - 5px);
+  height: 240px;
+  max-height: none;
 }
 .card-images:not(.duo) img {
-  max-height: 320px;
+  height: 320px;
+  max-height: none;
 }
 .embed-mode .card.plastic-card h2 {
   font-size: 24px;
@@ -192,15 +196,17 @@ body {
 .toc-item{min-height:44px;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;cursor:pointer}
 .toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
 html.embed-mode .progress{display:none}
-html.embed-mode{--embed-frame-width:392px;--embed-frame-scale:.74}
-html.embed-mode .card{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh;padding:6px 4px}
+html.embed-mode{--embed-frame-width:392px;--embed-frame-scale:.74;--embed-v-pad:clamp(6px,1.4vh,11px);--embed-h-pad:clamp(4px,1vw,8px)}
+html.embed-mode .card{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh;padding:var(--embed-v-pad) var(--embed-h-pad)}
 html.embed-mode .card-inner{max-width:var(--embed-frame-width);width:100%;transform:scale(var(--embed-frame-scale));transform-origin:center center;margin:0 auto}
 html.embed-mode .cover-card .card-inner{max-width:var(--embed-frame-width)}
 html.embed-mode .cover-card h1{font-size:27px}
 html.embed-mode .card h2{font-size:19px}
 html.embed-mode .card-text,html.embed-mode .caption{font-size:12.5px;line-height:1.5}
-html.embed-mode img{max-height:23vh;object-fit:contain}
-html.embed-mode .cover-card img{width:100%;max-height:34vh;object-fit:cover;margin-bottom:18px}
+html.embed-mode img{object-fit:cover}
+html.embed-mode .card-images.duo img{height:21vh}
+html.embed-mode .card-images:not(.duo) img{height:23vh}
+html.embed-mode .cover-card img{width:100%;height:34vh;max-height:none;object-fit:cover;margin-bottom:18px}
 html.embed-mode .cover-card .cover-sub{margin-bottom:16px}
 html.embed-mode .caption{margin-top:8px}
 html.embed-mode .toc-fab{left:10px;top:10px;bottom:auto;width:42px;height:42px;border-radius:14px}
