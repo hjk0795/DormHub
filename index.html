@@ -121,19 +121,6 @@
         box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14);
       }
 
-      .label-when-en,
-      .label-when-vi {
-        display: inline;
-      }
-
-      [data-lang="vi"] .label-when-en {
-        display: none;
-      }
-
-      [data-lang="en"] .label-when-vi {
-        display: none;
-      }
-
       .lang-select {
         appearance: none;
         -webkit-appearance: none;
@@ -212,11 +199,27 @@
         align-content: start;
       }
 
-      [data-lang="vi"] .lang-en {
+      [data-lang="vi"] .lang-en,
+      [data-lang="vi"] .lang-hi,
+      [data-lang="vi"] .lang-id {
         display: none !important;
       }
 
-      [data-lang="en"] .lang-vi {
+      [data-lang="en"] .lang-vi,
+      [data-lang="en"] .lang-hi,
+      [data-lang="en"] .lang-id {
+        display: none !important;
+      }
+
+      [data-lang="hi"] .lang-vi,
+      [data-lang="hi"] .lang-en,
+      [data-lang="hi"] .lang-id {
+        display: none !important;
+      }
+
+      [data-lang="id"] .lang-vi,
+      [data-lang="id"] .lang-en,
+      [data-lang="id"] .lang-hi {
         display: none !important;
       }
 
@@ -420,16 +423,20 @@
           <div class="hero">
             <h1 class="lang-en">🏠 Dormitory All-in-One Guide</h1>
             <h1 class="lang-vi">🏠 Hướng dẫn KTX tất cả trong một</h1>
+            <h1 class="lang-hi">🏠 छात्रावास की पूरी गाइड</h1>
+            <h1 class="lang-id">🏠 Panduan Lengkap Asrama</h1>
             <p class="subtitle lang-en">Check all the information you need for dorm life in one place!</p>
             <p class="subtitle lang-vi">Xem tất cả thông tin cần thiết cho cuộc sống KTX tại một nơi!</p>
+            <p class="subtitle lang-hi">छात्रावास जीवन के लिए ज़रूरी सारी जानकारी एक ही जगह देखें!</p>
+            <p class="subtitle lang-id">Lihat semua informasi penting untuk kehidupan asrama di satu tempat!</p>
           </div>
 
           <div class="lang-picker">
-            <label class="lang-label" for="langSelect"
-              ><span class="globe" aria-hidden="true"></span> <span class="label-when-vi">LANGUAGE</span><span class="label-when-en">Ngôn ngữ</span></label
-            >
+            <label class="lang-label" for="langSelect"><span class="globe" aria-hidden="true"></span> <span id="langLabelText">Language</span></label>
             <select id="langSelect" class="lang-select" aria-label="Language selector">
               <option value="vi">Tiếng Việt</option>
+              <option value="hi">हिन्दी</option>
+              <option value="id">Bahasa Indonesia</option>
               <option value="en">English</option>
             </select>
           </div>
@@ -586,6 +593,154 @@
             </div>
           </a>
         </div>
+
+        <div class="lang-col lang-hi" aria-label="Hindi links">
+          <a class="card" href="/recycling-guide/en">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>रीसाइक्लिंग और कचरा गाइड</strong>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules/en">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>छात्रावास नियम और विनियम</strong>
+            </div>
+          </a>
+
+          <a
+            class="card"
+            href="https://forms.gle/5WmkN938jqDJJjdg6"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facility issue report - Hindi guidance"
+          >
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 22a7 7 0 1 0-7-7" />
+                <path d="M9.5 14.5 7 17" />
+                <path d="M14 6l4 4" />
+                <path d="M11 9l4 4" />
+                <path d="M5 19l4-4" />
+                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>सुविधा समस्या रिपोर्ट और सामान्य पूछताछ</strong>
+            </div>
+          </a>
+        </div>
+
+        <div class="lang-col lang-id" aria-label="Indonesian links">
+          <a class="card" href="/recycling-guide/en">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Panduan Daur Ulang &amp; Sampah</strong>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules/en">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Peraturan &amp; Ketentuan Asrama</strong>
+            </div>
+          </a>
+
+          <a
+            class="card"
+            href="https://forms.gle/5WmkN938jqDJJjdg6"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facility issue report - Indonesian guidance"
+          >
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 22a7 7 0 1 0-7-7" />
+                <path d="M9.5 14.5 7 17" />
+                <path d="M14 6l4 4" />
+                <path d="M11 9l4 4" />
+                <path d="M5 19l4-4" />
+                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>Laporan Masalah Fasilitas &amp; Pertanyaan Umum</strong>
+            </div>
+          </a>
+        </div>
       </section>
 
       <section id="faq" class="faq" aria-label="FAQ">
@@ -622,6 +777,34 @@
             </p>
           </details>
         </div>
+
+        <div class="lang-hi">
+          <h2>अक्सर पूछे जाने वाले प्रश्न</h2>
+
+          <details>
+            <summary><span class="q">Q</span> कर्फ़्यू / प्रवेश समय प्रतिबंध (रातभर रुकना सहित)</summary>
+            <p>अलग से कोई कर्फ़्यू नहीं है। लेकिन अधिक स्वतंत्रता के साथ, कृपया छात्रावास नियमों का पालन करें और रूममेट तथा साझा स्थानों का ध्यान रखें।</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> उपयोगिता बिल (बिजली, गैस, पानी)</summary>
+            <p>आमतौर पर बिजली, गैस और पानी का खर्च शामिल होता है और अलग से भुगतान नहीं करना पड़ता। लेकिन यदि आपका बिल भवन औसत से 10% से अधिक है, तो अतिरिक्त राशि आपको देनी होगी।</p>
+          </details>
+        </div>
+
+        <div class="lang-id">
+          <h2>Pertanyaan yang Sering Diajukan</h2>
+
+          <details>
+            <summary><span class="q">Q</span> Jam malam / batas waktu masuk (termasuk menginap)</summary>
+            <p>Tidak ada jam malam khusus. Namun, karena kebebasannya lebih besar, mohon tetap mengikuti peraturan asrama dan menghormati teman sekamar serta area bersama.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> Tagihan utilitas (listrik, gas, air)</summary>
+            <p>Biasanya biaya listrik, gas, dan air sudah termasuk sehingga Anda tidak perlu membayar terpisah. Namun, jika tagihan Anda melebihi rata-rata gedung lebih dari 10%, Anda harus membayar selisihnya.</p>
+          </details>
+        </div>
       </section>
       </div>
     </main>
@@ -629,6 +812,13 @@
     <script>
       (function () {
         var ACK_STORAGE_KEY = "dormhub_ack_verified_v1";
+        var LANGS = ["vi", "hi", "id", "en"];
+        var LANG_LABELS = {
+          vi: "Ngôn ngữ",
+          hi: "भाषा",
+          id: "Bahasa",
+          en: "Language"
+        };
         function hasAckState() {
           try {
             var saved = JSON.parse(localStorage.getItem(ACK_STORAGE_KEY) || "null");
@@ -644,15 +834,37 @@
         }
 
         var select = document.getElementById("langSelect");
+        var labelText = document.getElementById("langLabelText");
+        var labelTimer = null;
         if (!select) return;
 
+        function startLabelRotation(activeLang) {
+          if (!labelText) return;
+          var others = LANGS.filter(function (code) {
+            return code !== activeLang;
+          });
+          if (!others.length) {
+            labelText.textContent = LANG_LABELS.en;
+            return;
+          }
+          var index = 0;
+          function renderLabel() {
+            labelText.textContent = LANG_LABELS[others[index]] || LANG_LABELS.en;
+            index = (index + 1) % others.length;
+          }
+          if (labelTimer) clearInterval(labelTimer);
+          renderLabel();
+          labelTimer = setInterval(renderLabel, 1600);
+        }
+
         function applyLang(next) {
-          var lang = next === "en" ? "en" : "vi";
+          var lang = LANGS.indexOf(next) !== -1 ? next : "vi";
           document.documentElement.setAttribute("data-lang", lang);
           document.documentElement.lang = lang;
           try {
             localStorage.setItem("dormHubLang", lang);
           } catch (e) {}
+          startLabelRotation(lang);
         }
 
         var initial = "vi";
@@ -660,7 +872,7 @@
           initial = localStorage.getItem("dormHubLang") || "vi";
         } catch (e) {}
 
-        select.value = initial === "en" ? "en" : "vi";
+        select.value = LANGS.indexOf(initial) !== -1 ? initial : "vi";
         applyLang(select.value);
 
         select.addEventListener("change", function () {

@@ -122,6 +122,8 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   </div>
   <div class="lang-row">
     <button class="lang-btn on" data-lang-btn="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+    <button class="lang-btn" data-lang-btn="hi" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+    <button class="lang-btn" data-lang-btn="id" onclick="setLang('id')">🇮🇩 Bahasa Indonesia</button>
     <button class="lang-btn" data-lang-btn="en" onclick="setLang('en')">🇬🇧 English</button>
   </div>
 
@@ -266,6 +268,16 @@ const URLS = {
     '/dormitory-rules/vi.html?embed=1',
     '/recycling-guide/vi.html?embed=1',
     '/password-policy.html?lang=vi&embed=1',
+  ],
+  hi: [
+    '/dormitory-rules/en.html?embed=1',
+    '/recycling-guide/en.html?embed=1',
+    '/password-policy.html?lang=hi&embed=1',
+  ],
+  id: [
+    '/dormitory-rules/en.html?embed=1',
+    '/recycling-guide/en.html?embed=1',
+    '/password-policy.html?lang=id&embed=1',
   ]
 };
 const DORM_HUB_HOME_URL = 'https://dorm-hub.vercel.app/';
@@ -276,6 +288,8 @@ const FALLBACK_LAST_INDEX = [13, 11, 2];
 const TITLES = {
   en: ['Dormitory Rules', 'Recycling Guide', 'Password Policy'],
   vi: ['Nội quy KTX', 'Phân loại rác', 'Quy định mật khẩu'],
+  hi: ['छात्रावास नियम', 'रीसाइक्लिंग गाइड', 'पासवर्ड नीति'],
+  id: ['Peraturan Asrama', 'Panduan Daur Ulang', 'Kebijakan Kata Sandi'],
 };
 
 const I = {
@@ -310,10 +324,46 @@ const I = {
     tF:'Vui lòng điền đầy đủ',tE:'Thất bại. Vui lòng thử lại.',tNF:'Không tìm thấy xác nhận trước đó. Vui lòng kiểm tra lại tên và số phòng.',tFD:'Đã tìm thấy xác nhận. Đang chuyển đến Dorm Hub...',
     dB:'Tòa nhà',dR:'Phòng',dN:'Tên',dD:'Ngày',
     scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',tA:'Vui lòng đọc xong cả ba tài liệu trước.',
+  },
+  hi: {
+    hT:'📋 छात्रावास नियम चेक-इन',hS:'क्युंगसंग विश्वविद्यालय ऑफ-कैम्पस छात्रावास',
+    inf:'आपकी जानकारी',bL:'भवन',bS:'— चुनें —',rL:'कमरा नंबर',nL:'पूरा नाम (अंग्रेज़ी में)',
+    rvT:'क्या आपने यह पहले पूरा किया है?',rvL:'मैं यह पहले कर चुका/चुकी हूँ',rvH:'यदि आपने पहले जमा किया है, तो जारी रखने के लिए वही भवन, कमरा नंबर और नाम दर्ज करें।',rvB:'← वापस',rvF:'पुष्टि करें',
+    rbL:'भवन',rrL:'कमरा नंबर',rnL:'पूरा नाम (अंग्रेज़ी में)',pN:'यह केवल चेक-इन पुष्टि के लिए उपयोग होता है। बाहर जाने के बाद हटा दिया जाएगा।',
+    cL:'पुष्टि चेकलिस्ट',
+    cN:'आप इन दस्तावेज़ों को बाद में Dorm Hub मुख्य पेज से फिर देख सकते हैं।',
+    c0:'मैंने छात्रावास नियम और विनियम पढ़ लिए हैं।',c0h:'पहले पढ़ने के लिए 📖 टैप करें',
+    c1:'मैंने रीसाइक्लिंग और कचरा गाइड पढ़ ली है।',c1h:'पहले पढ़ने के लिए ♻️ टैप करें',
+    c2:'मैंने डोर लॉक पासवर्ड नीति पढ़ ली है।',c2h:'पहले पढ़ने के लिए 🔐 टैप करें',
+    c3:'मैं ऊपर दिए गए सभी नियमों का पालन करने के लिए सहमत हूँ। मैं समझता/समझती हूँ कि उल्लंघन पर डिमेरिट अंक, निष्कासन, या स्थायी प्रतिबंध हो सकता है।',
+    sub:'जमा करें ✓',sT:'जमा हो गया!',sM:'सब तैयार है!',sB:'3 सेकंड में मुख्य पेज पर लौट रहे हैं…',
+    tF:'कृपया सभी फ़ील्ड भरें',tE:'विफल। कृपया फिर से प्रयास करें।',tNF:'पहले का रिकॉर्ड नहीं मिला। कृपया नाम और कमरा फिर जाँचें।',tFD:'रिकॉर्ड मिल गया। Dorm Hub पर जा रहे हैं...',
+    dB:'भवन',dR:'कमरा',dN:'नाम',dD:'तारीख',
+    scrBtn:'↓ अगला पेज',okBtn:'✓ मैंने पढ़ लिया है',tA:'कृपया पहले तीनों दस्तावेज़ पढ़ें।',
+  },
+  id: {
+    hT:'📋 Check-in Aturan Asrama',hS:'Asrama luar kampus Universitas Kyungsung',
+    inf:'Informasi Anda',bL:'Gedung',bS:'— Pilih —',rL:'Nomor Kamar',nL:'Nama Lengkap (dalam bahasa Inggris)',
+    rvT:'Sudah menyelesaikan ini?',rvL:'Saya sudah pernah melakukan ini',rvH:'Jika Anda sudah pernah mengirim sebelumnya, masukkan kembali gedung, nomor kamar, dan nama yang sama untuk melanjutkan.',rvB:'← Kembali',rvF:'Konfirmasi',
+    rbL:'Gedung',rrL:'Nomor Kamar',rnL:'Nama Lengkap (dalam bahasa Inggris)',pN:'Data ini hanya dipakai untuk konfirmasi check-in. Akan dihapus setelah Anda keluar dari asrama.',
+    cL:'Daftar Konfirmasi',
+    cN:'Anda dapat meninjau kembali dokumen ini nanti dari halaman utama Dorm Hub.',
+    c0:'Saya telah membaca Peraturan & Ketentuan Asrama.',c0h:'Ketuk 📖 untuk membaca dulu',
+    c1:'Saya telah membaca Panduan Daur Ulang & Sampah.',c1h:'Ketuk ♻️ untuk membaca dulu',
+    c2:'Saya telah membaca Kebijakan Kata Sandi Kunci Pintu.',c2h:'Ketuk 🔐 untuk membaca dulu',
+    c3:'Saya setuju untuk mengikuti semua aturan di atas. Saya memahami bahwa pelanggaran dapat mengakibatkan poin pelanggaran, pengusiran, atau larangan permanen.',
+    sub:'Kirim ✓',sT:'Terkirim!',sM:'Semuanya sudah siap!',sB:'Kembali ke halaman utama dalam 3 detik…',
+    tF:'Harap isi semua kolom',tE:'Gagal. Silakan coba lagi.',tNF:'Data sebelumnya tidak ditemukan. Silakan periksa kembali nama dan nomor kamar Anda.',tFD:'Data ditemukan. Melanjutkan ke Dorm Hub...',
+    dB:'Gedung',dR:'Kamar',dN:'Nama',dD:'Tanggal',
+    scrBtn:'↓ Halaman berikutnya',okBtn:'✓ Saya sudah membaca',tA:'Harap baca ketiga dokumen terlebih dahulu.',
   }
 };
 
 let lang='vi';
+try{
+  const savedLang = localStorage.getItem('dormHubLang');
+  if(I[savedLang]) lang = savedLang;
+}catch(e){}
 const rd=[false,false,false];
 let curM=-1, curSlide=0;
 let mLast=1;
@@ -329,9 +379,10 @@ function syncModalViewport(){
 }
 
 function getCountdownLabel(sec){
-  return lang==='vi'
-    ? `Tự động chuyển về màn hình chính sau ${sec} giây…`
-    : `Returning to the main page in ${sec} second${sec===1?'':'s'}…`;
+  if(lang==='vi') return `Tự động chuyển về màn hình chính sau ${sec} giây…`;
+  if(lang==='hi') return `${sec} सेकंड में मुख्य पेज पर लौट रहे हैं…`;
+  if(lang==='id') return `Kembali ke halaman utama dalam ${sec} detik…`;
+  return `Returning to the main page in ${sec} second${sec===1?'':'s'}…`;
 }
 
 function setModalLastIndexFromDoc(doc){
@@ -359,16 +410,18 @@ function setModalLastIndexFromDoc(doc){
 
 // ═══ Lang ═══
 function setLang(l){
-  lang=l;
+  lang = I[l] ? l : 'vi';
+  document.documentElement.lang = lang;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelector(`.lang-btn[data-lang-btn="${l}"]`)?.classList.add('on');
+  document.querySelector(`.lang-btn[data-lang-btn="${lang}"]`)?.classList.add('on');
   document.querySelectorAll('[data-i]').forEach(el=>{
     const k=el.getAttribute('data-i');
-    if(!I[l][k])return;
-    if(el.tagName==='INPUT')el.placeholder=I[l][k];
-    else if(el.tagName==='OPTION')el.textContent=I[l][k];
-    else el.innerHTML=I[l][k];
+    if(!I[lang][k])return;
+    if(el.tagName==='INPUT')el.placeholder=I[lang][k];
+    else if(el.tagName==='OPTION')el.textContent=I[lang][k];
+    else el.innerHTML=I[lang][k];
   });
+  try{ localStorage.setItem('dormHubLang', lang); }catch(e){}
   const autoGoTxt=document.getElementById('autoGoTxt');
   if(autoGoTxt && document.getElementById('suc').style.display==='block'){
     autoGoTxt.textContent=getCountdownLabel(3);
