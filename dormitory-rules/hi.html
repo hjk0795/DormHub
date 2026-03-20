@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>छात्रावास नियम</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans Devanagari', 'Be Vietnam Pro', 'Noto Sans KR', sans-serif;
+  background: #111;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.card {
+  scroll-snap-align: start;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.card-inner {
+  max-width: 440px;
+  width: 100%;
+  z-index: 2;
+}
+.card-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+.big-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+.card h2 {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.card-text {
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.rule-item .rule-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.rule-item.danger {
+  background: rgba(183,28,28,0.1);
+  border-left: 4px solid #B71C1C;
+}
+.rule-item.warn {
+  background: rgba(230,81,0,0.1);
+  border-left: 4px solid #E65100;
+}
+.rule-item.info {
+  background: rgba(0,0,0,0.05);
+  border-left: 4px solid rgba(0,0,0,0.15);
+}
+.penalty-box {
+  background: rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 10px 0;
+}
+.penalty-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 13.5px;
+}
+.penalty-row:last-child { border-bottom: none; }
+.penalty-row .pts {
+  font-weight: 800;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.penalty-row .pts.neg {
+  color: #B71C1C;
+}
+.highlight-banner {
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  margin: 14px 0;
+  line-height: 1.4;
+}
+.demerit-badge {
+  display: inline-block;
+  background: #B71C1C;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin: 8px 0;
+}
+.small-note {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin: 14px 0 6px 0;
+}
+.cover-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  text-align: center;
+}
+.cover-card h1 {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.cover-card .cover-sub {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.cover-card .cover-warning {
+  background: rgba(255,82,82,0.2);
+  border: 1px solid rgba(255,82,82,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  text-align: left;
+}
+.swipe-hint {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-4px); }
+}
+.scroll-arrow {
+  display: inline-block;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.progress {
+  position: fixed;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 100;
+}
+.progress .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: all 0.3s;
+}
+.progress .dot.active {
+  background: white;
+  transform: scale(1.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* ── TOC ── */
+.toc-emoji{font-size:16px;line-height:1;flex:0 0 auto}
+.toc-text{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;line-height:1.1}
+@media (max-width:360px){.toc-text{max-width:200px}}
+.toc-fab{position:fixed;left:14px;bottom:14px;z-index:150;width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,0.25);background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.toc-fab:active{transform:scale(.98)}
+.toc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:200;align-items:flex-start;justify-content:center;padding:18px 12px 12px}
+.toc-modal.open{display:flex}
+.toc-sheet{width:100%;max-width:480px;max-height:min(78vh,calc(100dvh - 30px));margin-top:8px;background:rgba(17,17,17,0.92);color:#fff;border-radius:20px;border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.28)}
+.toc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.12)}
+.toc-head-title{font-weight:900;font-size:14px;letter-spacing:.2px}
+.toc-close{width:34px;height:34px;border-radius:12px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer}
+.toc-items{padding:12px 12px 18px;overflow:auto;max-height:calc(78vh - 60px);-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px}
+.toc-item{min-height:44px;text-align:left;display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;cursor:pointer}
+.toc-item .toc-text{white-space:normal;max-width:none;line-height:1.25}
+html.embed-mode body { opacity: 0; }
+html.embed-mode.embed-ready body { opacity: 1; transition: opacity .18s ease; }
+html.embed-mode .progress{display:none}
+html.embed-mode{--embed-frame-width:392px;--embed-frame-scale:.74;--embed-frame-target-scale:.74;--embed-v-pad:clamp(6px,1.4vh,11px);--embed-h-pad:clamp(4px,1vw,8px)}
+html.embed-mode .card{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh;padding:var(--embed-v-pad) var(--embed-h-pad)}
+html.embed-mode .card-inner{max-width:var(--embed-frame-width);width:100%;transform:scale(var(--embed-frame-scale));transform-origin:center center;margin:0 auto}
+html.embed-mode .cover-card .card-inner{max-width:var(--embed-frame-width)}
+html.embed-mode .cover-card h1{font-size:27px}
+html.embed-mode .cover-sub{font-size:12px}
+html.embed-mode .cover-warning{padding:12px 14px;font-size:12px;margin-top:16px}
+html.embed-mode .big-icon{font-size:38px;margin-bottom:8px}
+html.embed-mode .card h2{font-size:18px;margin-bottom:10px}
+html.embed-mode .card-text,html.embed-mode .rule-item,html.embed-mode .small-note{font-size:12px;line-height:1.45}
+html.embed-mode .rule-item{padding:8px 10px;margin-top:6px}
+html.embed-mode .highlight-banner{font-size:12px;padding:8px 10px;margin:8px 0}
+html.embed-mode .section-label{font-size:10.5px;margin:10px 0 6px}
+html.embed-mode .demerit-badge{font-size:13px;padding:7px 11px}
+html.embed-mode .penalty-box{padding:11px 12px;margin:7px 0}
+html.embed-mode .penalty-row{padding:7px 0;font-size:11.5px}
+html.embed-mode .toc-fab{left:10px;top:10px;bottom:auto;width:42px;height:42px;border-radius:14px}
+html.embed-mode .toc-sheet{max-width:calc(100% - 8px);max-height:calc(100dvh - 34px);margin-top:10px;border-radius:18px}
+html.embed-mode .toc-items{max-height:calc(100dvh - 104px)}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<button class="toc-fab" id="tocFab" type="button" aria-label="विषयसूची खोलें">☰</button>
+<div class="toc-modal" id="tocModal" aria-hidden="true">
+  <div class="toc-sheet" role="dialog" aria-modal="true" aria-label="विषयसूची">
+    <div class="toc-head">
+      <div class="toc-head-title">📑 विषयसूची</div>
+      <button class="toc-close" id="tocClose" type="button" aria-label="बंद करें">✕</button>
+    </div>
+    <div class="toc-items" id="tocModalList"></div>
+  </div>
+</div>
+
+<div class="card cover-card" data-card="0">
+  <div class="card-inner">
+    <div class="card-num">경성대 교외 원룸 기숙사</div>
+    <div style="font-size:64px;margin-bottom:16px;">🏠</div>
+    <h1>छात्रावास के नियम<br>जो आपको जानने चाहिए</h1>
+    <div class="cover-sub">Kyungsung Univ. Off-campus Studio Dormitory<br>경성대 교외 원룸 기숙사</div>
+    <div class="cover-warning">⚠️ <strong>डिमेरिट अंक जबरन निष्कासन का कारण बन सकते हैं।</strong> निष्कासित छात्रों पर स्थायी प्रतिबंध या अगले सेमेस्टर के लिए प्रतिबंध लग सकता है। कृपया ध्यान से पढ़ें!</div>
+    <div class="swipe-hint"><span class="scroll-arrow">↓</span> नीचे स्क्रॉल करें <span class="scroll-arrow">↓</span></div>
+  </div>
+</div>
+
+<div class="card" style="background:#FFF8E1;color:#E65100" data-card="1">
+  <div class="card-inner">
+    <div class="card-num" style="color:#E65100">1 / 13</div>
+    <div class="big-icon">🚨</div>
+    <h2>दंड अंक प्रणाली</h2>
+
+<div class="card-text">नियम तोड़ें → <strong>डिमेरिट अंक</strong> मिलेंगे। अंक जुड़ते जाते हैं और गंभीर परिणाम हो सकते हैं:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>⚠️ चेतावनी जारी</span><span class="pts neg">−10 अंक</span></div>
+  <div class="penalty-row"><span>🚪 निष्कासन + अगले सेमेस्टर में प्रवेश निषिद्ध</span><span class="pts neg">−15 अंक</span></div>
+</div>
+<div class="section-label" style="margin-top:16px;">उल्लंघन के प्रकार के अनुसार:</div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span><strong>सुरक्षा और व्यवस्था संबंधी उल्लंघन</strong><br>→ निष्कासन + <strong>स्थायी प्रतिबंध</strong> (फिर कभी वापस नहीं आ सकते)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚠️</span><span><strong>निवासी दायित्व उल्लंघन</strong><br>→ निष्कासन + <strong>अगले सेमेस्टर में प्रतिबंध</strong></span></div>
+<div class="small-note">आप मेरिट अंकों से डिमेरिट अंकों की भरपाई कर सकते हैं (स्वयंसेवा, कमरा साफ रखना, कार्यक्रमों में भाग लेना आदि)।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFEBEE;color:#B71C1C" data-card="2">
+  <div class="card-inner">
+    <div class="card-num" style="color:#B71C1C">2 / 13</div>
+    <div class="big-icon">🔥</div>
+    <h2>तुरंत निष्कासन +<br>स्थायी प्रतिबंध</h2>
+
+<div class="card-text">ये <strong>सुरक्षा और व्यवस्था संबंधी उल्लंघन</strong> हैं — तुरंत निष्कासन और आप <strong>कभी वापस नहीं आ सकते</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🔥</span><span>आग, बाढ़ या अन्य दुर्घटनाएँ पैदा करना (जानबूझकर या लापरवाही से)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚔</span><span>चोरी, हमला या जुआ</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚫</span><span>अपने कमरे में विपरीत लिंग के व्यक्ति को रात भर ठहरने देना</span></div>
+<div class="rule-item danger"><span class="rule-icon">⚠️</span><span>छात्रावास नियमों के अन्य गंभीर उल्लंघन</span></div>
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">स्थायी प्रतिबंध = आप भविष्य में<br>किसी भी छात्रावास के लिए आवेदन नहीं कर सकते</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FCE4EC;color:#880E4F" data-card="3">
+  <div class="card-inner">
+    <div class="card-num" style="color:#880E4F">3 / 13</div>
+    <div class="big-icon">🚪</div>
+    <h2>निष्कासन + अगले<br>सेमेस्टर में प्रतिबंध</h2>
+    
+<div class="card-text">ये <strong>निवासी दायित्व उल्लंघन</strong> हैं — निष्कासन और <strong>अगले सेमेस्टर में दोबारा प्रवेश नहीं</strong>:</div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>गैर-निवासी को रात भर ठहरने देना</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>विपरीत लिंग के कमरे में जाना (या उन्हें अपने कमरे में आने देना)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🔄</span><span>बिना अनुमति कमरा बदलना</span></div>
+<div class="rule-item danger"><span class="rule-icon">📄</span><span>झूठे/जाली दस्तावेज़ जमा करना</span></div>
+<div class="rule-item danger"><span class="rule-icon">💬</span><span>छात्रावास या निवासियों के बारे में झूठी जानकारी, मानहानि या अपमान फैलाना</span></div>
+<div class="rule-item danger"><span class="rule-icon">🐾</span><span>पालतू जानवर लाना या रखना (मछली और कीड़े भी शामिल)</span></div>
+<div class="rule-item danger"><span class="rule-icon">🧹</span><span>छात्रावास छोड़ते समय कमरे की खराब स्थिति</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="4">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">4 / 13</div>
+    <div class="big-icon">🚷</div>
+    <h2>अपने कमरे में बाहरी<br>मेहमान नहीं</h2>
+    
+<div class="highlight-banner" style="background:rgba(183,28,28,0.12);color:#B71C1C;">बाहरी व्यक्ति को छात्रावास में लाना</div>
+<div style="text-align:center;"><span class="demerit-badge">−12 अंक</span></div>
+<div class="card-text" style="margin-top:14px;">गैर-निवासियों को किसी भी परिस्थिति में छात्रावास भवन में <strong>प्रवेश की अनुमति नहीं</strong> है।</div>
+<div class="rule-item danger"><span class="rule-icon">🚷</span><span>किसी भी बाहरी व्यक्ति को भवन में लाना = <strong>−12 अंक</strong></span></div>
+<div class="rule-item danger"><span class="rule-icon">🛏️</span><span>उन्हें रात भर ठहराना = <strong>तुरंत निष्कासन + अगले सेमेस्टर में प्रतिबंध</strong></span></div>
+<div class="card-text" style="margin-top:8px;">इसमें दोस्त, पार्टनर, परिवार और कोई भी व्यक्ति शामिल है जो इस छात्रावास का पंजीकृत निवासी नहीं है।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FFF3E0;color:#BF360C" data-card="5">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">5 / 13</div>
+    <div class="big-icon">🍺</div>
+    <h2>शराब</h2>
+    
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🍺 शराब पीना प्रतिबंधित है<br>खाली बोतल भी सबूत मानी जाएगी!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 अंक</span></div>
+<div class="card-text" style="margin-top:12px;">आपको शराब पीते हुए पकड़ा जाना ज़रूरी नहीं है। यदि <strong>कोई भी निशान</strong> मिले — बोतल, कैन, गंध — तो उसे शराब पीना माना जाएगा।</div>
+<div class="rule-item danger"><span class="rule-icon">🍷</span><span><strong>−10 डिमेरिट अंक</strong> — आपके कमरे में खाली बोतलें, कैन, या शराब का कोई भी संकेत</span></div>
+<div class="small-note">💡 सुझाव: शराब “बाद में पीने” के लिए भी कमरे में न रखें। निरीक्षण में मिली तो −10 अंक मिलेंगे।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F3E5F5;color:#6A1B9A" data-card="6">
+  <div class="card-inner">
+    <div class="card-num" style="color:#6A1B9A">6 / 13</div>
+    <div class="big-icon">🚬</div>
+    <h2>धूम्रपान</h2>
+    
+<div class="highlight-banner" style="background:rgba(106,27,154,0.1);color:#6A1B9A;">🚬 बिल्कुल धूम्रपान नहीं<br>कमरे, गलियारे और सीढ़ियों में!</div>
+<div style="text-align:center;"><span class="demerit-badge">−10 अंक</span></div>
+<div class="card-text" style="margin-top:12px;">भवन के अंदर <strong>किसी भी प्रकार</strong> का धूम्रपान <strong>हर जगह</strong> प्रतिबंधित है — कमरे, गलियारे, सीढ़ियाँ। इसमें शामिल हैं:</div>
+<div class="rule-item danger"><span class="rule-icon">🚬</span><span>सिगरेट, <strong>ई-सिगरेट, वेप, IQOS, heated tobacco</strong> और अन्य सभी धूम्रपान उपकरण</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚨</span><span><strong>फायर सेंसर बहुत संवेदनशील हैं</strong> — धूम्रपान पूरे भवन में अलार्म बजा सकता है</span></div>
+<div class="rule-item danger"><span class="rule-icon">💥</span><span><strong>खतरा:</strong> कुछ हिस्सों में गैस पाइप लगे हैं — उनके पास धूम्रपान करने से <strong>विस्फोट का जोखिम</strong> है</span></div>
+<div class="rule-item danger"><span class="rule-icon">⚖️</span><span>धूम्रपान उल्लंघन पर <strong>निष्कासन + कानूनी कार्रवाई</strong> हो सकती है</span></div>
+<div class="card-text" style="margin-top:8px;">❌ सीढ़ियों पर सिगरेट बट फेंकना या दीवार/फर्श पर बुझाना भी प्रतिबंधित है। <strong>निशान</strong> (गंध, बट, धुआँ) सबूत माने जाते हैं।</div>
+<div class="highlight-banner" style="background:rgba(46,125,50,0.1);color:#2E7D32;font-size:14px;">✅ कृपया केवल भवन के बाहर धूम्रपान करें।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E3F2FD;color:#0D47A1" data-card="7">
+  <div class="card-inner">
+    <div class="card-num" style="color:#0D47A1">7 / 13</div>
+    <div class="big-icon">🔌</div>
+    <h2>प्रतिबंधित उपकरण</h2>
+    
+<div style="text-align:center;"><span class="demerit-badge">−10 अंक</span></div>
+<div class="card-text" style="margin-top:12px;">आपके कमरे में ये वस्तुएँ <strong>सख्ती से प्रतिबंधित</strong> हैं:</div>
+<div class="rule-item warn"><span class="rule-icon">🔥</span><span><strong>इलेक्ट्रिक हीटर</strong> — स्पेस हीटर, फैन हीटर आदि</span></div>
+<div class="rule-item warn"><span class="rule-icon">🛏️</span><span><strong>इलेक्ट्रिक हीटिंग मैट / कंबल</strong> (전기매트, 전기장판)</span></div>
+<div class="rule-item warn"><span class="rule-icon">⚡</span><span><strong>किसी भी प्रकार का हीटिंग उपकरण</strong> या ज्वलनशील सामग्री</span></div>
+<div class="rule-item warn"><span class="rule-icon">💇</span><span><strong>हेयर स्ट्रेटनर प्लग में छोड़ देना</strong> → <span style="color:#B71C1C;font-weight:800;">−5 अंक</span></span></div>
+<div class="small-note">केवल बिल्ट-इन हीटिंग/कूलिंग सिस्टम का उपयोग करें। यदि खराब हो, तो रिपोर्ट करें!</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="8">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">8 / 13</div>
+    <div class="big-icon">💡</div>
+    <h2>उपयोगिता बिल</h2>
+    
+<div class="card-text">बिजली, गैस और पानी का खर्च <strong>सामान्यतः शामिल</strong> होता है और अलग से भुगतान नहीं करना पड़ता। लेकिन:</div>
+<div class="rule-item warn"><span class="rule-icon">💡</span><span>यदि आपका बिजली, गैस या पानी का बिल भवन के औसत से <strong>10% से अधिक</strong> है, तो अतिरिक्त राशि आपको देनी होगी</span></div>
+<div class="rule-item info"><span class="rule-icon">🌡️</span><span>खिड़की/दरवाज़ा खुला रखकर AC या हीटर न चलाएँ → <span style="color:#B71C1C;font-weight:800;">−5 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚪</span><span>बाहर जाते समय: खिड़कियाँ बंद करें, AC/हीटर बंद करें, गर्म पानी का नल जाँचें</span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#F5F5F5;color:#37474F" data-card="9">
+  <div class="card-inner">
+    <div class="card-num" style="color:#37474F">9 / 13</div>
+    <div class="big-icon">📋</div>
+    <h2>कमरा निरीक्षण</h2>
+    
+<div class="card-text">छात्रावास कर्मचारी आपके कमरे का <strong>निरीक्षण कर सकते हैं और करेंगे</strong>:</div>
+<div class="rule-item info"><span class="rule-icon">🔍</span><span>सुरक्षा जांच, दुर्घटना रोकथाम, सफाई</span></div>
+<div class="rule-item info"><span class="rule-icon">🧹</span><span>कमरे की खराब सफाई → <span style="color:#B71C1C;font-weight:800;">−3 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🚫</span><span>कमरा निरीक्षण से इनकार → <span style="color:#B71C1C;font-weight:800;">−5 अंक</span></span></div>
+<div class="card-text" style="margin-top:10px;">आम तौर पर निरीक्षण पहले से सूचना देकर किया जाता है। लेकिन <strong>आपातकालीन स्थिति</strong> (मरम्मत, कीट नियंत्रण, सुरक्षा) में आपकी अनुपस्थिति में भी किया जा सकता है — बाद में आपको सूचित किया जाएगा।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#EFEBE9;color:#4E342E" data-card="10">
+  <div class="card-inner">
+    <div class="card-num" style="color:#4E342E">10 / 13</div>
+    <div class="big-icon">📦</div>
+    <h2>मूव-आउट और रिफंड</h2>
+    
+<div class="card-text"><strong>स्वेच्छिक मूव-आउट</strong> पहले 30 दिनों तक अनुमति नहीं है, सिवाय विशेष परिस्थितियों जैसे अपने देश लौटना।</div>
+<div class="section-label">30 दिनों के बाद — स्वेच्छिक मूव-आउट:</div>
+<div class="penalty-box">
+  <div class="penalty-row"><span>स्वेच्छिक मूव-आउट पेनल्टी</span><span class="pts neg">14 दिन का शुल्क</span></div>
+  <div class="penalty-row"><span>जबरन निष्कासन पेनल्टी</span><span class="pts neg">30 दिन का शुल्क</span></div>
+  <div class="penalty-row"><span>यदि 30 दिन से कम शेष हों<br><span style="font-size:11px;opacity:0.6;">(छुट्टी के दौरान 20 दिन)</span></span><span class="pts neg">कोई रिफंड नहीं</span></div>
+</div>
+<div class="card-text" style="margin-top:10px;">रिफंड = कुल जमा राशि <strong>माइनस पेनल्टी</strong>, फिर <strong>दैनिक शुल्क × उपयोग किए गए दिन</strong> को मूव-आउट तिथि तक घटाया जाएगा।</div>
+<div class="card-text">मूव-आउट करते समय: जारी की गई सभी वस्तुएँ लौटाएँ, कमरे का निरीक्षण करवाएँ, और किसी भी नुकसान या खोई वस्तु की भरपाई करें।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8EAF6;color:#283593" data-card="11">
+  <div class="card-inner">
+    <div class="card-num" style="color:#283593">11 / 13</div>
+    <div class="big-icon">📌</div>
+    <h2>अन्य याद रखने योग्य नियम</h2>
+    
+<div class="rule-item info"><span class="rule-icon">📢</span><span>शोर से परेशानी (पड़ोसियों की शिकायत सहित) → <span style="color:#B71C1C;font-weight:800;">−5 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🧲</span><span>फर्नीचर/सुविधाओं को खोलना, बदलना या हटाना मना है → <span style="color:#B71C1C;font-weight:800;">−3 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">♻️</span><span>रीसाइक्लिंग नियमों का पालन न करना → <span style="color:#B71C1C;font-weight:800;">−2 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🍔</span><span>खाद्य अपशिष्ट लापरवाही से फेंकना / रूममेट की नींद में बाधा डालना → <span style="color:#B71C1C;font-weight:800;">−2 अंक</span></span></div>
+<div class="rule-item info"><span class="rule-icon">🪟</span><span>कपड़े सुखाने के लिए ब्लाइंड्स या स्प्रिंकलर का उपयोग करना → <span style="color:#B71C1C;font-weight:800;">−2 अंक</span></span></div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#FBE9E7;color:#BF360C" data-card="12">
+  <div class="card-inner">
+    <div class="card-num" style="color:#BF360C">12 / 13</div>
+    <div class="big-icon">🧯</div>
+    <h2>अग्नि सुरक्षा कानून:<br>गलियारों में कोई सामान नहीं!</h2>
+    
+<div class="highlight-banner" style="background:rgba(191,54,12,0.12);color:#BF360C;">🚨 पहली बार जुर्माना: ₩1,000,000<br>(कोरियाई अग्नि सुरक्षा कानून)</div>
+<div class="card-text">कानून के अनुसार, निम्न स्थानों पर कोई भी वस्तु रखना <strong>सख्ती से मना</strong> है:</div>
+<div class="rule-item danger"><span class="rule-icon">🚲</span><span>गलियारे — साइकिल, डिब्बे, जूता रैक आदि नहीं</span></div>
+<div class="rule-item danger"><span class="rule-icon">🪴</span><span>सीढ़ियाँ — गमले, फर्नीचर, बैग आदि नहीं</span></div>
+<div class="rule-item danger"><span class="rule-icon">🚪</span><span>आपातकालीन निकास — हर समय पूरी तरह खाली होने चाहिए</span></div>
+<div class="card-text" style="margin-top:10px;">यह सिर्फ छात्रावास का नियम नहीं — यह <strong>कोरियाई कानून</strong> है। कोई भी इसकी शिकायत कर सकता है, और पहली बार का जुर्माना <strong>₩1,000,000</strong> से शुरू होता है।</div>
+<div class="small-note">सारी निजी वस्तुएँ अपने कमरे के अंदर रखें। कोई अपवाद नहीं।</div>
+
+  </div>
+</div>
+
+<div class="card" style="background:#E8F5E9;color:#1B5E20" data-card="13">
+  <div class="card-inner">
+    <div class="card-num" style="color:#1B5E20">13 / 13</div>
+    <div class="big-icon">⭐</div>
+    <h2>मेरिट अंक<br>— डिमेरिट की भरपाई करें!</h2>
+<div class="card-text">आप <strong>मेरिट अंक कमा</strong> कर डिमेरिट अंकों की भरपाई कर सकते हैं। ऐसे:</div>
+<div class="penalty-box" style="background:rgba(46,125,50,0.08);">
+  <div class="penalty-row"><span>🏆 छात्रावास की प्रतिष्ठा बढ़ाना</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+  <div class="penalty-row"><span>🚑 आपातकालीन प्राथमिक उपचार सहायता</span><span class="pts" style="color:#2E7D32;">+5</span></div>
+  <div class="penalty-row"><span>📋 ओरिएंटेशन में भाग लेना</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+  <div class="penalty-row"><span>🧠 करियर और मनोवैज्ञानिक परामर्श</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+  <div class="penalty-row"><span>🧹 साफ-सफाई के लिए मान्यता प्राप्त कमरा</span><span class="pts" style="color:#2E7D32;">+3</span></div>
+  <div class="penalty-row"><span>📝 छात्रावास संतुष्टि सर्वेक्षण</span><span class="pts" style="color:#2E7D32;">+2</span></div>
+  <div class="penalty-row"><span>🎉 छात्रावास कार्यक्रमों में भाग लेना</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+  <div class="penalty-row"><span>🤝 प्रशासन की मदद करना (अनुवाद आदि)</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+  <div class="penalty-row"><span>📢 नियम उल्लंघन की रिपोर्ट करना</span><span class="pts" style="color:#2E7D32;">+1</span></div>
+  <div class="penalty-row"><span>💪 स्वयंसेवा कार्य (1 अंक/घंटा)</span><span class="pts" style="color:#2E7D32;">+1/घंटा</span></div>
+</div>
+<div class="small-note">※ दिखाए गए अंक अधिकतम हैं और बदल सकते हैं। स्वयंसेवी गतिविधियों के लिए पहले से डॉर्म सुपरवाइज़र कार्यालय में आवेदन करना होगा।</div>
+
+  </div>
+</div>
+
+<script>
+const EMBED_MODE = new URLSearchParams(window.location.search).get('embed') === '1';
+if (EMBED_MODE) document.documentElement.classList.add('embed-mode');
+function applyUnifiedEmbedScale(){
+  if(!EMBED_MODE) return;
+  const root = document.documentElement;
+  const sampleCard = document.querySelector('.card');
+  const samples = Array.from(document.querySelectorAll('.card-inner'));
+  if(!sampleCard || !samples.length) return;
+  const cardStyle = getComputedStyle(sampleCard);
+  const frameWidth = parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-width')) || 392;
+  const targetScale = parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-target-scale')) || parseFloat(getComputedStyle(root).getPropertyValue('--embed-frame-scale')) || 0.74;
+  const availableWidth = window.innerWidth - (parseFloat(cardStyle.paddingLeft) || 0) - (parseFloat(cardStyle.paddingRight) || 0);
+  const availableHeight = window.innerHeight - (parseFloat(cardStyle.paddingTop) || 0) - (parseFloat(cardStyle.paddingBottom) || 0);
+  const maxHeight = Math.max(...samples.map(el => Math.max(el.offsetHeight || 0, el.scrollHeight || 0, el.getBoundingClientRect().height || 0)));
+  const widthCap = Math.min(availableWidth / frameWidth, 1);
+  const preferredScale = Math.min(targetScale, widthCap);
+  const heightCap = availableHeight / maxHeight;
+  const scale = maxHeight * preferredScale <= availableHeight
+    ? preferredScale
+    : Math.max(0.58, Math.min(preferredScale, heightCap));
+  root.style.setProperty('--embed-frame-scale', scale.toFixed(3));
+}
+function markEmbedReady(){
+  if(!EMBED_MODE) return;
+  document.documentElement.classList.add('embed-ready');
+}
+function scheduleEmbedScaleRefresh(){
+  applyUnifiedEmbedScale();
+  requestAnimationFrame(applyUnifiedEmbedScale);
+  setTimeout(applyUnifiedEmbedScale, 180);
+  setTimeout(() => {
+    applyUnifiedEmbedScale();
+    markEmbedReady();
+  }, 420);
+  setTimeout(applyUnifiedEmbedScale, 700);
+}
+window.addEventListener('load', scheduleEmbedScaleRefresh);
+window.addEventListener('resize', scheduleEmbedScaleRefresh);
+if (document.fonts?.ready) document.fonts.ready.then(scheduleEmbedScaleRefresh);
+const cards = document.querySelectorAll('.card');
+const progress = document.getElementById('progress');
+cards.forEach((_,i) => { const d=document.createElement('div'); d.className='dot'; progress.appendChild(d); });
+const dots = progress.querySelectorAll('.dot');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const idx = Array.from(cards).indexOf(e.target);
+      dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+      const isDark = e.target.classList.contains('cover-card');
+      dots.forEach(d => {
+        d.style.background = d.classList.contains('active')
+          ? (isDark?'white':'#333')
+          : (isDark?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.15)');
+      });
+    }
+  });
+}, {threshold: 0.5});
+cards.forEach(c => observer.observe(c));
+
+// ── TOC ──
+(() => {
+  const tocModal = document.getElementById('tocModal');
+  const tocModalList = document.getElementById('tocModalList');
+  const tocFab = document.getElementById('tocFab');
+  const tocClose = document.getElementById('tocClose');
+  if (!tocModal || !tocModalList || !tocFab || !tocClose) return;
+
+  const tocCards = Array.from(document.querySelectorAll('.card[data-card]'))
+    .filter(c => c.getAttribute('data-card') !== '0');
+
+  const items = tocCards.map(c => {
+    const idx = c.getAttribute('data-card');
+    const icon = (c.querySelector('.big-icon')?.textContent || '').replace(/\s+/g, ' ').trim();
+    const title = (c.querySelector('h2')?.textContent || `Slide ${idx}`).replace(/\s+/g, ' ').trim();
+    return { idx, icon, title };
+  });
+
+  const scrollToCard = (idx) => {
+    const el = document.querySelector(`.card[data-card="${idx}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const closeModal = () => {
+    tocModal.classList.remove('open');
+    tocModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+  const openModal = () => {
+    tocModal.classList.add('open');
+    tocModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  tocFab.addEventListener('click', (e) => { e.stopPropagation(); openModal(); });
+  tocClose.addEventListener('click', closeModal);
+  tocModal.addEventListener('click', (e) => { if (e.target === tocModal) closeModal(); });
+
+  const mkBtn = (cls, it, closeOnClick) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls;
+    b.title = it.title;
+
+    const em = document.createElement('span');
+    em.className = 'toc-emoji';
+    em.textContent = it.icon || '•';
+
+    const tx = document.createElement('span');
+    tx.className = 'toc-text';
+    tx.textContent = it.title;
+
+    b.appendChild(em);
+    b.appendChild(tx);
+    b.addEventListener('click', () => {
+      scrollToCard(it.idx);
+      if (closeOnClick) closeModal();
+    });
+    return b;
+  };
+
+  items.forEach(it => tocModalList.appendChild(mkBtn('toc-item', it, true)));
+})();
+</script>
+</body>
+</html>
