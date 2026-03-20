@@ -457,13 +457,17 @@ function unlock(i){
 }
 
 function normalizeName(name){
-  return name
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu,'')
-    .toLowerCase()
+  const base = String(name || '')
+    .normalize('NFKC')
+    .replace(/[\u200B-\u200D\uFEFF]/g,'')
     .replace(/[^\p{L}\s]/gu,' ')
     .replace(/\s+/g,' ')
     .trim();
+  const lower = base.toLocaleLowerCase();
+  const hasLatin = /\p{Script=Latin}/u.test(lower);
+  return hasLatin
+    ? lower.normalize('NFD').replace(/\p{Diacritic}/gu,'')
+    : lower;
 }
 
 function sanitizeRoom(value){
