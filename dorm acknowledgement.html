@@ -809,7 +809,11 @@ async function submitToGoogleForm(rec){
   const body = new URLSearchParams();
   if(cfg.entries.building) body.set(cfg.entries.building, rec.building);
   if(cfg.entries.room) body.set(cfg.entries.room, rec.room);
-  if(cfg.entries.name) body.set(cfg.entries.name, normalizedName);
+  if(cfg.entries.nameOriginal) body.set(cfg.entries.nameOriginal, rec.name);
+  if(cfg.entries.nameNormalized) body.set(cfg.entries.nameNormalized, normalizedName);
+  if(!cfg.entries.nameOriginal && !cfg.entries.nameNormalized && cfg.entries.name){
+    body.set(cfg.entries.name, rec.name);
+  }
   if(cfg.entries.lang) body.set(cfg.entries.lang, rec.lang);
   await fetch(submitUrl,{
     method:'POST',
