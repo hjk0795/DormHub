@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+Sinhala:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -48,7 +48,7 @@
           radial-gradient(900px 520px at 85% 0%, rgba(45, 212, 191, 0.18), transparent 52%),
           radial-gradient(900px 520px at 70% 90%, rgba(251, 113, 133, 0.14), transparent 55%),
           linear-gradient(180deg, #fff7ed, var(--paper));
-        font-family: "Be Vietnam Pro", "Noto Sans KR", system-ui, -apple-system, Segoe UI, sans-serif;
+        font-family: "Be Vietnam Pro", "Noto Sans KR", "Noto Sans Sinhala", "Noto Sans Tamil", system-ui, -apple-system, Segoe UI, sans-serif;
         letter-spacing: -0.01em;
       }
 
@@ -201,25 +201,49 @@
 
       [data-lang="vi"] .lang-en,
       [data-lang="vi"] .lang-hi,
-      [data-lang="vi"] .lang-id {
+      [data-lang="vi"] .lang-id,
+      [data-lang="vi"] .lang-si,
+      [data-lang="vi"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="en"] .lang-vi,
       [data-lang="en"] .lang-hi,
-      [data-lang="en"] .lang-id {
+      [data-lang="en"] .lang-id,
+      [data-lang="en"] .lang-si,
+      [data-lang="en"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="hi"] .lang-vi,
       [data-lang="hi"] .lang-en,
-      [data-lang="hi"] .lang-id {
+      [data-lang="hi"] .lang-id,
+      [data-lang="hi"] .lang-si,
+      [data-lang="hi"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="id"] .lang-vi,
       [data-lang="id"] .lang-en,
-      [data-lang="id"] .lang-hi {
+      [data-lang="id"] .lang-hi,
+      [data-lang="id"] .lang-si,
+      [data-lang="id"] .lang-ta {
+        display: none !important;
+      }
+
+      [data-lang="si"] .lang-vi,
+      [data-lang="si"] .lang-en,
+      [data-lang="si"] .lang-hi,
+      [data-lang="si"] .lang-id,
+      [data-lang="si"] .lang-ta {
+        display: none !important;
+      }
+
+      [data-lang="ta"] .lang-vi,
+      [data-lang="ta"] .lang-en,
+      [data-lang="ta"] .lang-hi,
+      [data-lang="ta"] .lang-id,
+      [data-lang="ta"] .lang-si {
         display: none !important;
       }
 
@@ -292,6 +316,105 @@
         letter-spacing: -0.02em;
       }
 
+      .title span {
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .group-copy {
+        padding: 2px 2px 6px;
+      }
+
+      .group-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        background: rgba(255, 255, 255, 0.82);
+        color: rgba(16, 24, 40, 0.86);
+      }
+
+      .group-tag.secure {
+        border-color: rgba(147, 51, 234, 0.22);
+        background: rgba(124, 58, 237, 0.08);
+        color: #5b21b6;
+      }
+
+      .group-copy p {
+        margin: 8px 2px 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .card.locked-card {
+        border-color: rgba(124, 58, 237, 0.18);
+        background: linear-gradient(180deg, rgba(252, 251, 255, 0.94), rgba(245, 243, 255, 0.8));
+      }
+
+      .card.locked-card::after {
+        background: radial-gradient(700px 180px at 35% 0%, rgba(124, 58, 237, 0.16), transparent 60%);
+      }
+
+      .lock-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(124, 58, 237, 0.18);
+        color: #5b21b6;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .notice-board {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(16, 24, 40, 0.12);
+      }
+
+      .notice-board h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .notice-board p {
+        margin: 0 0 12px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .notice-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .notice-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .notice-item b {
+        min-width: 26px;
+        color: rgba(16, 24, 40, 0.92);
+      }
+
       .pillrow {
         margin-top: 14px;
         display: flex;
@@ -322,6 +445,7 @@
         margin-top: 16px;
         padding-top: 16px;
         border-top: 1px solid rgba(16, 24, 40, 0.12);
+        text-align: left;
       }
 
       .faq h2 {
@@ -349,6 +473,29 @@
         display: flex;
         align-items: baseline;
         gap: 10px;
+        justify-content: flex-start;
+        text-align: left;
+        position: relative;
+        padding-right: 24px;
+      }
+
+      summary::after {
+        content: "";
+        position: absolute;
+        right: 2px;
+        top: 50%;
+        width: 9px;
+        height: 9px;
+        flex-shrink: 0;
+        border-right: 2px solid rgba(16, 24, 40, 0.42);
+        border-bottom: 2px solid rgba(16, 24, 40, 0.42);
+        transform: translateY(-60%) rotate(45deg);
+        transition: transform 0.18s ease, border-color 0.18s ease;
+      }
+
+      details[open] summary::after {
+        transform: translateY(-40%) rotate(225deg);
+        border-color: rgba(16, 24, 40, 0.62);
       }
 
       summary::-webkit-details-marker {
@@ -425,16 +572,22 @@
             <h1 class="lang-vi">🏠 Hướng dẫn KTX tất cả trong một</h1>
             <h1 class="lang-hi">🏠 छात्रावास की पूरी गाइड</h1>
             <h1 class="lang-id">🏠 Panduan Lengkap Asrama</h1>
+            <h1 class="lang-si">🏠 නේවාසිකාගාර සම්පූර්ණ මාර්ගෝපදේශය</h1>
+            <h1 class="lang-ta">🏠 விடுதி முழுமையான வழிகாட்டி</h1>
             <p class="subtitle lang-en">Check all the information you need for dorm life in one place!</p>
             <p class="subtitle lang-vi">Xem tất cả thông tin cần thiết cho cuộc sống KTX tại một nơi!</p>
             <p class="subtitle lang-hi">छात्रावास जीवन के लिए ज़रूरी सारी जानकारी एक ही जगह देखें!</p>
             <p class="subtitle lang-id">Lihat semua informasi penting untuk kehidupan asrama di satu tempat!</p>
+            <p class="subtitle lang-si">නේවාසිකාගාර ජීවිතයට අවශ්‍ය සියලු තොරතුරු එක තැනකින් බලන්න!</p>
+            <p class="subtitle lang-ta">விடுதி வாழ்க்கைக்கு தேவையான அனைத்து தகவல்களையும் ஒரே இடத்தில் பாருங்கள்!</p>
           </div>
 
           <div class="lang-picker">
             <label class="lang-label" for="langSelect"><span class="globe" aria-hidden="true"></span> <span id="langLabelText">Language</span></label>
             <select id="langSelect" class="lang-select" aria-label="Language selector">
               <option value="vi">Tiếng Việt</option>
+              <option value="si">සිංහල</option>
+              <option value="ta">தமிழ்</option>
               <option value="hi">हिन्दी</option>
               <option value="id">Bahasa Indonesia</option>
               <option value="en">English</option>
@@ -446,7 +599,12 @@
       <div class="panel">
       <section id="links" class="lang-grid" aria-label="Main links">
         <div class="lang-col lang-en" aria-label="English links">
-          <a class="card" href="/recycling-guide/hi">
+          <div class="group-copy">
+            <span class="group-tag">Open without login</span>
+            <p>Public information for quick self-service.</p>
+          </div>
+
+          <a class="card" href="/recycling-guide/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -465,10 +623,11 @@
             </div>
             <div class="title">
               <strong>Recycling &amp; Trash Guide</strong>
+              <span>Sort trash correctly without asking staff first.</span>
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/hi">
+          <a class="card" href="/dormitory-rules/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -488,39 +647,74 @@
             </div>
             <div class="title">
               <strong>Dormitory Rules &amp; Regulations</strong>
+              <span>Check the summary before asking about penalties or room rules.</span>
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility Issue Report - English Google Form"
-          >
-            <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g5)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <defs>
-                  <linearGradient id="g5" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#2dd4bf" />
-                    <stop offset="1" stop-color="#f59e0b" />
-                  </linearGradient>
-                </defs>
-                <path d="M14 7h6" />
-                <path d="M14 11h6" />
-                <path d="M14 15h6" />
-                <path d="M4 20V4a1 1 0 0 1 1-1h9l6 6v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z" />
-                <path d="M14 3v6h6" />
-                <path d="M7.5 12l1.8 1.8L12.8 10" />
-              </svg>
-            </div>
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
             <div class="title">
-              <strong>Facility Issue Report &amp; General Inquiry</strong>
+              <strong>FAQ</strong>
+              <span>Fast answers for the most common resident questions.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>General Notices</strong>
+              <span>Building-wide updates such as water outages or office hour changes.</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Google login required</span>
+            <p>Use Google login for room-based handling, follow-up, and personal notices.</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">Login required</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>My Room Notices</strong>
+              <span>Missing documents, room inspection results, and room-specific follow-up.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">Login required</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>Inspection Schedule</strong>
+              <span>Room inspection time and revisit schedule for your room.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">Login required</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>Facility Issue Submission</strong>
+              <span>Submit issues only after resident and room identification.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">Login required</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>My Repair History / Status</strong>
+              <span>Track submitted issues and follow-up progress for your room.</span>
             </div>
           </a>
         </div>
 
         <div class="lang-col lang-vi" aria-label="Vietnamese links">
+          <div class="group-copy">
+            <span class="group-tag">Mở trực tiếp</span>
+            <p>Thông tin chung có thể xem ngay để tự xử lý nhanh.</p>
+          </div>
+
           <a class="card" href="/recycling-guide/vi">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -540,6 +734,7 @@
             </div>
             <div class="title">
               <strong>Hướng dẫn phân loại rác</strong>
+              <span>Xem ngay cách bỏ rác đúng mà không cần hỏi riêng.</span>
             </div>
           </a>
 
@@ -562,44 +757,299 @@
             </div>
             <div class="title">
               <strong>Quy định và nội quy KTX</strong>
+              <span>Xem trước các quy định chung và mức phạt thường gặp.</span>
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/83SrD4kbLB3yengP7"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Vietnamese Google Form"
-          >
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
+            <div class="title">
+              <strong>Câu hỏi thường gặp</strong>
+              <span>Câu trả lời nhanh cho những thắc mắc phổ biến nhất.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>Thông báo chung</strong>
+              <span>Thông báo cho toàn tòa nhà như mất nước hoặc thay đổi giờ làm việc.</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Cần đăng nhập Google</span>
+            <p>Dùng cho thông tin theo phòng, theo dõi xử lý và liên hệ 1:1.</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">Cần đăng nhập</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>Thông báo phòng của tôi</strong>
+              <span>Thiếu hồ sơ, kết quả kiểm tra phòng và các việc cần theo dõi riêng.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">Cần đăng nhập</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>Lịch kiểm tra phòng</strong>
+              <span>Thời gian kiểm tra và lịch quay lại theo từng phòng.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">Cần đăng nhập</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>Gửi sự cố cơ sở vật chất</strong>
+              <span>Cần xác định người ở và số phòng trước khi gửi yêu cầu.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">Cần đăng nhập</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>Lịch sử / trạng thái sửa chữa</strong>
+              <span>Theo dõi các yêu cầu đã gửi và tình trạng xử lý của phòng bạn.</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="lang-col lang-si" aria-label="Sinhala links">
+          <div class="group-copy">
+            <span class="group-tag">ලොග් වීම නැතුව</span>
+            <p>ඉක්මනින්ම ස්වයංව විසඳාගත හැකි පොදු තොරතුරු.</p>
+          </div>
+
+          <a class="card" href="/recycling-guide/si">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gsi1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#f59e0b" />
+                  <linearGradient id="gsi1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
                 </defs>
-                <path d="M12 22a7 7 0 1 0-7-7" />
-                <path d="M9.5 14.5 7 17" />
-                <path d="M14 6l4 4" />
-                <path d="M11 9l4 4" />
-                <path d="M5 19l4-4" />
-                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
               </svg>
             </div>
             <div class="title">
-              <strong>Báo cáo sự cố cơ sở vật chất &amp; Liên hệ chung</strong>
+              <strong>ප්‍රතිචක්‍රීකරණ හා කසල මාර්ගෝපදේශය</strong>
+              <span>පළමුවම කසල නිවැරදිව වෙන් කරන ආකාරය බලන්න.</span>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules/si">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gsi2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gsi2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>නේවාසිකාගාර නීති සහ රෙගුලාසි</strong>
+              <span>සාමාන්‍ය නීති සහ දඩ ලකුණු පිළිබඳ සාරාංශය පළමුවම බලන්න.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
+            <div class="title">
+              <strong>නිතර අසන ප්‍රශ්න</strong>
+              <span>නිතර අසන ප්‍රශ්න සඳහා ඉක්මන් පිළිතුරු.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>පොදු දැනුම්දීම්</strong>
+              <span>ජල කප්පාදුවක් හෝ කාර්යාල වේලාව වෙනස් වීමක් වැනි ගොඩනැගිල්ලම අදාල දැනුම්දීම්.</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Google ලොග් වීම අවශ්‍යයි</span>
+            <p>කාමරයට අදාල දේවල්, අනුව යාම සහ පුද්ගලික දැනුම්දීම් සඳහා Google ලොග් වීම භාවිත කරන්න.</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">ලොග් වීම අවශ්‍යයි</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>මගේ කාමර දැනුම්දීම්</strong>
+              <span>අඩු ලේඛන, කාමර පරීක්ෂණ ප්‍රතිඵල සහ කාමරයට අදාල අනුව යාම.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">ලොග් වීම අවශ්‍යයි</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>පරීක්ෂණ වේලාව</strong>
+              <span>ඔබගේ කාමරයට අදාල පරීක්ෂණ වේලාව සහ නැවත පැමිණෙන කාලසටහන.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">ලොග් වීම අවශ්‍යයි</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>පහසුකම් ගැටලු ඉදිරිපත් කිරීම</strong>
+              <span>පදිංචිකරු සහ කාමරය හඳුනාගැනීමෙන් පසුව පමණක් ඉදිරිපත් කරන්න.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">ලොග් වීම අවශ්‍යයි</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>මගේ අලුත්වැඩියා ඉතිහාසය / තත්ත්වය</strong>
+              <span>ඔබගේ කාමරය සඳහා ඉදිරිපත් කළ ගැටලු සහ ඒවායේ ප්‍රගතිය බලන්න.</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="lang-col lang-ta" aria-label="Tamil links">
+          <div class="group-copy">
+            <span class="group-tag">உள்நுழைவு இல்லாமல்</span>
+            <p>வேகமாகத் தானாக சரிபார்க்கக்கூடிய பொதுத் தகவல்கள்.</p>
+          </div>
+
+          <a class="card" href="/recycling-guide/ta">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gta1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gta1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>மறுசுழற்சி மற்றும் குப்பை வழிகாட்டி</strong>
+              <span>ஊழியர்களிடம் கேட்கும் முன் குப்பையை சரியாக பிரிப்பதை பார்க்கலாம்.</span>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules/ta">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gta2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gta2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>விடுதி விதிமுறைகள்</strong>
+              <span>பொதுவான விதிகள் மற்றும் தண்டனை விவரங்களை முன்பே பார்க்கலாம்.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
+            <div class="title">
+              <strong>அடிக்கடி கேட்கப்படும் கேள்விகள்</strong>
+              <span>அதிகம் கேட்கப்படும் கேள்விகளுக்கான விரைவான பதில்கள்.</span>
+            </div>
+          </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>பொது அறிவிப்புகள்</strong>
+              <span>முழு கட்டிடத்திற்கான நீர்தடை அல்லது அலுவலக நேர மாற்றம் போன்ற அறிவிப்புகள்.</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Google உள்நுழைவு தேவை</span>
+            <p>அறை சார்ந்த தகவல், தொடர்ச்சி கண்காணிப்பு மற்றும் தனிப்பட்ட அறிவிப்புகளுக்கு Google உள்நுழைவு பயன்படுத்தப்படுகிறது.</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">உள்நுழைவு தேவை</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>என் அறை அறிவிப்புகள்</strong>
+              <span>காணாமல் போன ஆவணங்கள், அறை ஆய்வு முடிவுகள் மற்றும் அறை சார்ந்த தொடர்ச்சி விபரங்கள்.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">உள்நுழைவு தேவை</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>ஆய்வு அட்டவணை</strong>
+              <span>உங்கள் அறைக்கான ஆய்வு நேரமும் மறுபார்வை அட்டவணையும்.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">உள்நுழைவு தேவை</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>வசதி பிரச்சினை சமர்ப்பிப்பு</strong>
+              <span>குடியிருப்பவர் மற்றும் அறை அடையாளம் கண்ட பிறகே சமர்ப்பிக்கலாம்.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">உள்நுழைவு தேவை</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>என் பழுது சரிசெய்தல் வரலாறு / நிலை</strong>
+              <span>உங்கள் அறைக்கான கோரிக்கைகள் மற்றும் தொடர்ச்சி நிலையைப் பாருங்கள்.</span>
             </div>
           </a>
         </div>
 
         <div class="lang-col lang-hi" aria-label="Hindi links">
-          <a class="card" href="/recycling-guide/id">
+          <div class="group-copy">
+            <span class="group-tag">बिना लॉगिन</span>
+            <p>जल्दी खुद से देखने योग्य सार्वजनिक जानकारी।</p>
+          </div>
+
+          <a class="card" href="/recycling-guide/hi">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#ghi1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="ghi1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -614,14 +1064,15 @@
             </div>
             <div class="title">
               <strong>रीसाइक्लिंग और कचरा गाइड</strong>
+              <span>पहले कचरा सही तरह से अलग करने की जानकारी देखें।</span>
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/id">
+          <a class="card" href="/dormitory-rules/hi">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#ghi2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="ghi2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#f59e0b" />
                   </linearGradient>
@@ -636,44 +1087,79 @@
             </div>
             <div class="title">
               <strong>छात्रावास नियम और विनियम</strong>
+              <span>सामान्य नियम और दंड संबंधी जानकारी पहले देखें।</span>
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Hindi guidance"
-          >
-            <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <defs>
-                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#f59e0b" />
-                    <stop offset="1" stop-color="#2dd4bf" />
-                  </linearGradient>
-                </defs>
-                <path d="M12 22a7 7 0 1 0-7-7" />
-                <path d="M9.5 14.5 7 17" />
-                <path d="M14 6l4 4" />
-                <path d="M11 9l4 4" />
-                <path d="M5 19l4-4" />
-                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
-              </svg>
-            </div>
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
             <div class="title">
-              <strong>सुविधा समस्या रिपोर्ट और सामान्य पूछताछ</strong>
+              <strong>अक्सर पूछे जाने वाले प्रश्न</strong>
+              <span>सबसे आम सवालों के लिए तेज़ जवाब।</span>
+            </div>
+          </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>सामान्य सूचनाएँ</strong>
+              <span>पूरी बिल्डिंग के लिए पानी बंद, कीटाणुशोधन, ऑफिस समय बदलाव जैसी सूचनाएँ।</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Google लॉगिन आवश्यक</span>
+            <p>कमरा-आधारित जानकारी, फॉलो-अप और व्यक्तिगत सूचनाओं के लिए Google लॉगिन ज़रूरी है।</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">लॉगिन आवश्यक</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>मेरे कमरे की सूचनाएँ</strong>
+              <span>कमी वाले दस्तावेज़, निरीक्षण परिणाम और कमरे से जुड़ी फॉलो-अप जानकारी।</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">लॉगिन आवश्यक</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>निरीक्षण समय-सारणी</strong>
+              <span>आपके कमरे के निरीक्षण समय और दोबारा आने की तारीख।</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">लॉगिन आवश्यक</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>सुविधा समस्या जमा करना</strong>
+              <span>निवासी पहचान और कमरे की जानकारी के बाद ही शिकायत जमा करें।</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">लॉगिन आवश्यक</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>मेरी मरम्मत हिस्ट्री / स्थिति</strong>
+              <span>आपके कमरे से जुड़ी शिकायतों और उनकी प्रगति को देखें।</span>
             </div>
           </a>
         </div>
 
         <div class="lang-col lang-id" aria-label="Indonesian links">
-          <a class="card" href="/recycling-guide/en">
+          <div class="group-copy">
+            <span class="group-tag">Tanpa login</span>
+            <p>Informasi umum yang bisa dibuka langsung untuk self-service.</p>
+          </div>
+
+          <a class="card" href="/recycling-guide/id">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gid1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="gid1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -688,14 +1174,15 @@
             </div>
             <div class="title">
               <strong>Panduan Daur Ulang &amp; Sampah</strong>
+              <span>Lihat dulu cara membuang sampah dengan benar tanpa perlu bertanya ke staf.</span>
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/en">
+          <a class="card" href="/dormitory-rules/id">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gid2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="gid2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#f59e0b" />
                   </linearGradient>
@@ -710,36 +1197,128 @@
             </div>
             <div class="title">
               <strong>Peraturan &amp; Ketentuan Asrama</strong>
+              <span>Cek dulu ringkasan aturan umum dan poin pelanggaran yang sering ditanyakan.</span>
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Indonesian guidance"
-          >
-            <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <defs>
-                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#f59e0b" />
-                    <stop offset="1" stop-color="#2dd4bf" />
-                  </linearGradient>
-                </defs>
-                <path d="M12 22a7 7 0 1 0-7-7" />
-                <path d="M9.5 14.5 7 17" />
-                <path d="M14 6l4 4" />
-                <path d="M11 9l4 4" />
-                <path d="M5 19l4-4" />
-                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
-              </svg>
-            </div>
+          <a class="card" href="#faq">
+            <div class="icon" aria-hidden="true">❓</div>
             <div class="title">
-              <strong>Laporan Masalah Fasilitas &amp; Pertanyaan Umum</strong>
+              <strong>Pertanyaan yang Sering Diajukan</strong>
+              <span>Jawaban cepat untuk pertanyaan penghuni yang paling sering muncul.</span>
             </div>
           </a>
+
+          <a class="card" href="#general-notices">
+            <div class="icon" aria-hidden="true">📢</div>
+            <div class="title">
+              <strong>Pengumuman Umum</strong>
+              <span>Pengumuman untuk seluruh gedung seperti air mati, disinfeksi, atau perubahan jam kantor.</span>
+            </div>
+          </a>
+
+          <div class="group-copy">
+            <span class="group-tag secure">🔒 Perlu login Google</span>
+            <p>Dipakai untuk penanganan berdasarkan kamar, tindak lanjut, dan pemberitahuan pribadi.</p>
+          </div>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=my-room-notices">
+            <span class="lock-badge">Perlu login</span>
+            <div class="icon" aria-hidden="true">🔔</div>
+            <div class="title">
+              <strong>Pemberitahuan Kamar Saya</strong>
+              <span>Dokumen kurang, hasil inspeksi kamar, dan tindak lanjut khusus kamar.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=inspection-schedule">
+            <span class="lock-badge">Perlu login</span>
+            <div class="icon" aria-hidden="true">🗓️</div>
+            <div class="title">
+              <strong>Jadwal Inspeksi</strong>
+              <span>Waktu inspeksi kamar dan jadwal kunjungan ulang untuk kamar Anda.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=facility-issues">
+            <span class="lock-badge">Perlu login</span>
+            <div class="icon" aria-hidden="true">🛠️</div>
+            <div class="title">
+              <strong>Pengajuan Masalah Fasilitas</strong>
+              <span>Kirim laporan setelah identitas penghuni dan kamar terhubung.</span>
+            </div>
+          </a>
+
+          <a class="card locked-card" href="/google-login.html?lang=en&amp;target=repair-history">
+            <span class="lock-badge">Perlu login</span>
+            <div class="icon" aria-hidden="true">🧾</div>
+            <div class="title">
+              <strong>Riwayat / Status Perbaikan Saya</strong>
+              <span>Lihat laporan yang sudah dikirim dan progres tindak lanjut untuk kamar Anda.</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section id="general-notices" class="notice-board" aria-label="General notices">
+        <div class="lang-en">
+          <h2>General Notices</h2>
+          <p>Only building-wide updates appear here. Room-specific notices move behind Google login.</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>Building-wide water outage notice</span></div>
+            <div class="notice-item"><b>2</b><span>Full-building disinfection or pest control schedule</span></div>
+            <div class="notice-item"><b>3</b><span>Office hour changes or holiday closures</span></div>
+          </div>
+        </div>
+
+        <div class="lang-vi">
+          <h2>Thông báo chung</h2>
+          <p>Chỉ những thông báo áp dụng cho toàn tòa nhà mới xuất hiện ở đây. Thông báo theo từng phòng sẽ ở phía sau đăng nhập Google.</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>Thông báo cắt nước cho toàn bộ tòa nhà</span></div>
+            <div class="notice-item"><b>2</b><span>Lịch khử trùng hoặc diệt côn trùng toàn tòa nhà</span></div>
+            <div class="notice-item"><b>3</b><span>Thay đổi giờ làm việc hoặc lịch nghỉ của văn phòng</span></div>
+          </div>
+        </div>
+
+        <div class="lang-si">
+          <h2>පොදු දැනුම්දීම්</h2>
+          <p>මෙහි පෙන්වන්නේ ගොඩනැගිල්ලම අදාල දැනුම්දීම් පමණි. කාමරයට අදාල දැනුම්දීම් Google ලොග් වීමෙන් පසු පෙන්වයි.</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>ගොඩනැගිල්ල පුරා ජල සැපයුම නතර වීම පිළිබඳ දැනුම්දීම</span></div>
+            <div class="notice-item"><b>2</b><span>ගොඩනැගිල්ල පුරා විෂබීජ නාශක හෝ පළිබෝධ පාලන කාලසටහන</span></div>
+            <div class="notice-item"><b>3</b><span>කාර්යාල වේලාවන් වෙනස් වීම හෝ නිවාඩු දින වසා තැබීම</span></div>
+          </div>
+        </div>
+
+        <div class="lang-ta">
+          <h2>பொது அறிவிப்புகள்</h2>
+          <p>இங்கு கட்டிடமுழுவதற்கான அறிவிப்புகள் மட்டுமே காட்டப்படும். அறை சார்ந்த அறிவிப்புகள் Google உள்நுழைவுக்குப் பின் காட்டப்படும்.</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>முழு கட்டிடத்திற்கான தண்ணீர் நிறுத்த அறிவிப்பு</span></div>
+            <div class="notice-item"><b>2</b><span>முழு கட்டிட கிருமிநாசினி அல்லது பூச்சிக்கொல்லி அட்டவணை</span></div>
+            <div class="notice-item"><b>3</b><span>அலுவலக நேர மாற்றம் அல்லது விடுமுறை மூடல் அறிவிப்பு</span></div>
+          </div>
+        </div>
+
+        <div class="lang-hi">
+          <h2>सामान्य सूचनाएँ</h2>
+          <p>यहाँ केवल पूरी बिल्डिंग से जुड़ी सूचनाएँ दिखाई जाएँगी। कमरे से जुड़ी सूचनाएँ Google लॉगिन के बाद दिखाई जाएँगी।</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>पूरी बिल्डिंग के लिए पानी बंद होने की सूचना</span></div>
+            <div class="notice-item"><b>2</b><span>पूरी बिल्डिंग के कीटाणुशोधन या कीट नियंत्रण का समय</span></div>
+            <div class="notice-item"><b>3</b><span>ऑफिस समय में बदलाव या छुट्टी के कारण बंद रहने की सूचना</span></div>
+          </div>
+        </div>
+
+        <div class="lang-id">
+          <h2>Pengumuman Umum</h2>
+          <p>Di sini hanya tampil pengumuman yang berlaku untuk seluruh gedung. Pengumuman khusus kamar ditampilkan setelah login Google.</p>
+          <div class="notice-list">
+            <div class="notice-item"><b>1</b><span>Pemberitahuan air mati untuk seluruh gedung</span></div>
+            <div class="notice-item"><b>2</b><span>Jadwal disinfeksi atau pengendalian hama seluruh gedung</span></div>
+            <div class="notice-item"><b>3</b><span>Perubahan jam kantor atau penutupan saat hari libur</span></div>
+          </div>
         </div>
       </section>
 
@@ -778,6 +1357,34 @@
           </details>
         </div>
 
+        <div class="lang-si">
+          <h2>නිතර අසන ප්‍රශ්න</h2>
+
+          <details>
+            <summary><span class="q">Q</span> අවසන් වෙලාව / ඇතුල් වීමේ වේලාවේ සීමා (රාත්‍රි නවාතැන් ඇතුළුව)</summary>
+            <p>වෙන්වූ curfew එකක් නැහැ. එහෙත් වැඩි නිදහසක් ඇති නිසා, කරුණාකර නේවාසිකාගාර නීති අනුගමනය කර සහ කාමර සගයන් හා පොදු ප්‍රදේශ ගෞරවයෙන් භාවිත කරන්න.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> විදුලි, ගෑස්, ජල බිල්පත්</summary>
+            <p>සාමාන්‍යයෙන් විදුලි, ගෑස්, ජල වියදම් ඇතුළත් වන අතර වෙනම ගෙවීමට අවශ්‍ය නැහැ. එහෙත් ඔබගේ භාවිතය ගොඩනැගිල්ලේ සාමාන්‍ය මට්ටමට වඩා 10% ඉක්මවන්නේ නම්, අමතර මුදල ගෙවිය යුතුය.</p>
+          </details>
+        </div>
+
+        <div class="lang-ta">
+          <h2>அடிக்கடி கேட்கப்படும் கேள்விகள்</h2>
+
+          <details>
+            <summary><span class="q">Q</span> இரவுக்கால வரையறை / நுழைவு நேரக் கட்டுப்பாடு (இரவு தங்குதல் உட்பட)</summary>
+            <p>தனியாக இரவுக்கால வரையறை இல்லை. ஆனால் அதிக சுயாட்சியுள்ளதால், விடுதி விதிகளை பின்பற்றி, அறைத் தோழர்கள் மற்றும் பொதுப் பகுதிகளை கவனமாக மதிக்கவும்.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> பயன்பாட்டு கட்டணம் (மின்சாரம், எரிவாயு, தண்ணீர்)</summary>
+            <p>பொதுவாக மின்சாரம், எரிவாயு மற்றும் தண்ணீர் செலவுகள் சேர்த்தே இருக்கும்; தனியாக செலுத்த வேண்டியதில்லை. ஆனால் உங்கள் பயன்பாடு கட்டிட சராசரியை விட 10% அதிகமாக இருந்தால், கூடுதல் தொகையை நீங்கள் செலுத்த வேண்டும்.</p>
+          </details>
+        </div>
+
         <div class="lang-hi">
           <h2>अक्सर पूछे जाने वाले प्रश्न</h2>
 
@@ -809,28 +1416,96 @@
       </div>
     </main>
 
+    <script src="/resident-session.js"></script>
     <script>
       (function () {
-        var ACK_STORAGE_KEY = "dormhub_ack_verified_v1";
-        var LANGS = ["vi", "hi", "id", "en"];
+        var LANGS = ["vi", "si", "ta", "hi", "id", "en"];
         var LANG_LABELS = {
           vi: "Ngôn ngữ",
+          si: "භාෂාව",
+          ta: "மொழி",
           hi: "भाषा",
           id: "Bahasa",
           en: "Language"
         };
+        var previewBypass = false;
+        var reviewSafeMode = false;
+        try {
+          var params = new URLSearchParams(window.location.search);
+          previewBypass = params.get("preview") === "1";
+          reviewSafeMode = params.get("review") === "1" || /dormhub-review-safe/i.test(window.location.hostname);
+        } catch (e) {}
+        function injectReviewSafeBanner() {
+          if (!reviewSafeMode || document.getElementById("reviewSafeBanner")) return;
+          var banner = document.createElement("div");
+          banner.id = "reviewSafeBanner";
+          banner.textContent = "Review-safe preview: live forms and live contact/report links are disabled in this shared build.";
+          banner.style.cssText = "margin:12px 24px 0;padding:12px 14px;border-radius:14px;background:#fff4d6;color:#5c4300;border:1px solid #f1d48a;font-size:13px;font-weight:700;line-height:1.5;";
+          var main = document.querySelector("main");
+          if (main) main.insertBefore(banner, main.firstChild);
+        }
+        function applyReviewSafeLinks() {
+          if (!reviewSafeMode) return;
+          document.querySelectorAll('a[href]').forEach(function (anchor) {
+            var href = anchor.getAttribute('href') || '';
+            if (!href || href.startsWith('#')) return;
+            if (/forms\.gle|docs\.google\.com\/forms/i.test(href)) {
+              anchor.setAttribute('href', '#review-safe-disabled');
+              anchor.setAttribute('data-review-blocked', '1');
+              anchor.removeAttribute('target');
+              anchor.removeAttribute('rel');
+              return;
+            }
+            try {
+              var url = new URL(href, window.location.origin);
+              if (url.origin !== window.location.origin) return;
+              url.searchParams.set('review', '1');
+              if (url.pathname === '/' || url.pathname === '/index.html') {
+                url.searchParams.set('preview', '1');
+              }
+              anchor.setAttribute('href', url.pathname + url.search + url.hash);
+            } catch (e) {}
+          });
+          document.addEventListener('click', function (event) {
+            var link = event.target.closest('a[data-review-blocked="1"]');
+            if (!link) return;
+            event.preventDefault();
+            window.alert('Review-safe preview에서는 실제 문의/제출 링크가 열리지 않습니다.');
+          });
+        }
         function hasAckState() {
-          try {
-            var saved = JSON.parse(localStorage.getItem(ACK_STORAGE_KEY) || "null");
-            return !!(saved && saved.building && saved.room && saved.name);
-          } catch (e) {
-            return false;
-          }
+          return !!window.DormResidentSession?.getAckState?.();
         }
 
-        if (!hasAckState()) {
-          window.location.replace("/dorm-acknowledgement");
-          return;
+        function hasGoogleSession() {
+          return !!window.DormResidentSession?.getGoogleSession?.();
+        }
+
+        function buildFlowUrl(pathname, lang) {
+          var url = new URL(pathname, window.location.origin);
+          if (pathname === "/google-login.html") {
+            url.searchParams.set("lang", "en");
+          } else if (lang) {
+            url.searchParams.set("lang", lang);
+          }
+          if (reviewSafeMode) url.searchParams.set("review", "1");
+          if (previewBypass) url.searchParams.set("preview", "1");
+          return url.pathname + url.search + url.hash;
+        }
+
+        if (!previewBypass && !reviewSafeMode) {
+          var initialLangForFlow = "vi";
+          try {
+            initialLangForFlow = localStorage.getItem("dormHubLang") || "vi";
+          } catch (e) {}
+          if (!hasGoogleSession()) {
+            window.location.replace(buildFlowUrl("/google-login.html", initialLangForFlow));
+            return;
+          }
+          if (!hasAckState()) {
+            window.location.replace(buildFlowUrl("/dorm-acknowledgement", initialLangForFlow));
+            return;
+          }
         }
 
         var select = document.getElementById("langSelect");
@@ -874,6 +1549,8 @@
 
         select.value = LANGS.indexOf(initial) !== -1 ? initial : "vi";
         applyLang(select.value);
+        injectReviewSafeBanner();
+        applyReviewSafeLinks();
 
         select.addEventListener("change", function () {
           applyLang(select.value);

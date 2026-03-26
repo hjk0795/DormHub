@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resident Portal Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+Sinhala:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&family=Roboto:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f5f2ed;
+      --panel:#ffffff;
+      --text:#132238;
+      --muted:#5f6f84;
+      --stroke:rgba(19,34,56,.12);
+      --accent:#1b2a4a;
+      --accent-soft:rgba(27,42,74,.08);
+      --shadow:0 18px 48px rgba(19,34,56,.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Be Vietnam Pro","Noto Sans KR","Noto Sans Sinhala","Noto Sans Tamil",system-ui,sans-serif;
+      background:linear-gradient(180deg,#faf8f4 0%,#f2ede6 100%);
+      color:var(--text);
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+    .shell{
+      width:min(100%,560px);
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--stroke);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:22px 22px 24px;
+      backdrop-filter:blur(12px);
+    }
+    .head-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      color:var(--accent);
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .lang-picker{
+      position:relative;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .lang-select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      border:1px solid rgba(19,34,56,.16);
+      background:rgba(255,255,255,.72);
+      border-radius:999px;
+      padding:10px 40px 10px 12px;
+      font-weight:700;
+      color:rgba(19,34,56,.9);
+      box-shadow:0 10px 18px rgba(19,34,56,.1);
+      cursor:pointer;
+      line-height:1;
+      min-width:148px;
+    }
+    .lang-picker::after{
+      content:"";
+      position:absolute;
+      right:14px;
+      bottom:15px;
+      width:8px;
+      height:8px;
+      border-right:2px solid rgba(19,34,56,.45);
+      border-bottom:2px solid rgba(19,34,56,.45);
+      transform:rotate(45deg);
+      pointer-events:none;
+    }
+    .content{
+      display:grid;
+      justify-items:center;
+      text-align:center;
+      padding:34px 0 6px;
+    }
+    h1{margin:0 0 12px;font-size:30px;line-height:1.1;letter-spacing:-.03em}
+    p{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+    .body-copy{
+      max-width:420px;
+      margin:14px auto 0;
+    }
+    .actions{
+      display:grid;
+      gap:10px;
+      margin-top:22px;
+      justify-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      min-height:52px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:500;
+      border:1px solid #747775;
+      font-family:"Roboto","Be Vietnam Pro","Noto Sans KR","Noto Sans Sinhala","Noto Sans Tamil",sans-serif;
+      cursor:pointer;
+      padding:0 16px;
+      font-size:14px;
+      line-height:20px;
+      width:min(100%,320px);
+    }
+    .btn.primary{
+      background:#ffffff;
+      color:#1f1f1f;
+    }
+    .google-g{
+      width:20px;
+      height:20px;
+      flex-shrink:0;
+    }
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+    .btn.is-hidden{
+      display:none;
+    }
+    .status{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(27,42,74,.06);
+      color:var(--accent);
+      font-size:13px;
+      line-height:1.5;
+      display:none;
+    }
+    .status.show{display:block}
+    .helper{
+      font-size:12px;
+      text-align:center;
+      margin-top:14px;
+    }
+    .gsi-wrap{
+      display:none;
+      justify-content:center;
+      padding:8px 0 4px;
+      width:min(100%,320px);
+    }
+    .gsi-wrap.show{display:flex}
+    .privacy-copy{
+      max-width:380px;
+      margin:10px auto 0;
+      font-size:11px;
+      line-height:1.55;
+      color:rgba(95,111,132,.95);
+      text-align:center;
+    }
+    .privacy-copy a{
+      color:var(--accent);
+      font-weight:700;
+      text-decoration:underline;
+      text-underline-offset:2px;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="head-row">
+      <div class="brand" id="brand">Dorm Hub</div>
+      <div class="lang-picker">
+        <select id="langSelect" class="lang-select" aria-label="Language selector">
+          <option value="vi">Tiếng Việt</option>
+          <option value="si">සිංහල</option>
+          <option value="ta">தமிழ்</option>
+          <option value="hi">हिन्दी</option>
+          <option value="id">Bahasa Indonesia</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+    <div class="content">
+      <h1 id="title">Sign in to Dorm Hub</h1>
+      <p class="body-copy" id="body">Sign in with Google to access your room-specific notices, inspection schedule, move-in/move-out status, and support updates.</p>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="googleBtn" type="button">
+        <svg class="google-g" viewBox="0 0 18 18" aria-hidden="true">
+          <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62Z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.82.86-3.06.86-2.35 0-4.33-1.58-5.04-3.7H.96v2.32A9 9 0 0 0 9 18Z"/>
+          <path fill="#FBBC05" d="M3.96 10.72A5.41 5.41 0 0 1 3.68 9c0-.6.1-1.18.28-1.72V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l3-2.32Z"/>
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.36l2.58-2.58C13.46.92 11.42 0 9 0A9 9 0 0 0 .96 4.96l3 2.32c.7-2.12 2.68-3.7 5.04-3.7Z"/>
+        </svg>
+        <span id="googleBtnText">Sign in with Google</span>
+      </button>
+      <div class="gsi-wrap" id="googleButtonWrap">
+        <div id="googleButton"></div>
+      </div>
+    </div>
+    <p class="privacy-copy">By continuing or selecting “Sign in with Google,” your name and email will be used for dorm-related communication. For more details, please refer to the <a href="/privacy-policy.html">DormHub Privacy Policy</a>.</p>
+    <div class="status" id="statusBox"></div>
+  </main>
+
+  <script src="./ack-config.js"></script>
+  <script src="./resident-session.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function () {
+      var LANGS = ['vi', 'si', 'ta', 'hi', 'id', 'en'];
+      var REVIEW_SAFE_MODE = new URLSearchParams(window.location.search).get('review') === '1' || /dormhub-review-safe/i.test(window.location.hostname);
+      var AUTH_CONFIG = window.DORM_GOOGLE_AUTH_CONFIG || {};
+      var ACK_FORM_CONFIG = window.DORM_ACK_FORM_CONFIG || null;
+      var copy = {
+        en: {
+          brand: 'Dorm Hub',
+          title: 'Sign in to Dorm Hub',
+          body: 'Sign in with Google to access your room-specific notices, inspection schedule, move-in/move-out status, and support updates.',
+          button: 'Sign in with Google',
+          loading: 'Checking your login and dorm check-in status…',
+          reviewSafe: 'Review-safe mode uses a sample Google account instead of a real login.',
+          noClient: '',
+          syncFail: 'Could not connect your saved dorm check-in to this Google account. Please try again.',
+          signedIn: 'Signed in as'
+        },
+        vi: {
+          brand: 'Dorm Hub',
+          title: 'Đăng nhập bằng Google',
+          body: 'Cần đăng nhập Google để xem thông báo cá nhân, trạng thái check-in/check-out và email cập nhật về các yêu cầu cơ sở vật chất.',
+          button: 'Sign in with Google',
+          loading: 'Đang kiểm tra đăng nhập và trạng thái check-in…',
+          reviewSafe: 'Ở chế độ review-safe, hệ thống dùng tài khoản Google mẫu thay vì đăng nhập thật.',
+          noClient: '',
+          syncFail: 'Không thể nối dữ liệu check-in đã lưu với tài khoản Google này. Vui lòng thử lại.',
+          signedIn: 'Đã đăng nhập bằng'
+        },
+        si: {
+          brand: 'Dorm Hub',
+          title: 'Google සමඟ ලොග් වන්න',
+          body: 'පුද්ගලික දැනුම්දීම්, check-in/check-out තත්ත්වය සහ පහසුකම් ඉල්ලීම් ගැන email යාවත්කාලීන බලන්න Google ලොග් වීම අවශ්‍යයි.',
+          button: 'Sign in with Google',
+          loading: 'ලොග් වීම සහ check-in තත්ත්වය පරීක්ෂා කරමින්…',
+          reviewSafe: 'Review-safe මාදිලියේදී සැබෑ ලොග් වීම වෙනුවට නියැදි Google ගිණුමක් භාවිතා වේ.',
+          noClient: '',
+          syncFail: 'සුරක්ෂිත කර ඇති check-in තොරතුරු මෙම Google ගිණුමට සම්බන්ධ කළ නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.',
+          signedIn: 'ලොග් වී ඇත්තේ'
+        },
+        ta: {
+          brand: 'Dorm Hub',
+          title: 'Google மூலம் உள்நுழைக',
+          body: 'தனிப்பட்ட அறிவிப்புகள், check-in/check-out நிலை மற்றும் வசதி கோரிக்கைகளுக்கான email புதுப்பிப்புகளைப் பார்க்க Google உள்நுழைவு தேவை.',
+          button: 'Sign in with Google',
+          loading: 'உள்நுழைவு மற்றும் check-in நிலையை சரிபார்க்கிறது…',
+          reviewSafe: 'Review-safe முறையில் உண்மையான உள்நுழைவைப் பதிலாக மாதிரி Google கணக்கு பயன்படுத்தப்படுகிறது.',
+          noClient: '',
+          syncFail: 'சேமிக்கப்பட்ட check-in தகவலை இந்த Google கணக்குடன் இணைக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.',
+          signedIn: 'உள்நுழைந்த கணக்கு'
+        },
+        hi: {
+          brand: 'Dorm Hub',
+          title: 'Google से साइन इन करें',
+          body: 'व्यक्तिगत सूचनाएँ, check-in/check-out स्थिति और सुविधा अनुरोधों के email अपडेट देखने के लिए Google लॉगिन आवश्यक है।',
+          button: 'Sign in with Google',
+          loading: 'लॉगिन और check-in स्थिति जाँची जा रही है…',
+          reviewSafe: 'Review-safe मोड में असली लॉगिन की जगह नमूना Google खाता इस्तेमाल होता है।',
+          noClient: '',
+          syncFail: 'सहेजी गई check-in जानकारी को इस Google खाते से जोड़ नहीं सके। कृपया फिर कोशिश करें।',
+          signedIn: 'साइन-इन खाता'
+        },
+        id: {
+          brand: 'Dorm Hub',
+          title: 'Masuk dengan Google',
+          body: 'Login Google diperlukan untuk melihat pemberitahuan pribadi, status check-in/check-out, dan email pembaruan untuk permintaan fasilitas.',
+          button: 'Sign in with Google',
+          loading: 'Sedang memeriksa login dan status check-in…',
+          reviewSafe: 'Dalam mode review-safe, sistem memakai akun Google contoh, bukan login sungguhan.',
+          noClient: '',
+          syncFail: 'Data check-in yang tersimpan belum bisa dihubungkan ke akun Google ini. Silakan coba lagi.',
+          signedIn: 'Sudah login sebagai'
+        }
+      };
+
+      var params = new URLSearchParams(window.location.search);
+      var lang = params.get('lang') || 'en';
+      var preview = params.get('preview') === '1';
+      var ui = copy[lang] || copy.vi;
+      var sessionApi = window.DormResidentSession;
+      var statusBox = document.getElementById('statusBox');
+      var googleBtn = document.getElementById('googleBtn');
+      var googleButtonWrap = document.getElementById('googleButtonWrap');
+      var langSelect = document.getElementById('langSelect');
+
+      function applyLang(nextLang) {
+        lang = LANGS.indexOf(nextLang) !== -1 ? nextLang : 'en';
+        ui = copy[lang] || copy.en;
+        document.documentElement.lang = lang;
+        document.getElementById('brand').textContent = ui.brand;
+        document.getElementById('title').textContent = ui.title;
+        document.getElementById('body').textContent = ui.body;
+        document.getElementById('googleBtnText').textContent = ui.button;
+        if (langSelect) langSelect.value = lang;
+        try {
+          localStorage.setItem('dormHubLang', lang);
+        } catch (e) {}
+        var nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('lang', lang);
+        window.history.replaceState({}, '', nextUrl.pathname + nextUrl.search + nextUrl.hash);
+      }
+
+      applyLang(lang);
+
+      function showStatus(message) {
+        statusBox.textContent = message;
+        statusBox.classList.add('show');
+      }
+
+      function buildHomeUrl() {
+        var url = new URL('/', window.location.origin);
+        if (preview || REVIEW_SAFE_MODE) url.searchParams.set('preview', '1');
+        if (REVIEW_SAFE_MODE) url.searchParams.set('review', '1');
+        return url.pathname + url.search;
+      }
+
+      function buildAckUrl() {
+        var url = new URL('/dorm-acknowledgement', window.location.origin);
+        url.searchParams.set('lang', lang);
+        url.searchParams.set('login', '1');
+        if (preview || REVIEW_SAFE_MODE) url.searchParams.set('preview', '1');
+        if (REVIEW_SAFE_MODE) url.searchParams.set('review', '1');
+        return url.pathname + url.search;
+      }
+
+      async function resolveAfterLogin(profile) {
+        showStatus(ui.loading);
+        var session = sessionApi.setGoogleSession(profile);
+        try {
+          var serverAck = null;
+          if (!REVIEW_SAFE_MODE) {
+            serverAck = await sessionApi.findServerAckByEmail({
+              email: session.email,
+              config: ACK_FORM_CONFIG
+            });
+          }
+
+          if (serverAck?.building && serverAck?.room && serverAck?.name) {
+            sessionApi.setAckState({
+              building: serverAck.building,
+              room: serverAck.room,
+              name: serverAck.name,
+              lang: lang
+            });
+            sessionApi.clearFlowPrefill();
+            window.location.replace(buildHomeUrl());
+            return;
+          }
+
+          var ack = sessionApi.getAckState();
+          var prefill = {
+            building: ack?.building || '',
+            room: ack?.room || '',
+            name: profile?.name || ack?.name || '',
+            lang: lang,
+            autoCompleteChecklist: !!ack
+          };
+          sessionApi.setFlowPrefill(prefill);
+          window.location.replace(buildAckUrl());
+        } catch (error) {
+          showStatus(ui.syncFail);
+          googleBtn.disabled = false;
+          googleBtn.classList.remove('is-hidden');
+          googleButtonWrap.classList.remove('show');
+        }
+      }
+
+      function runReviewSafeLogin() {
+        googleBtn.disabled = true;
+        showStatus(ui.reviewSafe);
+        resolveAfterLogin({
+          email: AUTH_CONFIG.reviewSafeEmail || 'reviewer@dormhub.local',
+          name: 'Review Safe User'
+        });
+      }
+
+      function handleCredentialResponse(response) {
+        try {
+          var payload = sessionApi.decodeJwtPayload(response.credential);
+          resolveAfterLogin({
+            email: payload.email,
+            name: payload.name
+          });
+        } catch (error) {
+          showStatus(ui.syncFail);
+          googleBtn.disabled = false;
+        }
+      }
+
+      function setupGoogleButton() {
+        if (REVIEW_SAFE_MODE) {
+          googleBtn.addEventListener('click', runReviewSafeLogin);
+          return;
+        }
+        var clientId = String(AUTH_CONFIG.clientId || '').trim();
+        if (!clientId) {
+          googleBtn.disabled = true;
+          return;
+        }
+
+        var tries = 0;
+        (function waitGoogle() {
+          if (window.google && window.google.accounts && window.google.accounts.id) {
+            window.google.accounts.id.initialize({
+              client_id: clientId,
+              callback: handleCredentialResponse,
+              use_fedcm_for_prompt: true
+            });
+            window.google.accounts.id.renderButton(document.getElementById('googleButton'), {
+              theme: 'outline',
+              size: 'large',
+              width: 320,
+              text: 'signin_with',
+              shape: 'pill',
+              logo_alignment: 'left'
+            });
+            googleButtonWrap.classList.add('show');
+            googleBtn.classList.add('is-hidden');
+            return;
+          }
+          tries += 1;
+          if (tries < 40) window.setTimeout(waitGoogle, 150);
+        })();
+      }
+
+      var existingSession = sessionApi.getGoogleSession();
+      if (existingSession) {
+        showStatus(ui.signedIn + ': ' + existingSession.email);
+        window.setTimeout(function () {
+          resolveAfterLogin(existingSession);
+        }, 250);
+      } else {
+        setupGoogleButton();
+      }
+
+      if (langSelect) {
+        langSelect.addEventListener('change', function () {
+          applyLang(langSelect.value);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

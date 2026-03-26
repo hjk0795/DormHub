@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Dormitory Rules Check-in</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#1B2A4A;--navy-l:#2a3d66;--coral:#E8654A;
@@ -13,7 +13,7 @@
   --dis-bg:#f0ede8;--dis-text:#b5b0a8;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+body{font-family:'Plus Jakarta Sans','Noto Sans Sinhala','Noto Sans Tamil',-apple-system,BlinkMacSystemFont,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 .container{max-width:480px;margin:0 auto;min-height:100vh}
 
 /* Header */
@@ -67,7 +67,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 .chk-info .h{font-size:11px;color:var(--coral);font-weight:600;margin-top:3px;display:none}
 .chk.locked .h{display:block}
 .chk.done .h{display:none}
-.chk-open{flex-shrink:0;width:28px;height:28px;border:none;border-radius:8px;background:#f0ede8;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.chk-open{flex-shrink:0;width:28px;height:28px;border:none;border-radius:8px;background:#f0ede8;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .chk-open:hover{background:#e4e0d9}
 .chk.done .chk-open{background:var(--success);color:#fff}
 
@@ -122,6 +122,8 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
   </div>
   <div class="lang-row">
     <button class="lang-btn on" data-lang-btn="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+    <button class="lang-btn" data-lang-btn="si" onclick="setLang('si')">🇱🇰 සිංහල</button>
+    <button class="lang-btn" data-lang-btn="ta" onclick="setLang('ta')">🇱🇰 தமிழ்</button>
     <button class="lang-btn" data-lang-btn="hi" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
     <button class="lang-btn" data-lang-btn="id" onclick="setLang('id')">🇮🇩 Bahasa Indonesia</button>
     <button class="lang-btn" data-lang-btn="en" onclick="setLang('en')">🇬🇧 English</button>
@@ -256,6 +258,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 <div class="toast" id="toast"></div>
 
 <script src="./ack-config.js"></script>
+<script src="./resident-session.js"></script>
 <script>
 // ═══ Config ═══
 const URLS = {
@@ -269,6 +272,16 @@ const URLS = {
     '/recycling-guide/vi.html?embed=1',
     '/password-policy.html?lang=vi&embed=1',
   ],
+  si: [
+    '/dormitory-rules/si.html?embed=1',
+    '/recycling-guide/si.html?embed=1',
+    '/password-policy.html?lang=si&embed=1',
+  ],
+  ta: [
+    '/dormitory-rules/ta.html?embed=1',
+    '/recycling-guide/ta.html?embed=1',
+    '/password-policy.html?lang=ta&embed=1',
+  ],
   hi: [
     '/dormitory-rules/hi.html?embed=1',
     '/recycling-guide/hi.html?embed=1',
@@ -281,13 +294,20 @@ const URLS = {
   ]
 };
 const DORM_HUB_HOME_URL = 'https://dorm-hub.vercel.app/';
+const REVIEW_SAFE_MODE = new URLSearchParams(window.location.search).get('review') === '1' || /dormhub-review-safe/i.test(window.location.hostname);
+const REVIEW_SAFE_HOME_URL = `${window.location.origin}/?preview=1&review=1`;
 const ACK_FORM_CONFIG = window.DORM_ACK_FORM_CONFIG || null;
+const SESSION_API = window.DormResidentSession;
+const PAGE_PARAMS = new URLSearchParams(window.location.search);
+const PREVIEW_MODE = PAGE_PARAMS.get('preview') === '1';
 
 // Fallback "last slide index" per content (used until iframe loads and we can compute it).
 const FALLBACK_LAST_INDEX = [13, 11, 2];
 const TITLES = {
   en: ['Dormitory Rules', 'Recycling Guide', 'Password Policy'],
   vi: ['Nội quy KTX', 'Phân loại rác', 'Quy định mật khẩu'],
+  si: ['නේවාසිකාගාර නීති', 'ප්‍රතිචක්‍රීකරණ මාර්ගෝපදේශය', 'මුරපද ප්‍රතිපත්තිය'],
+  ta: ['விடுதி விதிமுறைகள்', 'மறுசுழற்சி வழிகாட்டி', 'கடவுச்சொல் கொள்கை'],
   hi: ['छात्रावास नियम', 'रीसाइक्लिंग गाइड', 'पासवर्ड नीति'],
   id: ['Peraturan Asrama', 'Panduan Daur Ulang', 'Kebijakan Kata Sandi'],
 };
@@ -325,6 +345,38 @@ const I = {
     dB:'Tòa nhà',dR:'Phòng',dN:'Tên',dD:'Ngày',
     scrBtn:'↓ Trang tiếp',okBtn:'✓ Tôi đã đọc xong',tA:'Vui lòng đọc xong cả ba tài liệu trước.',
   },
+  si: {
+    hT:'📋 නේවාසිකාගාර නීති පරීක්ෂා කිරීම',hS:'Kyungsung විශ්වවිද්‍යාලයේ බාහිර නේවාසිකාගාරය',
+    inf:'ඔබගේ තොරතුරු',bL:'ගොඩනැගිල්ල',bS:'— තෝරන්න —',rL:'කාමර අංකය',nL:'සම්පූර්ණ නම (ඉංග්‍රීසියෙන්)',
+    rvT:'ඔබ මෙය කලින් සම්පූර්ණ කර තිබේද?',rvL:'මම මෙය කලින් කළා',rvH:'ඔබ කලින් මෙය ඉදිරිපත් කර තිබේ නම්, ඉදිරියට යාමට එකම ගොඩනැගිල්ල, කාමර අංකය සහ නම ඇතුල් කරන්න.',rvB:'← ආපසු',rvF:'තහවුරු කරන්න',
+    rbL:'ගොඩනැගිල්ල',rrL:'කාමර අංකය',rnL:'සම්පූර්ණ නම (ඉංග්‍රීසියෙන්)',pN:'මෙය නේවාසිකාගාර පැමිණීම තහවුරු කිරීම සඳහා පමණක් භාවිතා වේ. ඔබ නේවාසිකාගාරයෙන් පිටවූ පසු මකා දමනු ලැබේ.',
+    cL:'තහවුරු කිරීමේ ලැයිස්තුව',
+    cN:'ඔබට මෙම ලේඛන Dorm Hub ප්‍රධාන පිටුවෙන් පසුව නැවත බලන්න පුළුවන්.',
+    c0:'මම නේවාසිකාගාර නීති සහ රෙගුලාසි කියවා ඇත.',c0h:'පළමුව කියවීමට 📖 තට්ටු කරන්න',
+    c1:'මම ප්‍රතිචක්‍රීකරණ හා කසල මාර්ගෝපදේශය කියවා ඇත.',c1h:'පළමුව කියවීමට ♻️ තට්ටු කරන්න',
+    c2:'මම දොර අගුලේ මුරපද ප්‍රතිපත්තිය කියවා ඇත.',c2h:'පළමුව කියවීමට 🔐 තට්ටු කරන්න',
+    c3:'ඉහත සියලු නීති අනුගමනය කිරීමට මම එකඟ වෙමි. උල්ලංඝනය කරන්නේ නම් දඩ ලකුණු, නේවාසිකාගාරයෙන් ඉවත් කිරීම, හෝ ස්ථිර තහනමක් ලැබිය හැකි බව මම තේරුම් ගන්නෙමි.',
+    sub:'යවන්න ✓',sT:'යවා ඇත!',sM:'සියල්ල සූදානම්!',sB:'තත්පර 3කින් ප්‍රධාන පිටුවට යමින්…',
+    tF:'කරුණාකර සියලු තොරතුරු පුරවන්න',tE:'අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.',tNF:'පෙර තහවුරු කිරීමක් හමු නොවීය. කරුණාකර ඔබගේ නම සහ කාමර අංකය පරීක්ෂා කරන්න.',tFD:'තහවුරු කිරීම හමු විය. Dorm Hub වෙත යමින්…',
+    dB:'ගොඩනැගිල්ල',dR:'කාමරය',dN:'නම',dD:'දිනය',
+    scrBtn:'↓ ඊළඟ පිටුව',okBtn:'✓ මම මෙය කියවා ඇත',tA:'කරුණාකර පළමුව ලේඛන තුනම කියවන්න.',
+  },
+  ta: {
+    hT:'📋 விடுதி விதிகள் சரிபார்ப்பு',hS:'Kyungsung பல்கலைக்கழக வெளியக விடுதி',
+    inf:'உங்கள் தகவல்',bL:'கட்டிடம்',bS:'— தேர்ந்தெடுக்கவும் —',rL:'அறை எண்',nL:'முழு பெயர் (ஆங்கிலத்தில்)',
+    rvT:'நீங்கள் இதை முன்பு முடித்துவிட்டீர்களா?',rvL:'நான் இதை முன்பே செய்துள்ளேன்',rvH:'நீங்கள் இதை முன்பு சமர்ப்பித்திருந்தால், தொடர அதே கட்டிடம், அறை எண் மற்றும் பெயரை உள்ளிடுங்கள்.',rvB:'← பின் செல்லவும்',rvF:'உறுதிப்படுத்தவும்',
+    rbL:'கட்டிடம்',rrL:'அறை எண்',rnL:'முழு பெயர் (ஆங்கிலத்தில்)',pN:'இது விடுதி வருகை உறுதிப்படுத்தலுக்காக மட்டுமே பயன்படுத்தப்படும். நீங்கள் வெளியேறிய பிறகு நீக்கப்படும்.',
+    cL:'உறுதிப்படுத்தல் பட்டியல்',
+    cN:'இந்த ஆவணங்களை பின்னர் Dorm Hub முதன்மை பக்கத்தில் மீண்டும் பார்க்கலாம்.',
+    c0:'விடுதி விதிமுறைகளை நான் வாசித்தேன்.',c0h:'முதலில் படிக்க 📖 தட்டவும்',
+    c1:'மறுசுழற்சி மற்றும் குப்பை வழிகாட்டியை நான் வாசித்தேன்.',c1h:'முதலில் படிக்க ♻️ தட்டவும்',
+    c2:'கதவு பூட்டு கடவுச்சொல் கொள்கையை நான் வாசித்தேன்.',c2h:'முதலில் படிக்க 🔐 தட்டவும்',
+    c3:'மேலுள்ள அனைத்து விதிகளையும் பின்பற்ற சம்மதிக்கிறேன். மீறல்கள் குறைப்புள்ளிகள், வெளியேற்றம் அல்லது நிரந்தர தடை ஏற்படுத்தலாம் என்பதை நான் புரிந்துகொள்கிறேன்.',
+    sub:'சமர்ப்பிக்கவும் ✓',sT:'சமர்ப்பிக்கப்பட்டது!',sM:'அனைத்தும் தயார்!',sB:'3 விநாடிகளில் முதன்மை பக்கத்திற்குத் திரும்புகிறது…',
+    tF:'அனைத்து புலங்களையும் நிரப்பவும்',tE:'தோல்வி. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.',tNF:'முன்னைய உறுதிப்படுத்தல் கிடைக்கவில்லை. தயவுசெய்து உங்கள் பெயரும் அறை எண்ணையும் சரிபார்க்கவும்.',tFD:'உறுதிப்படுத்தல் கிடைத்தது. Dorm Hub-க்கு செல்கிறது…',
+    dB:'கட்டிடம்',dR:'அறை',dN:'பெயர்',dD:'தேதி',
+    scrBtn:'↓ அடுத்த பக்கம்',okBtn:'✓ நான் இதை வாசித்தேன்',tA:'முதலில் மூன்று ஆவணங்களையும் வாசிக்கவும்.',
+  },
   hi: {
     hT:'📋 छात्रावास नियम चेक-इन',hS:'क्युंगसंग विश्वविद्यालय ऑफ-कैम्पस छात्रावास',
     inf:'आपकी जानकारी',bL:'भवन',bS:'— चुनें —',rL:'कमरा नंबर',nL:'पूरा नाम (अंग्रेज़ी में)',
@@ -359,10 +411,45 @@ const I = {
   }
 };
 
+const REVIEW_SAFE_COPY = {
+  en: {
+    banner: 'Review-safe preview: live submissions and real recovery checks are disabled in this shared build.',
+    submit: 'Review-safe preview: this submission is shown as a mock and no real data is sent.',
+    lookup: 'Review-safe preview: existing-record lookup is disabled. Continuing with local preview state only.'
+  },
+  vi: {
+    banner: 'Bản review-safe: đã tắt gửi dữ liệu thật và tra cứu xác nhận thật trong bản chia sẻ này.',
+    submit: 'Bản review-safe: đây là gửi mô phỏng, không có dữ liệu thật nào được gửi đi.',
+    lookup: 'Bản review-safe: đã tắt tra cứu xác nhận thật. Sẽ tiếp tục bằng trạng thái xem trước cục bộ.'
+  },
+  si: {
+    banner: 'Review-safe පෙරදසුන: සත්‍ය දත්ත යැවීම සහ සැබෑ තහවුරු පරීක්ෂා කිරීම මෙම හුවමාරු සංස්කරණයේ අක්‍රිය කර ඇත.',
+    submit: 'Review-safe පෙරදසුන: මෙය ආදර්ශ යැවීමක් පමණි. සැබෑ දත්ත කිසිවක් යවනු නොලැබේ.',
+    lookup: 'Review-safe පෙරදසුන: පවතින වාර්තා පරීක්ෂාව අක්‍රිය කර ඇත. ප්‍රාදේශීය පෙරදසුන් තත්වයෙන් ඉදිරියට යයි.'
+  },
+  ta: {
+    banner: 'Review-safe முன்னோட்டம்: உண்மையான சமர்ப்பிப்பும் உண்மையான சரிபார்ப்பு தேடலும் இந்த பகிரப்பட்ட build-ல் முடக்கப்பட்டுள்ளது.',
+    submit: 'Review-safe முன்னோட்டம்: இது மாதிரி சமர்ப்பிப்பு மட்டும். எந்த உண்மை தரவும் அனுப்பப்படாது.',
+    lookup: 'Review-safe முன்னோட்டம்: பழைய பதிவு தேடல் முடக்கப்பட்டுள்ளது. உள்ளூர் preview நிலை மட்டும் பயன்படுத்தி தொடர்கிறது.'
+  },
+  hi: {
+    banner: 'Review-safe प्रीव्यू: इस साझा बिल्ड में वास्तविक सबमिशन और वास्तविक रिकॉर्ड जाँच बंद है।',
+    submit: 'Review-safe प्रीव्यू: यह केवल मॉक सबमिशन है, कोई वास्तविक डेटा नहीं भेजा जाता।',
+    lookup: 'Review-safe प्रीव्यू: पुराने रिकॉर्ड की जाँच बंद है। केवल लोकल प्रीव्यू स्टेट के साथ आगे बढ़ रहे हैं।'
+  },
+  id: {
+    banner: 'Pratinjau review-safe: pengiriman nyata dan pemeriksaan data nyata dinonaktifkan di build berbagi ini.',
+    submit: 'Pratinjau review-safe: ini hanya pengiriman mock, tidak ada data nyata yang dikirim.',
+    lookup: 'Pratinjau review-safe: pencarian data lama dinonaktifkan. Melanjutkan hanya dengan status preview lokal.'
+  }
+};
+
 let lang='vi';
 try{
   const savedLang = localStorage.getItem('dormHubLang');
   if(I[savedLang]) lang = savedLang;
+  const requestedLang = PAGE_PARAMS.get('lang');
+  if(I[requestedLang]) lang = requestedLang;
 }catch(e){}
 const rd=[false,false,false];
 let curM=-1, curSlide=0;
@@ -370,6 +457,10 @@ let mLast=1;
 let mReachedEnd=false;
 let currentSections=[];
 let redirectTimer=null;
+
+function reviewSafeText(key){
+  return REVIEW_SAFE_COPY[lang]?.[key] || REVIEW_SAFE_COPY.en[key];
+}
 
 function syncModalViewport(){
   const viewportHeight = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0;
@@ -380,6 +471,8 @@ function syncModalViewport(){
 
 function getCountdownLabel(sec){
   if(lang==='vi') return `Tự động chuyển về màn hình chính sau ${sec} giây…`;
+  if(lang==='si') return `තත්පර ${sec}කින් ප්‍රධාන පිටුවට යමින්…`;
+  if(lang==='ta') return `${sec} விநாடிகளில் முதன்மை பக்கத்திற்குத் திரும்புகிறது…`;
   if(lang==='hi') return `${sec} सेकंड में मुख्य पेज पर लौट रहे हैं…`;
   if(lang==='id') return `Kembali ke halaman utama dalam ${sec} detik…`;
   return `Returning to the main page in ${sec} second${sec===1?'':'s'}…`;
@@ -426,6 +519,41 @@ function setLang(l){
   if(autoGoTxt && document.getElementById('suc').style.display==='block'){
     autoGoTxt.textContent=getCountdownLabel(3);
   }
+  const reviewSafeBanner=document.getElementById('reviewSafeBanner');
+  if(reviewSafeBanner) reviewSafeBanner.textContent=reviewSafeText('banner');
+}
+
+function initReviewSafeMode(){
+  if(!REVIEW_SAFE_MODE || document.getElementById('reviewSafeBanner')) return;
+  const banner=document.createElement('div');
+  banner.id='reviewSafeBanner';
+  banner.textContent=reviewSafeText('banner');
+  banner.style.cssText='margin:0 24px 12px;padding:12px 14px;border-radius:14px;background:#fff4d6;color:#5c4300;border:1px solid #f1d48a;font-size:13px;font-weight:700;line-height:1.5;';
+  document.querySelector('.main')?.prepend(banner);
+}
+
+function getGoogleSession(){
+  return SESSION_API?.getGoogleSession?.() || null;
+}
+
+function buildGoogleLoginUrl(){
+  const url = new URL('/google-login.html', window.location.origin);
+  url.searchParams.set('lang', 'en');
+  if(PREVIEW_MODE || REVIEW_SAFE_MODE) url.searchParams.set('preview', '1');
+  if(REVIEW_SAFE_MODE) url.searchParams.set('review', '1');
+  return url.pathname + url.search;
+}
+
+function buildHomeUrl(){
+  if(REVIEW_SAFE_MODE) return REVIEW_SAFE_HOME_URL;
+  if(PREVIEW_MODE) return `${window.location.origin}/?preview=1`;
+  return DORM_HUB_HOME_URL;
+}
+
+function ensureLoggedInBeforeCheckIn(){
+  if(REVIEW_SAFE_MODE || PREVIEW_MODE) return;
+  if(getGoogleSession()?.email) return;
+  location.replace(buildGoogleLoginUrl());
 }
 
 // ═══ Checklist ═══
@@ -535,6 +663,21 @@ async function findExisting(){
   document.getElementById('recoveryRoom').value=room;
   document.getElementById('recoveryName').value=name;
   if(!building||!room||!name){toast(I[lang].tF);return;}
+  if(REVIEW_SAFE_MODE){
+    const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
+    if(!recs.some(rec =>
+      rec.building===building &&
+      sanitizeRoom(rec.room || '')===room &&
+      normalizeName(rec.name || '')===normalizeName(name)
+    )){
+      recs.push({building, room, name, lang, reviewSafe:true});
+      localStorage.setItem('dorm_ack', JSON.stringify(recs));
+    }
+    persistAckState({building, room, name, lang});
+    toast(reviewSafeText('lookup'));
+    setTimeout(()=>{location.href=REVIEW_SAFE_HOME_URL;},700);
+    return;
+  }
   const found = await findExistingRecord({building, room, name});
   if(!found){toast(I[lang].tNF);return;}
   const recs = JSON.parse(localStorage.getItem('dorm_ack')||'[]');
@@ -546,9 +689,23 @@ async function findExisting(){
     recs.push({building, room, name, lang});
     localStorage.setItem('dorm_ack', JSON.stringify(recs));
   }
+  const googleSession = getGoogleSession();
+  if(googleSession?.email){
+    try{
+      await SESSION_API.syncAckRecordWithEmail({
+        record:{building, room, name, lang},
+        email:googleSession.email,
+        config:ACK_FORM_CONFIG,
+        reviewSafe:REVIEW_SAFE_MODE
+      });
+    }catch(e){
+      toast(I[lang].tE);
+      return;
+    }
+  }
   persistAckState({building, room, name, lang});
   toast(I[lang].tFD);
-  setTimeout(()=>{location.href=DORM_HUB_HOME_URL;},500);
+  setTimeout(()=>{location.href=buildHomeUrl();},500);
 }
 
 async function findExistingRecord({building, room, name}){
@@ -752,7 +909,34 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('scroll', syncModalViewport);
 }
 syncModalViewport();
+ensureLoggedInBeforeCheckIn();
 setLang(lang);
+initReviewSafeMode();
+
+function setChecklistPrefilled(){
+  [0,1,2].forEach(i => unlock(i));
+  const agree=document.getElementById('cb3');
+  const agreeItem=document.getElementById('ci3');
+  if(agree){
+    agree.checked=true;
+    agree.disabled=true;
+  }
+  if(agreeItem) agreeItem.classList.add('done');
+}
+
+function applyGooglePrefill(){
+  const prefill = SESSION_API?.getFlowPrefill?.();
+  if(!prefill) return;
+  if(prefill.lang && I[prefill.lang]) setLang(prefill.lang);
+  if(prefill.building) document.getElementById('building').value = prefill.building;
+  if(prefill.room) document.getElementById('room').value = sanitizeRoom(prefill.room);
+  if(prefill.name) document.getElementById('fname').value = toDisplayName(prefill.name);
+  if(prefill.autoCompleteChecklist) setChecklistPrefilled();
+  val();
+  SESSION_API?.clearFlowPrefill?.();
+}
+
+applyGooglePrefill();
 
 // ═══ Validate ═══
 function val(){
@@ -769,14 +953,21 @@ async function doSubmit(){
   const building=document.getElementById('building').value;
   const room=sanitizeRoom(document.getElementById('room').value);
   const name=toDisplayName(document.getElementById('fname').value);
+  const googleSession = getGoogleSession();
   document.getElementById('room').value=room;
   document.getElementById('fname').value=name;
   if(!building||!room||!name){toast(I[lang].tF);return;}
+  if(!REVIEW_SAFE_MODE && !PREVIEW_MODE && !googleSession?.email){
+    location.replace(buildGoogleLoginUrl());
+    return;
+  }
   const date=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
   document.getElementById('ld').classList.add('on');
   try{
-    const rec={building,room,name,lang,date};
-    await submitToGoogleForm(rec);
+    const rec={building,room,name,lang,date,email:googleSession?.email || ''};
+    if(!REVIEW_SAFE_MODE){
+      await submitToGoogleForm(rec);
+    }
     const recs=JSON.parse(localStorage.getItem('dorm_ack')||'[]');
     recs.push(rec);localStorage.setItem('dorm_ack',JSON.stringify(recs));
     persistAckState(rec);
@@ -789,8 +980,10 @@ async function doSubmit(){
       <div class="suc-r"><span class="l">${t.dB}</span><span class="v">${building}</span></div>
       <div class="suc-r"><span class="l">${t.dR}</span><span class="v">${room}</span></div>
       <div class="suc-r"><span class="l">${t.dN}</span><span class="v">${name}</span></div>
-      <div class="suc-r"><span class="l">${t.dD}</span><span class="v">${date}</span></div>`;
+      <div class="suc-r"><span class="l">${t.dD}</span><span class="v">${date}</span></div>
+      ${REVIEW_SAFE_MODE ? `<div class="suc-r"><span class="l">Mode</span><span class="v">Review-safe mock</span></div>` : ''}`;
     document.getElementById('suc').style.display='block';
+    if(REVIEW_SAFE_MODE) toast(reviewSafeText('submit'));
     startRedirectCountdown();
     window.scrollTo(0,0);
   }catch(e){
@@ -800,26 +993,11 @@ async function doSubmit(){
 }
 
 async function submitToGoogleForm(rec){
-  const cfg = ACK_FORM_CONFIG;
-  if(!cfg || !cfg.formUrl || !cfg.entries) throw new Error('missing_form_config');
-  const submitUrl = String(cfg.formUrl)
-    .replace('/viewform?usp=preview','/formResponse')
-    .replace('/viewform','/formResponse');
-  const normalizedName = normalizeName(rec.name);
-  const body = new URLSearchParams();
-  if(cfg.entries.building) body.set(cfg.entries.building, rec.building);
-  if(cfg.entries.room) body.set(cfg.entries.room, rec.room);
-  if(cfg.entries.nameOriginal) body.set(cfg.entries.nameOriginal, rec.name);
-  if(cfg.entries.nameNormalized) body.set(cfg.entries.nameNormalized, normalizedName);
-  if(!cfg.entries.nameOriginal && !cfg.entries.nameNormalized && cfg.entries.name){
-    body.set(cfg.entries.name, rec.name);
-  }
-  if(cfg.entries.lang) body.set(cfg.entries.lang, rec.lang);
-  await fetch(submitUrl,{
-    method:'POST',
-    mode:'no-cors',
-    headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-    body:body.toString()
+  if(!rec.email) throw new Error('missing_google_email');
+  await SESSION_API.submitAckRecordToServer({
+    record: rec,
+    email: rec.email,
+    config: ACK_FORM_CONFIG
   });
 }
 
@@ -833,7 +1011,7 @@ function startRedirectCountdown(){
     if(left <= 0){
       clearInterval(redirectTimer);
       redirectTimer = null;
-      location.href = DORM_HUB_HOME_URL;
+      location.href = buildHomeUrl();
       return;
     }
     autoGoTxt.textContent=getCountdownLabel(left);
