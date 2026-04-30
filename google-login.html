@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dorm Hub 로그인 안내</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+Sinhala:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&family=Roboto:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f5f2ed;
+      --panel:#ffffff;
+      --text:#132238;
+      --muted:#5f6f84;
+      --stroke:rgba(19,34,56,.12);
+      --accent:#1b2a4a;
+      --accent-soft:rgba(27,42,74,.08);
+      --shadow:0 18px 48px rgba(19,34,56,.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Be Vietnam Pro","Noto Sans KR","Noto Sans Sinhala","Noto Sans Tamil",system-ui,sans-serif;
+      background:linear-gradient(180deg,#faf8f4 0%,#f2ede6 100%);
+      color:var(--text);
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+    .shell{
+      width:min(100%,560px);
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--stroke);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:22px 22px 24px;
+      backdrop-filter:blur(12px);
+    }
+    .head-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      color:var(--accent);
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .lang-picker{
+      position:relative;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .lang-select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      border:1px solid rgba(19,34,56,.16);
+      background:rgba(255,255,255,.72);
+      border-radius:999px;
+      padding:10px 40px 10px 12px;
+      font-weight:700;
+      color:rgba(19,34,56,.9);
+      box-shadow:0 10px 18px rgba(19,34,56,.1);
+      cursor:pointer;
+      line-height:1;
+      min-width:148px;
+    }
+    .lang-picker::after{
+      content:"";
+      position:absolute;
+      right:14px;
+      bottom:15px;
+      width:8px;
+      height:8px;
+      border-right:2px solid rgba(19,34,56,.45);
+      border-bottom:2px solid rgba(19,34,56,.45);
+      transform:rotate(45deg);
+      pointer-events:none;
+    }
+    .content{
+      display:grid;
+      justify-items:center;
+      text-align:center;
+      padding:34px 0 6px;
+    }
+    h1{margin:0 0 12px;font-size:30px;line-height:1.1;letter-spacing:-.03em}
+    p{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+    .body-copy{
+      max-width:420px;
+      margin:14px auto 0;
+    }
+    .actions{
+      display:grid;
+      gap:10px;
+      margin-top:22px;
+      justify-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      min-height:52px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:500;
+      border:1px solid #747775;
+      font-family:"Roboto","Be Vietnam Pro","Noto Sans KR","Noto Sans Sinhala","Noto Sans Tamil",sans-serif;
+      cursor:pointer;
+      padding:0 16px;
+      font-size:14px;
+      line-height:20px;
+      width:min(100%,320px);
+    }
+    .btn.primary{
+      background:#ffffff;
+      color:#1f1f1f;
+    }
+    .google-g{
+      width:20px;
+      height:20px;
+      flex-shrink:0;
+    }
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+    .btn.is-hidden{
+      display:none;
+    }
+    .status{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(27,42,74,.06);
+      color:var(--accent);
+      font-size:13px;
+      line-height:1.5;
+      display:none;
+    }
+    .status.show{display:block}
+    .helper{
+      font-size:12px;
+      text-align:center;
+      margin-top:14px;
+    }
+    .gsi-wrap{
+      display:none;
+      justify-content:center;
+      padding:8px 0 4px;
+      width:min(100%,320px);
+    }
+    .gsi-wrap.show{display:flex}
+    .privacy-copy{
+      max-width:380px;
+      margin:10px auto 0;
+      font-size:11px;
+      line-height:1.55;
+      color:rgba(95,111,132,.95);
+      text-align:center;
+    }
+    .privacy-copy a{
+      color:var(--accent);
+      font-weight:700;
+      text-decoration:underline;
+      text-underline-offset:2px;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="head-row">
+      <div class="brand" id="brand">Dorm Hub</div>
+      <div class="lang-picker" aria-hidden="true"></div>
+    </div>
+    <div class="content">
+      <h1 id="title">Dorm Hub 로그인</h1>
+      <p class="body-copy" id="body">Google 로그인 후 개인 공지, 점검 일정, 입·퇴사 상태, 시설 관련 문의 안내를 확인할 수 있습니다.</p>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="googleBtn" type="button">
+        <svg class="google-g" viewBox="0 0 18 18" aria-hidden="true">
+          <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62Z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.82.86-3.06.86-2.35 0-4.33-1.58-5.04-3.7H.96v2.32A9 9 0 0 0 9 18Z"/>
+          <path fill="#FBBC05" d="M3.96 10.72A5.41 5.41 0 0 1 3.68 9c0-.6.1-1.18.28-1.72V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l3-2.32Z"/>
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.36l2.58-2.58C13.46.92 11.42 0 9 0A9 9 0 0 0 .96 4.96l3 2.32c.7-2.12 2.68-3.7 5.04-3.7Z"/>
+        </svg>
+        <span id="googleBtnText">Google로 로그인</span>
+      </button>
+      <div class="gsi-wrap" id="googleButtonWrap">
+        <div id="googleButton"></div>
+      </div>
+    </div>
+    <p class="privacy-copy" id="privacyCopy">계속 진행하거나 “Google로 로그인”을 선택하면, 기숙사 관련 안내를 위해 이름과 이메일이 사용됩니다. 자세한 내용은 <a href="/privacy-policy.html" id="privacyLink">DormHub 개인정보 처리안내</a>를 확인해 주세요.</p>
+    <div class="status" id="statusBox"></div>
+  </main>
+
+  <script src="./ack-config.js"></script>
+  <script src="./resident-session.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function () {
+      var homeUrl = new URL('/', window.location.origin);
+      if (new URLSearchParams(window.location.search).get('preview') === '1') {
+        homeUrl.searchParams.set('preview', '1');
+      }
+      if (new URLSearchParams(window.location.search).get('review') === '1') {
+        homeUrl.searchParams.set('review', '1');
+      }
+      window.location.replace(homeUrl.pathname + homeUrl.search + homeUrl.hash);
+      return;
+
+      var REVIEW_SAFE_MODE = new URLSearchParams(window.location.search).get('review') === '1' || /dormhub-review-safe/i.test(window.location.hostname);
+      var AUTH_CONFIG = window.DORM_GOOGLE_AUTH_CONFIG || {};
+      var ACK_FORM_CONFIG = window.DORM_ACK_FORM_CONFIG || null;
+      var copy = {
+        ko: {
+          brand: 'Dorm Hub',
+          title: 'Dorm Hub 로그인',
+          body: 'Google 로그인 후 개인 공지, 점검 일정, 입·퇴사 상태, 시설 관련 문의 안내를 확인할 수 있습니다.',
+          button: 'Google로 로그인',
+          privacy: '계속 진행하거나 “Google로 로그인”을 선택하면, 기숙사 관련 안내를 위해 이름과 이메일이 사용됩니다. 자세한 내용은 ',
+          privacyLink: 'DormHub 개인정보 처리안내',
+          loading: '로그인 상태와 기숙사 체크인 상태를 확인하고 있습니다…',
+          reviewSafe: '리뷰용 화면에서는 실제 Google 로그인이 아닌 샘플 계정을 사용합니다.',
+          noClient: '',
+          syncFail: '저장된 체크인 정보를 현재 Google 계정과 연결하지 못했습니다. 다시 시도해 주세요.',
+          signedIn: '로그인 계정'
+        },
+        en: {
+          brand: 'Dorm Hub',
+          title: 'Sign in to Dorm Hub',
+          body: 'Sign in with Google to access your room-specific notices, inspection schedule, move-in/move-out status, and support updates.',
+          button: 'Sign in with Google',
+          privacy: 'By continuing or selecting “Sign in with Google,” your name and email will be used for dorm-related communication. For more details, please refer to the ',
+          privacyLink: 'DormHub Privacy Policy',
+          loading: 'Checking your login and dorm check-in status…',
+          reviewSafe: 'Review-safe mode uses a sample Google account instead of a real login.',
+          noClient: '',
+          syncFail: 'Could not connect your saved dorm check-in to this Google account. Please try again.',
+          signedIn: 'Signed in as'
+        },
+        vi: {
+          brand: 'Dorm Hub',
+          title: 'Đăng nhập bằng Google',
+          body: 'Cần đăng nhập Google để xem thông báo cá nhân, trạng thái check-in/check-out và email cập nhật về các yêu cầu cơ sở vật chất.',
+          button: 'Sign in with Google',
+          privacy: 'Khi tiếp tục hoặc chọn “Sign in with Google”, tên và email của bạn sẽ được dùng cho việc liên lạc liên quan đến ký túc xá. Xem thêm tại ',
+          privacyLink: 'Chính sách quyền riêng tư của DormHub',
+          loading: 'Đang kiểm tra đăng nhập và trạng thái check-in…',
+          reviewSafe: 'Ở chế độ review-safe, hệ thống dùng tài khoản Google mẫu thay vì đăng nhập thật.',
+          noClient: '',
+          syncFail: 'Không thể nối dữ liệu check-in đã lưu với tài khoản Google này. Vui lòng thử lại.',
+          signedIn: 'Đã đăng nhập bằng'
+        },
+        si: {
+          brand: 'Dorm Hub',
+          title: 'Google සමඟ ලොග් වන්න',
+          body: 'පුද්ගලික දැනුම්දීම්, check-in/check-out තත්ත්වය සහ පහසුකම් ඉල්ලීම් ගැන email යාවත්කාලීන බලන්න Google ලොග් වීම අවශ්‍යයි.',
+          button: 'Sign in with Google',
+          privacy: 'ඉදිරියට යාම හෝ “Sign in with Google” තේරීම මගින්, නේවාසිකාගාරයට අදාළ සන්නිවේදනය සඳහා ඔබගේ නම සහ email භාවිතා කරනු ලැබේ. වැඩි විස්තර සඳහා ',
+          privacyLink: 'DormHub රහස්‍යතා නිවේදනය',
+          loading: 'ලොග් වීම සහ check-in තත්ත්වය පරීක්ෂා කරමින්…',
+          reviewSafe: 'Review-safe මාදිලියේදී සැබෑ ලොග් වීම වෙනුවට නියැදි Google ගිණුමක් භාවිතා වේ.',
+          noClient: '',
+          syncFail: 'සුරක්ෂිත කර ඇති check-in තොරතුරු මෙම Google ගිණුමට සම්බන්ධ කළ නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.',
+          signedIn: 'ලොග් වී ඇත්තේ'
+        },
+        ta: {
+          brand: 'Dorm Hub',
+          title: 'Google மூலம் உள்நுழைக',
+          body: 'தனிப்பட்ட அறிவிப்புகள், check-in/check-out நிலை மற்றும் வசதி கோரிக்கைகளுக்கான email புதுப்பிப்புகளைப் பார்க்க Google உள்நுழைவு தேவை.',
+          button: 'Sign in with Google',
+          privacy: 'தொடர்வதோ அல்லது “Sign in with Google” என்பதைத் தேர்வதோ மூலம், விடுதி தொடர்பான தகவல் தொடர்புக்காக உங்கள் பெயரும் email-உமும் பயன்படுத்தப்படும். மேலும் விவரங்களுக்கு ',
+          privacyLink: 'DormHub தனியுரிமை அறிவிப்பு',
+          loading: 'உள்நுழைவு மற்றும் check-in நிலையை சரிபார்க்கிறது…',
+          reviewSafe: 'Review-safe முறையில் உண்மையான உள்நுழைவைப் பதிலாக மாதிரி Google கணக்கு பயன்படுத்தப்படுகிறது.',
+          noClient: '',
+          syncFail: 'சேமிக்கப்பட்ட check-in தகவலை இந்த Google கணக்குடன் இணைக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.',
+          signedIn: 'உள்நுழைந்த கணக்கு'
+        },
+        hi: {
+          brand: 'Dorm Hub',
+          title: 'Google से साइन इन करें',
+          body: 'व्यक्तिगत सूचनाएँ, check-in/check-out स्थिति और सुविधा अनुरोधों के email अपडेट देखने के लिए Google लॉगिन आवश्यक है।',
+          button: 'Sign in with Google',
+          privacy: 'आगे बढ़ने या “Sign in with Google” चुनने पर आपका नाम और email छात्रावास से संबंधित संचार के लिए उपयोग किया जाएगा। अधिक जानकारी के लिए ',
+          privacyLink: 'DormHub गोपनीयता सूचना',
+          loading: 'लॉगिन और check-in स्थिति जाँची जा रही है…',
+          reviewSafe: 'Review-safe मोड में असली लॉगिन की जगह नमूना Google खाता इस्तेमाल होता है।',
+          noClient: '',
+          syncFail: 'सहेजी गई check-in जानकारी को इस Google खाते से जोड़ नहीं सके। कृपया फिर कोशिश करें।',
+          signedIn: 'साइन-इन खाता'
+        },
+        id: {
+          brand: 'Dorm Hub',
+          title: 'Masuk dengan Google',
+          body: 'Login Google diperlukan untuk melihat pemberitahuan pribadi, status check-in/check-out, dan email pembaruan untuk permintaan fasilitas.',
+          button: 'Sign in with Google',
+          privacy: 'Dengan melanjutkan atau memilih “Sign in with Google”, nama dan email Anda akan digunakan untuk komunikasi terkait asrama. Untuk detail lebih lanjut, lihat ',
+          privacyLink: 'Kebijakan Privasi DormHub',
+          loading: 'Sedang memeriksa login dan status check-in…',
+          reviewSafe: 'Dalam mode review-safe, sistem memakai akun Google contoh, bukan login sungguhan.',
+          noClient: '',
+          syncFail: 'Data check-in yang tersimpan belum bisa dihubungkan ke akun Google ini. Silakan coba lagi.',
+          signedIn: 'Sudah login sebagai'
+        }
+      };
+
+      var params = new URLSearchParams(window.location.search);
+      var lang = 'ko';
+      var preview = params.get('preview') === '1';
+      var ui = copy[lang] || copy.vi;
+      var sessionApi = window.DormResidentSession;
+      var statusBox = document.getElementById('statusBox');
+      var googleBtn = document.getElementById('googleBtn');
+      var googleButtonWrap = document.getElementById('googleButtonWrap');
+      var privacyCopy = document.getElementById('privacyCopy');
+      var privacyLink = document.getElementById('privacyLink');
+
+      function applyLang(nextLang) {
+        lang = 'ko';
+        ui = copy.ko;
+        document.documentElement.lang = lang;
+        document.getElementById('brand').textContent = ui.brand;
+        document.getElementById('title').textContent = ui.title;
+        document.getElementById('body').textContent = ui.body;
+        document.getElementById('googleBtnText').textContent = ui.button;
+        if (privacyCopy && privacyLink) {
+          privacyCopy.innerHTML = '';
+          privacyCopy.append(document.createTextNode(ui.privacy || ''));
+          privacyLink.textContent = ui.privacyLink || 'DormHub Privacy Policy';
+          privacyCopy.appendChild(privacyLink);
+          privacyCopy.append(document.createTextNode('를 확인해 주세요.'));
+        }
+        try {
+          localStorage.setItem('dormHubLang', 'ko');
+        } catch (e) {}
+        var nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('lang', 'ko');
+        window.history.replaceState({}, '', nextUrl.pathname + nextUrl.search + nextUrl.hash);
+      }
+
+      applyLang(lang);
+
+      function showStatus(message) {
+        statusBox.textContent = message;
+        statusBox.classList.add('show');
+      }
+
+      function buildHomeUrl() {
+        var url = new URL('/', window.location.origin);
+        if (preview || REVIEW_SAFE_MODE) url.searchParams.set('preview', '1');
+        if (REVIEW_SAFE_MODE) url.searchParams.set('review', '1');
+        return url.pathname + url.search;
+      }
+
+      function buildAckUrl() {
+        var url = new URL('/dorm-acknowledgement', window.location.origin);
+        url.searchParams.set('lang', lang);
+        url.searchParams.set('login', '1');
+        if (preview || REVIEW_SAFE_MODE) url.searchParams.set('preview', '1');
+        if (REVIEW_SAFE_MODE) url.searchParams.set('review', '1');
+        return url.pathname + url.search;
+      }
+
+      async function resolveAfterLogin(profile) {
+        showStatus(ui.loading);
+        var session = sessionApi.setGoogleSession(profile);
+        try {
+          var serverAck = null;
+          if (!REVIEW_SAFE_MODE) {
+            serverAck = await sessionApi.findServerAckByEmail({
+              email: session.email,
+              config: ACK_FORM_CONFIG
+            });
+          }
+
+          if (serverAck?.building && serverAck?.room && serverAck?.name) {
+            sessionApi.setAckState({
+              building: serverAck.building,
+              room: serverAck.room,
+              name: serverAck.name,
+              lang: lang
+            });
+            sessionApi.clearFlowPrefill();
+            window.location.replace(buildHomeUrl());
+            return;
+          }
+
+          var ack = sessionApi.getAckState();
+          var prefill = {
+            building: ack?.building || '',
+            room: ack?.room || '',
+            name: profile?.name || ack?.name || '',
+            lang: lang,
+            autoCompleteChecklist: !!ack
+          };
+          sessionApi.setFlowPrefill(prefill);
+          window.location.replace(buildAckUrl());
+        } catch (error) {
+          showStatus(ui.syncFail);
+          googleBtn.disabled = false;
+          googleBtn.classList.remove('is-hidden');
+          googleButtonWrap.classList.remove('show');
+        }
+      }
+
+      function runReviewSafeLogin() {
+        googleBtn.disabled = true;
+        showStatus(ui.reviewSafe);
+        resolveAfterLogin({
+          email: AUTH_CONFIG.reviewSafeEmail || 'reviewer@dormhub.local',
+          name: 'Review Safe User'
+        });
+      }
+
+      function handleCredentialResponse(response) {
+        try {
+          var payload = sessionApi.decodeJwtPayload(response.credential);
+          resolveAfterLogin({
+            email: payload.email,
+            name: payload.name
+          });
+        } catch (error) {
+          showStatus(ui.syncFail);
+          googleBtn.disabled = false;
+        }
+      }
+
+      function setupGoogleButton() {
+        if (REVIEW_SAFE_MODE) {
+          googleBtn.addEventListener('click', runReviewSafeLogin);
+          return;
+        }
+        googleBtn.disabled = true;
+        return;
+
+        var tries = 0;
+        (function waitGoogle() {
+          if (window.google && window.google.accounts && window.google.accounts.id) {
+            window.google.accounts.id.initialize({
+              client_id: clientId,
+              callback: handleCredentialResponse,
+              use_fedcm_for_prompt: true
+            });
+            window.google.accounts.id.renderButton(document.getElementById('googleButton'), {
+              theme: 'outline',
+              size: 'large',
+              width: 320,
+              text: 'signin_with',
+              shape: 'pill',
+              logo_alignment: 'left'
+            });
+            googleButtonWrap.classList.add('show');
+            googleBtn.classList.add('is-hidden');
+            return;
+          }
+          tries += 1;
+          if (tries < 40) window.setTimeout(waitGoogle, 150);
+        })();
+      }
+
+      var existingSession = sessionApi.getGoogleSession();
+      if (existingSession) {
+        showStatus(ui.signedIn + ': ' + existingSession.email);
+        window.setTimeout(function () {
+          resolveAfterLogin(existingSession);
+        }, 250);
+      } else {
+        setupGoogleButton();
+      }
+    })();
+  </script>
+</body>
+</html>

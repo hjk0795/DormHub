@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+Sinhala:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -48,7 +48,7 @@
           radial-gradient(900px 520px at 85% 0%, rgba(45, 212, 191, 0.18), transparent 52%),
           radial-gradient(900px 520px at 70% 90%, rgba(251, 113, 133, 0.14), transparent 55%),
           linear-gradient(180deg, #fff7ed, var(--paper));
-        font-family: "Be Vietnam Pro", "Noto Sans KR", system-ui, -apple-system, Segoe UI, sans-serif;
+        font-family: "Be Vietnam Pro", "Noto Sans KR", "Noto Sans Sinhala", "Noto Sans Tamil", system-ui, -apple-system, Segoe UI, sans-serif;
         letter-spacing: -0.01em;
       }
 
@@ -201,25 +201,49 @@
 
       [data-lang="vi"] .lang-en,
       [data-lang="vi"] .lang-hi,
-      [data-lang="vi"] .lang-id {
+      [data-lang="vi"] .lang-id,
+      [data-lang="vi"] .lang-si,
+      [data-lang="vi"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="en"] .lang-vi,
       [data-lang="en"] .lang-hi,
-      [data-lang="en"] .lang-id {
+      [data-lang="en"] .lang-id,
+      [data-lang="en"] .lang-si,
+      [data-lang="en"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="hi"] .lang-vi,
       [data-lang="hi"] .lang-en,
-      [data-lang="hi"] .lang-id {
+      [data-lang="hi"] .lang-id,
+      [data-lang="hi"] .lang-si,
+      [data-lang="hi"] .lang-ta {
         display: none !important;
       }
 
       [data-lang="id"] .lang-vi,
       [data-lang="id"] .lang-en,
-      [data-lang="id"] .lang-hi {
+      [data-lang="id"] .lang-hi,
+      [data-lang="id"] .lang-si,
+      [data-lang="id"] .lang-ta {
+        display: none !important;
+      }
+
+      [data-lang="si"] .lang-vi,
+      [data-lang="si"] .lang-en,
+      [data-lang="si"] .lang-hi,
+      [data-lang="si"] .lang-id,
+      [data-lang="si"] .lang-ta {
+        display: none !important;
+      }
+
+      [data-lang="ta"] .lang-vi,
+      [data-lang="ta"] .lang-en,
+      [data-lang="ta"] .lang-hi,
+      [data-lang="ta"] .lang-id,
+      [data-lang="ta"] .lang-si {
         display: none !important;
       }
 
@@ -292,6 +316,105 @@
         letter-spacing: -0.02em;
       }
 
+      .title span {
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .group-copy {
+        padding: 2px 2px 6px;
+      }
+
+      .group-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        background: rgba(255, 255, 255, 0.82);
+        color: rgba(16, 24, 40, 0.86);
+      }
+
+      .group-tag.secure {
+        border-color: rgba(147, 51, 234, 0.22);
+        background: rgba(124, 58, 237, 0.08);
+        color: #5b21b6;
+      }
+
+      .group-copy p {
+        margin: 8px 2px 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .card.locked-card {
+        border-color: rgba(124, 58, 237, 0.18);
+        background: linear-gradient(180deg, rgba(252, 251, 255, 0.94), rgba(245, 243, 255, 0.8));
+      }
+
+      .card.locked-card::after {
+        background: radial-gradient(700px 180px at 35% 0%, rgba(124, 58, 237, 0.16), transparent 60%);
+      }
+
+      .lock-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(124, 58, 237, 0.18);
+        color: #5b21b6;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .notice-board {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(16, 24, 40, 0.12);
+      }
+
+      .notice-board h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .notice-board p {
+        margin: 0 0 12px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .notice-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .notice-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(16, 24, 40, 0.12);
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .notice-item b {
+        min-width: 26px;
+        color: rgba(16, 24, 40, 0.92);
+      }
+
       .pillrow {
         margin-top: 14px;
         display: flex;
@@ -322,6 +445,7 @@
         margin-top: 16px;
         padding-top: 16px;
         border-top: 1px solid rgba(16, 24, 40, 0.12);
+        text-align: left;
       }
 
       .faq h2 {
@@ -349,6 +473,29 @@
         display: flex;
         align-items: baseline;
         gap: 10px;
+        justify-content: flex-start;
+        text-align: left;
+        position: relative;
+        padding-right: 24px;
+      }
+
+      summary::after {
+        content: "";
+        position: absolute;
+        right: 2px;
+        top: 50%;
+        width: 9px;
+        height: 9px;
+        flex-shrink: 0;
+        border-right: 2px solid rgba(16, 24, 40, 0.42);
+        border-bottom: 2px solid rgba(16, 24, 40, 0.42);
+        transform: translateY(-60%) rotate(45deg);
+        transition: transform 0.18s ease, border-color 0.18s ease;
+      }
+
+      details[open] summary::after {
+        transform: translateY(-40%) rotate(225deg);
+        border-color: rgba(16, 24, 40, 0.62);
       }
 
       summary::-webkit-details-marker {
@@ -425,16 +572,22 @@
             <h1 class="lang-vi">🏠 Hướng dẫn KTX tất cả trong một</h1>
             <h1 class="lang-hi">🏠 छात्रावास की पूरी गाइड</h1>
             <h1 class="lang-id">🏠 Panduan Lengkap Asrama</h1>
+            <h1 class="lang-si">🏠 නේවාසිකාගාර සම්පූර්ණ මාර්ගෝපදේශය</h1>
+            <h1 class="lang-ta">🏠 விடுதி முழுமையான வழிகாட்டி</h1>
             <p class="subtitle lang-en">Check all the information you need for dorm life in one place!</p>
             <p class="subtitle lang-vi">Xem tất cả thông tin cần thiết cho cuộc sống KTX tại một nơi!</p>
             <p class="subtitle lang-hi">छात्रावास जीवन के लिए ज़रूरी सारी जानकारी एक ही जगह देखें!</p>
             <p class="subtitle lang-id">Lihat semua informasi penting untuk kehidupan asrama di satu tempat!</p>
+            <p class="subtitle lang-si">නේවාසිකාගාර ජීවිතයට අවශ්‍ය සියලු තොරතුරු එක තැනකින් බලන්න!</p>
+            <p class="subtitle lang-ta">விடுதி வாழ்க்கைக்கு தேவையான அனைத்து தகவல்களையும் ஒரே இடத்தில் பாருங்கள்!</p>
           </div>
 
           <div class="lang-picker">
             <label class="lang-label" for="langSelect"><span class="globe" aria-hidden="true"></span> <span id="langLabelText">Language</span></label>
             <select id="langSelect" class="lang-select" aria-label="Language selector">
               <option value="vi">Tiếng Việt</option>
+              <option value="si">සිංහල</option>
+              <option value="ta">தமிழ்</option>
               <option value="hi">हिन्दी</option>
               <option value="id">Bahasa Indonesia</option>
               <option value="en">English</option>
@@ -446,7 +599,7 @@
       <div class="panel">
       <section id="links" class="lang-grid" aria-label="Main links">
         <div class="lang-col lang-en" aria-label="English links">
-          <a class="card" href="/recycling-guide/hi">
+          <a class="card" href="/recycling-guide/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -468,7 +621,7 @@
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/hi">
+          <a class="card" href="/dormitory-rules/en">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -491,13 +644,7 @@
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility Issue Report - English Google Form"
-          >
+          <div class="card">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g5)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -516,8 +663,9 @@
             </div>
             <div class="title">
               <strong>Facility Issue Report &amp; General Inquiry</strong>
+              <span>Please email <b>hjk0795@ks.ac.kr</b> with your room number, name, and inquiry details.</span>
             </div>
-          </a>
+          </div>
         </div>
 
         <div class="lang-col lang-vi" aria-label="Vietnamese links">
@@ -565,13 +713,7 @@
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/83SrD4kbLB3yengP7"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Vietnamese Google Form"
-          >
+          <div class="card">
             <div class="icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
@@ -590,16 +732,155 @@
             </div>
             <div class="title">
               <strong>Báo cáo sự cố cơ sở vật chất &amp; Liên hệ chung</strong>
+              <span>Vui lòng gửi email đến <b>hjk0795@ks.ac.kr</b> kèm số phòng, họ tên và nội dung cần hỗ trợ.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lang-col lang-si" aria-label="Sinhala links">
+          <a class="card" href="/recycling-guide/si">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gsi1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gsi1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>ප්‍රතිචක්‍රීකරණ හා කසල මාර්ගෝපදේශය</strong>
             </div>
           </a>
+
+          <a class="card" href="/dormitory-rules/si">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gsi2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gsi2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>නේවාසිකාගාර නීති සහ රෙගුලාසි</strong>
+            </div>
+          </a>
+
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gsi3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gsi3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 22a7 7 0 1 0-7-7" />
+                <path d="M9.5 14.5 7 17" />
+                <path d="M14 6l4 4" />
+                <path d="M11 9l4 4" />
+                <path d="M5 19l4-4" />
+                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>පහසුකම් ගැටලු වාර්තාව හා සාමාන්‍ය විමසීම්</strong>
+              <span>ඔබගේ කාමර අංකය, නම සහ විස්තර සමඟ <b>hjk0795@ks.ac.kr</b> වෙත email එකක් යවන්න.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lang-col lang-ta" aria-label="Tamil links">
+          <a class="card" href="/recycling-guide/ta">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gta1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gta1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M7 19a2 2 0 0 1-2-2V7" />
+                <path d="M17 5a2 2 0 0 1 2 2v10" />
+                <path d="M5 7h14" />
+                <path d="M5 17h14" />
+                <path d="M12 9v6" />
+                <path d="M9 12h6" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>மறுசுழற்சி மற்றும் குப்பை வழிகாட்டி</strong>
+            </div>
+          </a>
+
+          <a class="card" href="/dormitory-rules/ta">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gta2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gta2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#60a5fa" />
+                    <stop offset="1" stop-color="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h10" />
+                <path d="M16 17l2 2 2-2" />
+                <path d="M18 19V5" />
+                <path d="M6 5h8" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>விடுதி விதிமுறைகள்</strong>
+            </div>
+          </a>
+
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gta3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                  <linearGradient id="gta3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="1" stop-color="#2dd4bf" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 22a7 7 0 1 0-7-7" />
+                <path d="M9.5 14.5 7 17" />
+                <path d="M14 6l4 4" />
+                <path d="M11 9l4 4" />
+                <path d="M5 19l4-4" />
+                <path d="M16 2l6 6-8 8H8V10l8-8Z" />
+              </svg>
+            </div>
+            <div class="title">
+              <strong>வசதி பிரச்சினை அறிக்கை மற்றும் பொதுவான விசாரணைகள்</strong>
+              <span>உங்கள் அறை எண், பெயர் மற்றும் விவரத்துடன் <b>hjk0795@ks.ac.kr</b> க்கு email அனுப்பவும்.</span>
+            </div>
+          </div>
         </div>
 
         <div class="lang-col lang-hi" aria-label="Hindi links">
-          <a class="card" href="/recycling-guide/id">
+          <a class="card" href="/recycling-guide/hi">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#ghi1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="ghi1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -617,11 +898,11 @@
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/id">
+          <a class="card" href="/dormitory-rules/hi">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#ghi2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="ghi2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#f59e0b" />
                   </linearGradient>
@@ -639,17 +920,11 @@
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Hindi guidance"
-          >
+          <div class="card">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#ghi3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="ghi3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#f59e0b" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -664,16 +939,17 @@
             </div>
             <div class="title">
               <strong>सुविधा समस्या रिपोर्ट और सामान्य पूछताछ</strong>
+              <span>कृपया अपना कमरा नंबर, नाम और पूछताछ का विवरण <b>hjk0795@ks.ac.kr</b> पर email करें।</span>
             </div>
-          </a>
+          </div>
         </div>
 
         <div class="lang-col lang-id" aria-label="Indonesian links">
-          <a class="card" href="/recycling-guide/en">
+          <a class="card" href="/recycling-guide/id">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gid1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="gid1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -691,11 +967,11 @@
             </div>
           </a>
 
-          <a class="card" href="/dormitory-rules/en">
+          <a class="card" href="/dormitory-rules/id">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g4)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gid2)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="gid2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#60a5fa" />
                     <stop offset="1" stop-color="#f59e0b" />
                   </linearGradient>
@@ -713,17 +989,11 @@
             </div>
           </a>
 
-          <a
-            class="card"
-            href="https://forms.gle/5WmkN938jqDJJjdg6"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facility issue report - Indonesian guidance"
-          >
+          <div class="card">
             <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#g6)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="url(#gid3)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
-                  <linearGradient id="g6" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="gid3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#f59e0b" />
                     <stop offset="1" stop-color="#2dd4bf" />
                   </linearGradient>
@@ -738,8 +1008,9 @@
             </div>
             <div class="title">
               <strong>Laporan Masalah Fasilitas &amp; Pertanyaan Umum</strong>
+              <span>Silakan kirim email ke <b>hjk0795@ks.ac.kr</b> dengan nomor kamar, nama, dan isi pertanyaan Anda.</span>
             </div>
-          </a>
+          </div>
         </div>
       </section>
 
@@ -778,6 +1049,34 @@
           </details>
         </div>
 
+        <div class="lang-si">
+          <h2>නිතර අසන ප්‍රශ්න</h2>
+
+          <details>
+            <summary><span class="q">Q</span> අවසන් වෙලාව / ඇතුල් වීමේ වේලාවේ සීමා (රාත්‍රි නවාතැන් ඇතුළුව)</summary>
+            <p>වෙන්වූ curfew එකක් නැහැ. එහෙත් වැඩි නිදහසක් ඇති නිසා, කරුණාකර නේවාසිකාගාර නීති අනුගමනය කර සහ කාමර සගයන් හා පොදු ප්‍රදේශ ගෞරවයෙන් භාවිත කරන්න.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> විදුලි, ගෑස්, ජල බිල්පත්</summary>
+            <p>සාමාන්‍යයෙන් විදුලි, ගෑස්, ජල වියදම් ඇතුළත් වන අතර වෙනම ගෙවීමට අවශ්‍ය නැහැ. එහෙත් ඔබගේ භාවිතය ගොඩනැගිල්ලේ සාමාන්‍ය මට්ටමට වඩා 10% ඉක්මවන්නේ නම්, අමතර මුදල ගෙවිය යුතුය.</p>
+          </details>
+        </div>
+
+        <div class="lang-ta">
+          <h2>அடிக்கடி கேட்கப்படும் கேள்விகள்</h2>
+
+          <details>
+            <summary><span class="q">Q</span> இரவுக்கால வரையறை / நுழைவு நேரக் கட்டுப்பாடு (இரவு தங்குதல் உட்பட)</summary>
+            <p>தனியாக இரவுக்கால வரையறை இல்லை. ஆனால் அதிக சுயாட்சியுள்ளதால், விடுதி விதிகளை பின்பற்றி, அறைத் தோழர்கள் மற்றும் பொதுப் பகுதிகளை கவனமாக மதிக்கவும்.</p>
+          </details>
+
+          <details>
+            <summary><span class="q">Q</span> பயன்பாட்டு கட்டணம் (மின்சாரம், எரிவாயு, தண்ணீர்)</summary>
+            <p>பொதுவாக மின்சாரம், எரிவாயு மற்றும் தண்ணீர் செலவுகள் சேர்த்தே இருக்கும்; தனியாக செலுத்த வேண்டியதில்லை. ஆனால் உங்கள் பயன்பாடு கட்டிட சராசரியை விட 10% அதிகமாக இருந்தால், கூடுதல் தொகையை நீங்கள் செலுத்த வேண்டும்.</p>
+          </details>
+        </div>
+
         <div class="lang-hi">
           <h2>अक्सर पूछे जाने वाले प्रश्न</h2>
 
@@ -809,28 +1108,81 @@
       </div>
     </main>
 
+    <script src="/resident-session.js"></script>
     <script>
       (function () {
-        var ACK_STORAGE_KEY = "dormhub_ack_verified_v1";
-        var LANGS = ["vi", "hi", "id", "en"];
+        var LANGS = ["vi", "si", "ta", "hi", "id", "en"];
         var LANG_LABELS = {
           vi: "Ngôn ngữ",
+          si: "භාෂාව",
+          ta: "மொழி",
           hi: "भाषा",
           id: "Bahasa",
           en: "Language"
         };
+        var previewBypass = false;
+        var reviewSafeMode = false;
+        try {
+          var params = new URLSearchParams(window.location.search);
+          previewBypass = params.get("preview") === "1";
+          reviewSafeMode = params.get("review") === "1" || /dormhub-review-safe/i.test(window.location.hostname);
+        } catch (e) {}
+        function injectReviewSafeBanner() {
+          if (!reviewSafeMode || document.getElementById("reviewSafeBanner")) return;
+          var banner = document.createElement("div");
+          banner.id = "reviewSafeBanner";
+          banner.textContent = "Review-safe preview: live forms and live contact/report links are disabled in this shared build.";
+          banner.style.cssText = "margin:12px 24px 0;padding:12px 14px;border-radius:14px;background:#fff4d6;color:#5c4300;border:1px solid #f1d48a;font-size:13px;font-weight:700;line-height:1.5;";
+          var main = document.querySelector("main");
+          if (main) main.insertBefore(banner, main.firstChild);
+        }
+        function applyReviewSafeLinks() {
+          if (!reviewSafeMode) return;
+          document.querySelectorAll('a[href]').forEach(function (anchor) {
+            var href = anchor.getAttribute('href') || '';
+            if (!href || href.startsWith('#')) return;
+            if (/forms\.gle|docs\.google\.com\/forms/i.test(href)) {
+              anchor.setAttribute('href', '#review-safe-disabled');
+              anchor.setAttribute('data-review-blocked', '1');
+              anchor.removeAttribute('target');
+              anchor.removeAttribute('rel');
+              return;
+            }
+            try {
+              var url = new URL(href, window.location.origin);
+              if (url.origin !== window.location.origin) return;
+              url.searchParams.set('review', '1');
+              if (url.pathname === '/' || url.pathname === '/index.html') {
+                url.searchParams.set('preview', '1');
+              }
+              anchor.setAttribute('href', url.pathname + url.search + url.hash);
+            } catch (e) {}
+          });
+          document.addEventListener('click', function (event) {
+            var link = event.target.closest('a[data-review-blocked="1"]');
+            if (!link) return;
+            event.preventDefault();
+            window.alert('Review-safe preview에서는 실제 문의/제출 링크가 열리지 않습니다.');
+          });
+        }
         function hasAckState() {
-          try {
-            var saved = JSON.parse(localStorage.getItem(ACK_STORAGE_KEY) || "null");
-            return !!(saved && saved.building && saved.room && saved.name);
-          } catch (e) {
-            return false;
-          }
+          return !!window.DormResidentSession?.getAckState?.();
         }
 
-        if (!hasAckState()) {
-          window.location.replace("/dorm-acknowledgement");
-          return;
+        function hasGoogleSession() {
+          return !!window.DormResidentSession?.getGoogleSession?.();
+        }
+
+        function buildFlowUrl(pathname, lang) {
+          var url = new URL(pathname, window.location.origin);
+          if (pathname === "/google-login.html") {
+            url.searchParams.set("lang", "ko");
+          } else if (lang) {
+            url.searchParams.set("lang", lang);
+          }
+          if (reviewSafeMode) url.searchParams.set("review", "1");
+          if (previewBypass) url.searchParams.set("preview", "1");
+          return url.pathname + url.search + url.hash;
         }
 
         var select = document.getElementById("langSelect");
@@ -874,6 +1226,8 @@
 
         select.value = LANGS.indexOf(initial) !== -1 ? initial : "vi";
         applyLang(select.value);
+        injectReviewSafeBanner();
+        applyReviewSafeLinks();
 
         select.addEventListener("change", function () {
           applyLang(select.value);
